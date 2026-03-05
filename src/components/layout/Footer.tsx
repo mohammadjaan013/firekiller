@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
 import {
-  Flame,
   Facebook,
   Instagram,
   Twitter,
@@ -9,14 +11,13 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 const footerLinks = {
   Products: [
     { label: "Home Extinguishers", href: "/shop?category=home" },
     { label: "Kitchen Safety", href: "/shop?category=kitchen" },
     { label: "Car Extinguishers", href: "/shop?category=car" },
-    { label: "PanSafe Sachets", href: "/shop?category=pansafe" },
-    { label: "Safety Combos", href: "/shop?category=combos" },
   ],
   Company: [
     { label: "About Us", href: "/about" },
@@ -35,30 +36,30 @@ const footerLinks = {
 };
 
 export default function Footer() {
+  const { theme } = useTheme();
+
   return (
-    <footer className="bg-secondary text-white">
+    <footer className="bg-card border-t border-border">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-5">
-              <Flame className="h-8 w-8 text-primary" />
-              <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight leading-none">
-                  FIRE<span className="text-primary">KILLER</span>
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.2em] text-gray-400 leading-none">
-                  Home · Kitchen · Car Safety
-                </span>
-              </div>
+            <Link href="/" className="flex items-center mb-5">
+              <Image
+                src={theme === "dark" ? "/images/brand/oustfire-dark.png" : "/images/brand/oustfire-light.png"}
+                alt="FireKiller"
+                width={180}
+                height={45}
+                className="h-10 w-auto object-contain"
+              />
             </Link>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
+            <p className="text-muted-foreground text-sm leading-relaxed mb-6 max-w-sm">
               India&apos;s most trusted compact fire extinguisher brand.
               Protecting homes, kitchens, and cars with innovative fire safety
               solutions since 2020.
             </p>
-            <div className="space-y-3 text-sm text-gray-400">
+            <div className="space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-primary" />
                 <span>+91 98765 43210</span>
@@ -85,7 +86,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-400 hover:text-primary transition-colors"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -98,9 +99,9 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
+      <div className="border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} FireKiller. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
@@ -113,7 +114,7 @@ export default function Footer() {
               <Link
                 key={i}
                 href={href}
-                className="p-2 rounded-full bg-gray-800 hover:bg-primary transition-colors"
+                className="p-2 rounded-full bg-muted hover:bg-primary hover:text-white transition-colors"
                 aria-label="Social link"
               >
                 <Icon className="h-4 w-4" />

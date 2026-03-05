@@ -65,11 +65,11 @@ export default function ProductDetailPage({
 
   // Related products (same category, excluding current)
   const related = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
+    .filter((p) => p.id !== product.id && p.categories.some((c) => product.categories.includes(c)))
     .slice(0, 4);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background pt-16">
       {/* Breadcrumb */}
       <div className="bg-muted border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -82,7 +82,7 @@ export default function ProductDetailPage({
               Shop
             </Link>
             <ChevronRight className="h-3.5 w-3.5" />
-            <span className="text-secondary font-medium truncate">
+            <span className="text-foreground font-medium truncate">
               {product.name}
             </span>
           </nav>
@@ -99,7 +99,7 @@ export default function ProductDetailPage({
               key={selectedImage}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="relative aspect-square bg-gradient-to-b from-gray-50 to-gray-100 rounded-2xl overflow-hidden mb-4"
+              className="relative aspect-square bg-muted rounded-2xl overflow-hidden mb-4"
             >
               <Image
                 src={product.images[selectedImage]}
@@ -174,7 +174,7 @@ export default function ProductDetailPage({
             <p className="text-sm font-medium text-primary uppercase tracking-wide">
               {product.categoryLabel}
             </p>
-            <h1 className="mt-2 text-3xl sm:text-4xl font-bold text-secondary">
+            <h1 className="mt-2 text-3xl sm:text-4xl font-heading font-bold">
               {product.name}
             </h1>
 
@@ -202,13 +202,13 @@ export default function ProductDetailPage({
 
             {/* Price */}
             <div className="mt-6 flex items-baseline gap-3">
-              <span className="text-4xl font-bold text-secondary">
+              <span className="text-4xl font-bold">
                 ₹{product.price.toLocaleString()}
               </span>
               <span className="text-xl text-muted-foreground line-through">
                 ₹{product.originalPrice.toLocaleString()}
               </span>
-              <span className="px-2.5 py-1 bg-green-100 text-green-700 text-sm font-semibold rounded-full">
+              <span className="px-2.5 py-1 bg-green-500/10 text-green-500 text-sm font-semibold rounded-full">
                 {discount}% OFF
               </span>
             </div>
@@ -353,7 +353,7 @@ export default function ProductDetailPage({
                       ([key, value], i) => (
                         <tr
                           key={key}
-                          className={i % 2 === 0 ? "bg-muted" : "bg-white"}
+                          className={i % 2 === 0 ? "bg-muted" : "bg-card"}
                         >
                           <td className="px-4 py-3 text-sm font-medium text-secondary">
                             {key}
@@ -498,7 +498,7 @@ export default function ProductDetailPage({
         {/* Related Products */}
         {related.length > 0 && (
           <div className="mt-12 border-t border-border pt-10">
-            <h2 className="text-2xl font-bold text-secondary mb-6">
+            <h2 className="text-2xl font-heading font-bold mb-6">
               You May Also Like
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -506,9 +506,9 @@ export default function ProductDetailPage({
                 <Link
                   key={rp.id}
                   href={`/shop/${rp.slug}`}
-                  className="group bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1"
+                  className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1"
                 >
-                  <div className="relative h-44 bg-gradient-to-b from-gray-50 to-gray-100 overflow-hidden">
+                    <div className="relative h-44 bg-muted overflow-hidden">
                     <Image
                       src={rp.images[0]}
                       alt={rp.name}

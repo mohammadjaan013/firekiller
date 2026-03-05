@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -23,7 +24,6 @@ const categories = [
   { value: "home", label: "Home Safety" },
   { value: "kitchen", label: "Kitchen Safety" },
   { value: "car", label: "Car Safety" },
-  { value: "combos", label: "Combos" },
 ];
 
 const sortOptions = [
@@ -35,12 +35,28 @@ const sortOptions = [
 ];
 
 export default function ShopPage() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-muted" />}>
+      <ShopPageContent />
+    </Suspense>
+  );
+}
+
+function ShopPageContent() {
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category") || "all";
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedSort, setSelectedSort] = useState("popular");
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const { addItem, isInCart } = useCart();
   const { showToast } = useToast();
+
+  // Sync when URL changes (e.g. from CategoriesSection links)
+  useEffect(() => {
+    const cat = searchParams.get("category") || "all";
+    setSelectedCategory(cat);
+  }, [searchParams]);
 
   const handleAddToCart = (product: (typeof products)[0]) => {
     addItem({
@@ -56,7 +72,7 @@ export default function ShopPage() {
 
   const filtered = products
     .filter(
-      (p) => selectedCategory === "all" || p.category === selectedCategory
+      (p) => selectedCategory === "all" || p.categories.includes(selectedCategory)
     )
     .filter(
       (p) =>
@@ -77,11 +93,11 @@ export default function ShopPage() {
     });
 
   return (
-    <div className="min-h-screen bg-muted">
+    <div className="min-h-screen bg-background pt-16">
       {/* Page Header */}
-      <div className="bg-white border-b border-border">
+      <div className="bg-surface border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-3xl font-bold text-secondary">
+          <h1 className="text-3xl font-heading font-bold">
             Shop <span className="text-primary">Fire Safety</span>
           </h1>
           <p className="mt-2 text-muted-foreground">
@@ -101,7 +117,7 @@ export default function ShopPage() {
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
+              className="w-full pl-11 pr-4 py-3 bg-card rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm"
             />
           </div>
 
@@ -110,7 +126,7 @@ export default function ShopPage() {
             <select
               value={selectedSort}
               onChange={(e) => setSelectedSort(e.target.value)}
-              className="appearance-none pl-4 pr-10 py-3 bg-white rounded-xl border border-border text-sm font-medium text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
+              className="appearance-none pl-4 pr-10 py-3 bg-card rounded-xl border border-border text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
             >
               {sortOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -138,7 +154,7 @@ export default function ShopPage() {
               showFilters ? "block" : "hidden"
             } sm:block w-full sm:w-56 flex-shrink-0`}
           >
-            <div className="bg-white rounded-2xl border border-border p-5 sticky top-24">
+            <div className="bg-card rounded-2xl border border-border p-5 sticky top-24">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-secondary uppercase tracking-wide">
                   Categories
@@ -158,7 +174,7 @@ export default function ShopPage() {
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                       selectedCategory === cat.value
                         ? "bg-primary text-white"
-                        : "text-secondary hover:bg-muted"
+                        : "text-foreground/80 hover:bg-muted"
                     }`}
                   >
                     {cat.label}
@@ -206,12 +222,12 @@ export default function ShopPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05, duration: 0.3 }}
-                    className="group bg-white rounded-2xl border border-border overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1"
+                    className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all hover:-translate-y-1"
                   >
                     {/* Image */}
                     <Link
                       href={`/shop/${product.slug}`}
-                      className="relative block h-52 bg-gradient-to-b from-gray-50 to-gray-100 overflow-hidden"
+                      className="relative block h-52 bg-muted overflow-hidden"
                     >
                       <Image
                         src={product.images[0]}
@@ -237,13 +253,13 @@ export default function ShopPage() {
                     <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                       <Link
                         href={`/shop/${product.slug}`}
-                        className="p-2 bg-white rounded-full shadow-md hover:bg-primary hover:text-white transition-colors"
+                        className="p-2 bg-card rounded-full shadow-md hover:bg-primary hover:text-white transition-colors"
                       >
                         <Eye className="h-4 w-4" />
                       </Link>
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="p-2 bg-white rounded-full shadow-md hover:bg-primary hover:text-white transition-colors"
+                        className="p-2 bg-card rounded-full shadow-md hover:bg-primary hover:text-white transition-colors"
                       >
                         <ShoppingCart className="h-4 w-4" />
                       </button>

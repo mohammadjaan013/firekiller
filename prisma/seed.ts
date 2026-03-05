@@ -16,70 +16,99 @@ async function main() {
 
   // ─── 1. CATEGORIES ─────────────────────────────────────
   console.log("📁 Creating categories...");
+
+  // Remove legacy combo-packs category if it exists (delete products first)
+  const comboCat = await prisma.category.findUnique({ where: { slug: "combo-packs" } });
+  if (comboCat) {
+    await prisma.productImage.deleteMany({
+      where: { product: { categoryId: comboCat.id } },
+    });
+    await prisma.product.deleteMany({ where: { categoryId: comboCat.id } });
+    await prisma.category.delete({ where: { slug: "combo-packs" } });
+  }
+
   const categories = await Promise.all([
     prisma.category.upsert({
       where: { slug: "home-safety" },
-      update: {},
+      update: {
+        description: "FireKiller extinguishers for your home — 1, 2, or 3 units",
+        image: "/images/categories/home.png",
+      },
       create: {
         name: "Home Safety",
         slug: "home-safety",
-        description: "Fire extinguishers and safety products for your home",
-        image: "/images/categories/home-safety.jpg",
+        description: "FireKiller extinguishers for your home — 1, 2, or 3 units",
+        image: "/images/categories/home.png",
         sortOrder: 1,
       },
     }),
     prisma.category.upsert({
       where: { slug: "kitchen-safety" },
-      update: {},
+      update: {
+        description: "PanSafe fire suppression sachets — toss & extinguish oil fires",
+        image: "/images/categories/kitchen.png",
+      },
       create: {
         name: "Kitchen Safety",
         slug: "kitchen-safety",
-        description: "Fire suppression solutions for kitchen and cooking fires",
-        image: "/images/categories/kitchen-safety.jpg",
+        description: "PanSafe fire suppression sachets — toss & extinguish oil fires",
+        image: "/images/categories/kitchen.png",
         sortOrder: 2,
       },
     }),
     prisma.category.upsert({
       where: { slug: "car-safety" },
-      update: {},
+      update: {
+        description: "Compact FireKiller extinguishers designed for vehicles",
+        image: "/images/categories/car.png",
+      },
       create: {
         name: "Car Safety",
         slug: "car-safety",
-        description: "Compact fire extinguishers designed for vehicles",
-        image: "/images/categories/car-safety.jpg",
+        description: "Compact FireKiller extinguishers designed for vehicles",
+        image: "/images/categories/car.png",
         sortOrder: 3,
-      },
-    }),
-    prisma.category.upsert({
-      where: { slug: "combo-packs" },
-      update: {},
-      create: {
-        name: "Combo Packs",
-        slug: "combo-packs",
-        description: "Value bundles for complete fire protection",
-        image: "/images/categories/combo-packs.jpg",
-        sortOrder: 4,
       },
     }),
   ]);
 
-  const [homeCat, kitchenCat, carCat, comboCat] = categories;
+  const [homeCat, kitchenCat, carCat] = categories;
   console.log(`   ✅ ${categories.length} categories created\n`);
 
   // ─── 2. PRODUCTS ───────────────────────────────────────
   console.log("📦 Creating products...");
 
+  // Clean up old products that no longer exist
+  const oldSlugs = [
+    "firekiller-500g-home", "firekiller-1kg-multipurpose",
+    "pansafe-kitchen-sachet-3pack", "firekiller-car-compact-500g",
+    "firekiller-2kg-industrial", "pansafe-firekiller-kitchen-combo",
+    "firekiller-car-mount-kit", "firekiller-home-safety-combo",
+    // Old 9-product slugs
+    "firekiller-home-1", "firekiller-home-2", "firekiller-home-3",
+    "pansafe-kitchen-1", "pansafe-kitchen-3", "pansafe-kitchen-5",
+    "firekiller-car-1", "firekiller-car-2", "firekiller-car-3",
+  ];
+  for (const slug of oldSlugs) {
+    const old = await prisma.product.findUnique({ where: { slug } });
+    if (old) {
+      await prisma.productImage.deleteMany({ where: { productId: old.id } });
+      await prisma.product.delete({ where: { slug } });
+    }
+  }
+
   const productsData = [
+    // ── FireKiller × 1 (Home + Car) ─────────────────────
     {
-      name: "FireKiller 500g Home Extinguisher",
-      slug: "firekiller-500g-home",
-      description: "Compact home fire extinguisher for living rooms and bedrooms",
+      name: "FireKiller — 1 Unit",
+      slug: "firekiller-1",
+      description: "Single compact fire extinguisher for home or car",
       shortDesc:
         "India's most trusted compact fire extinguisher. Works on Class A, B, C, and electrical fires. No maintenance needed for 5 years.",
-      price: 1499,
-      originalPrice: 2499,
-      sku: "FK-500G-HOME",
-      stock: 150,
+      price: 943,
+      originalPrice: 943,
+      sku: "FK-1",
+      stock: 200,
       isActive: true,
       isFeatured: true,
       badge: "Best Seller",
@@ -87,158 +116,113 @@ async function main() {
       dimensions: "28 × 9 cm",
       categoryId: homeCat.id,
       images: [
-        { url: "/images/products/firekiller-500g-home-1.jpg", isPrimary: true, sortOrder: 0 },
-        { url: "/images/products/firekiller-500g-home-2.jpg", isPrimary: false, sortOrder: 1 },
-        { url: "/images/products/firekiller-500g-home-3.jpg", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/firekiller-1.webp", isPrimary: true, sortOrder: 0 },
       ],
     },
+    // ── FireKiller × 2 (Home + Car) ─────────────────────
     {
-      name: "FireKiller 1kg Multi-Purpose",
-      slug: "firekiller-1kg-multipurpose",
-      description: "Large capacity extinguisher for whole-home protection",
+      name: "FireKiller — 2 Units",
+      slug: "firekiller-2",
+      description: "Two extinguishers for multi-room or multi-vehicle coverage",
       shortDesc:
-        "Double the capacity, double the protection. Extended 15-second discharge time with wider coverage for large living rooms and offices.",
-      price: 2199,
-      originalPrice: 3499,
-      sku: "FK-1KG-MULTI",
-      stock: 100,
+        "Cover bedroom + living room, or place one in each car. Same trusted clean-agent formula. Save over \u20B9200.",
+      price: 1650,
+      originalPrice: 1850,
+      sku: "FK-2",
+      stock: 150,
       isActive: true,
       isFeatured: true,
       badge: "Popular",
       weight: 1.0,
-      dimensions: "35 × 11 cm",
+      dimensions: "28 × 9 cm (each)",
       categoryId: homeCat.id,
       images: [
-        { url: "/images/products/firekiller-1kg-multi-1.jpg", isPrimary: true, sortOrder: 0 },
-        { url: "/images/products/firekiller-1kg-multi-2.jpg", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/firekiller-2.webp", isPrimary: true, sortOrder: 0 },
       ],
     },
+    // ── FireKiller × 3 (Home + Car) ─────────────────────
     {
-      name: "PanSafe Kitchen Sachet (Pack of 3)",
-      slug: "pansafe-kitchen-sachet-3pack",
-      description: "Automatic fire suppression sachets for kitchen oil fires",
+      name: "FireKiller — 3 Units",
+      slug: "firekiller-3",
+      description: "Three extinguishers for whole-home or fleet protection",
       shortDesc:
-        "Revolutionary throw-and-forget fire sachet for cooking oil fires. No aiming, no pins — just toss into the burning pan.",
-      price: 899,
+        "Protect bedroom, living room, kitchen, or all three vehicles. Best value with ₹400 savings.",
+      price: 2358,
+      originalPrice: 2758,
+      sku: "FK-3",
+      stock: 100,
+      isActive: true,
+      isFeatured: false,
+      badge: "Best Value",
+      weight: 1.5,
+      dimensions: "28 × 9 cm (each)",
+      categoryId: homeCat.id,
+      images: [
+        { url: "/images/products/firekiller-3.webp", isPrimary: true, sortOrder: 0 },
+      ],
+    },
+
+    // ── PanSafe × 1 (Kitchen) ───────────────────────────
+    {
+      name: "PanSafe Sachet — 1 Pc",
+      slug: "pansafe-1",
+      description: "Single fire suppression sachet for cooking oil fires",
+      shortDesc:
+        "Revolutionary throw-and-forget sachet. Toss into a burning pan — it activates on contact. No aiming, no pins.",
+      price: 1299,
       originalPrice: 1299,
-      sku: "PS-SACHET-3PK",
-      stock: 300,
+      sku: "PS-1",
+      stock: 500,
       isActive: true,
       isFeatured: true,
-      badge: "Kitchen Special",
-      weight: 0.3,
+      badge: "Starter",
+      weight: 0.1,
       dimensions: "15 × 10 cm",
       categoryId: kitchenCat.id,
       images: [
-        { url: "/images/products/pansafe-sachet-1.jpg", isPrimary: true, sortOrder: 0 },
-        { url: "/images/products/pansafe-sachet-2.jpg", isPrimary: false, sortOrder: 1 },
-        { url: "/images/products/pansafe-sachet-3.jpg", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/pansafe-1.webp", isPrimary: true, sortOrder: 0 },
       ],
     },
+    // ── PanSafe × 3 (Kitchen) ───────────────────────────
     {
-      name: "FireKiller Car Compact 500g",
-      slug: "firekiller-car-compact-500g",
-      description: "Ultra-compact extinguisher that fits under your car seat",
+      name: "PanSafe Sachet — 3 Pcs",
+      slug: "pansafe-3",
+      description: "Pack of 3 sachets for months of kitchen protection",
       shortDesc:
-        "Designed to fit under car seats or in the glove box. Vibration-resistant with glow-in-dark handle for emergencies.",
-      price: 1299,
-      originalPrice: 1999,
-      sku: "FK-CAR-500G",
-      stock: 120,
+        "Three sachets — stove, drawer, spare. Daily confidence for families who cook with oil. Save ₹399.",
+      price: 3498,
+      originalPrice: 3897,
+      sku: "PS-3",
+      stock: 300,
       isActive: true,
       isFeatured: true,
-      badge: "New",
-      weight: 0.5,
-      dimensions: "25 × 8 cm",
-      categoryId: carCat.id,
-      images: [
-        { url: "/images/products/firekiller-car-500g-1.jpg", isPrimary: true, sortOrder: 0 },
-        { url: "/images/products/firekiller-car-500g-2.jpg", isPrimary: false, sortOrder: 1 },
-      ],
-    },
-    {
-      name: "FireKiller 2kg Industrial",
-      slug: "firekiller-2kg-industrial",
-      description: "Heavy-duty extinguisher for large spaces and offices",
-      shortDesc:
-        "Built for large spaces — 4-5 meter range with 30-second continuous discharge. Commercial-grade certification.",
-      price: 3499,
-      originalPrice: 4999,
-      sku: "FK-2KG-IND",
-      stock: 50,
-      isActive: true,
-      isFeatured: false,
-      badge: "Pro",
-      weight: 2.0,
-      dimensions: "42 × 14 cm",
-      categoryId: homeCat.id,
-      images: [
-        { url: "/images/products/firekiller-2kg-industrial-1.jpg", isPrimary: true, sortOrder: 0 },
-        { url: "/images/products/firekiller-2kg-industrial-2.jpg", isPrimary: false, sortOrder: 1 },
-      ],
-    },
-    {
-      name: "PanSafe + FireKiller Kitchen Combo",
-      slug: "pansafe-firekiller-kitchen-combo",
-      description: "Complete kitchen fire safety kit with sachet and extinguisher",
-      shortDesc:
-        "PanSafe sachet (for oil fires) + FireKiller 500g (for everything else). Covers every kitchen fire scenario.",
-      price: 2199,
-      originalPrice: 3499,
-      sku: "FK-KITCHEN-COMBO",
-      stock: 80,
-      isActive: true,
-      isFeatured: false,
-      badge: "Value Pack",
-      weight: 0.6,
-      dimensions: "30 × 12 cm",
+      badge: "Best Seller",
+      weight: 0.3,
+      dimensions: "15 × 10 cm (each)",
       categoryId: kitchenCat.id,
       images: [
-        { url: "/images/products/kitchen-combo-1.jpg", isPrimary: true, sortOrder: 0 },
-        { url: "/images/products/kitchen-combo-2.jpg", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/pansafe-3.webp", isPrimary: true, sortOrder: 0 },
       ],
     },
+    // ── PanSafe × 5 (Kitchen) ───────────────────────────
     {
-      name: "FireKiller Car Mount Kit",
-      slug: "firekiller-car-mount-kit",
-      description: "Extinguisher with mounting bracket for secure car installation",
+      name: "PanSafe Sachet — 5 Pcs",
+      slug: "pansafe-5",
+      description: "Mega pack of 5 sachets for year-round kitchen safety",
       shortDesc:
-        "Premium 500g car extinguisher with heavy-duty steel bracket. Quick-release mechanism for emergencies.",
-      price: 1799,
-      originalPrice: 2499,
-      sku: "FK-CAR-MOUNT",
-      stock: 90,
+        "Under ₹1,099 per sachet. Share with family or stock up for the year. Best per-unit value.",
+      price: 5495,
+      originalPrice: 6495,
+      sku: "PS-5",
+      stock: 200,
       isActive: true,
       isFeatured: false,
-      badge: "Bundle",
-      weight: 0.75,
-      dimensions: "28 × 12 cm",
-      categoryId: carCat.id,
+      badge: "Family Pack",
+      weight: 0.5,
+      dimensions: "15 × 10 cm (each)",
+      categoryId: kitchenCat.id,
       images: [
-        { url: "/images/products/car-mount-kit-1.jpg", isPrimary: true, sortOrder: 0 },
-        { url: "/images/products/car-mount-kit-2.jpg", isPrimary: false, sortOrder: 1 },
-      ],
-    },
-    {
-      name: "FireKiller Home Safety Combo",
-      slug: "firekiller-home-safety-combo",
-      description: "Complete home protection: kitchen + bedroom + car extinguisher",
-      shortDesc:
-        "1kg home extinguisher + PanSafe kitchen sachet + 500g car compact. Save ₹2,000 — complete family protection.",
-      price: 3999,
-      originalPrice: 5999,
-      sku: "FK-HOME-COMBO",
-      stock: 60,
-      isActive: true,
-      isFeatured: true,
-      badge: "Best Value",
-      weight: 1.6,
-      dimensions: "40 × 20 cm",
-      categoryId: comboCat.id,
-      images: [
-        { url: "/images/products/home-combo-1.jpg", isPrimary: true, sortOrder: 0 },
-        { url: "/images/products/home-combo-2.jpg", isPrimary: false, sortOrder: 1 },
-        { url: "/images/products/home-combo-3.jpg", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/pansafe-5.webp", isPrimary: true, sortOrder: 0 },
       ],
     },
   ];

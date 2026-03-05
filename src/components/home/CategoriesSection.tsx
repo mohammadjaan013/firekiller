@@ -1,98 +1,96 @@
 "use client";
 
 import Link from "next/link";
-import { Home, Flame, Car, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { Home, Flame, Car, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const categories = [
   {
     title: "Home Safety",
-    description: "For Living & Bedrooms",
+    description: "FireKiller Extinguisher — 1, 2 or 3 Units",
     icon: Home,
     href: "/shop?category=home",
-    gradient: "from-orange-50 to-red-50",
-    borderColor: "border-orange-200",
+    image: "/images/categories/home.png",
   },
   {
-    title: "Kitchen Oil Fires",
-    description: "PanSafe Sachet + FireKiller",
+    title: "Kitchen Safety",
+    description: "PanSafe Sachet — 1, 3 or 5 Pcs",
     icon: Flame,
     href: "/shop?category=kitchen",
-    gradient: "from-red-50 to-pink-50",
-    borderColor: "border-red-200",
+    image: "/images/categories/kitchen.png",
   },
   {
-    title: "Car Protection",
-    description: "Compact & Ready",
+    title: "Car Safety",
+    description: "FireKiller Car — 1, 2 or 3 Units",
     icon: Car,
     href: "/shop?category=car",
-    gradient: "from-gray-50 to-slate-100",
-    borderColor: "border-gray-200",
+    image: "/images/categories/car.png",
   },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.15, duration: 0.5 },
-  }),
-};
-
 export default function CategoriesSection() {
   return (
-    <section className="py-20 bg-muted">
+    <section className="py-20 lg:py-28 bg-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-secondary">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-14"
+        >
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold">
             Choose <span className="text-primary">Your</span> Protection
           </h2>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
             Select the right fire safety solution for every area of your life
           </p>
-        </div>
+        </motion.div>
 
         {/* Category Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {categories.map((cat, i) => (
             <motion.div
               key={cat.title}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              variants={cardVariants}
+              transition={{ delay: i * 0.12, duration: 0.5 }}
             >
               <Link
                 href={cat.href}
-                className={`group block relative overflow-hidden rounded-2xl bg-gradient-to-br ${cat.gradient} border ${cat.borderColor} p-6 h-56 transition-all hover:shadow-lg hover:-translate-y-1`}
+                className="group block overflow-hidden rounded-2xl bg-card border border-border transition-all hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1.5 hover:border-primary/30"
               >
-                {/* Icon */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2.5 bg-white rounded-xl shadow-sm">
-                    <cat.icon className="h-6 w-6 text-primary" />
+                {/* Image */}
+                <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted">
+                  <Image
+                    src={cat.image}
+                    alt={cat.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  {/* Icon badge */}
+                  <div className="absolute top-4 left-4 p-2.5 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-xl shadow-lg">
+                    <cat.icon className="h-5 w-5 text-primary" />
                   </div>
                 </div>
 
-                {/* Text */}
-                <h3 className="text-xl font-bold text-secondary">
-                  {cat.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {cat.description}
-                </p>
-
-                {/* CTA */}
-                <div className="absolute bottom-6 left-6 flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">
-                  Shop Now
-                  <ChevronRight className="h-4 w-4" />
-                </div>
-
-                {/* Decorative Product placeholder */}
-                <div className="absolute right-4 bottom-4 w-24 h-32 bg-white/60 rounded-xl flex items-center justify-center">
-                  <div className="w-10 h-20 bg-gradient-to-b from-red-500 to-red-600 rounded-md opacity-60" />
+                {/* Content */}
+                <div className="p-5">
+                  <h3 className="text-lg font-heading font-bold">
+                    {cat.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {cat.description}
+                  </p>
+                  <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-3 transition-all">
+                    Shop Now
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                  </div>
                 </div>
               </Link>
             </motion.div>
