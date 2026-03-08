@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { razorpay } from "@/lib/razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 
 /**
  * POST /api/razorpay/order
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const order = await razorpay.orders.create({
+    const order = await getRazorpay().orders.create({
       amount: Math.round(amount * 100), // Razorpay uses paise
       currency: "INR",
       receipt: receipt || `rcpt_${Date.now()}`,
