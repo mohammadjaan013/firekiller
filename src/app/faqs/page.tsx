@@ -90,9 +90,9 @@ export default function FAQsPage() {
     .filter((cat) => cat.faqs.length > 0);
 
   return (
-    <div className="min-h-screen bg-muted">
+    <div className="min-h-screen bg-background pt-16">
       {/* Header */}
-      <div className="bg-white border-b border-border">
+      <div className="bg-surface border-b border-border">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
           <h1 className="text-3xl sm:text-4xl font-bold text-secondary">
             Frequently Asked <span className="text-primary">Questions</span>
@@ -128,7 +128,7 @@ export default function FAQsPage() {
                 return (
                   <div
                     key={key}
-                    className="bg-white rounded-xl border border-border overflow-hidden"
+                    className="bg-card rounded-xl border border-border overflow-hidden"
                   >
                     <button
                       onClick={() => toggle(key)}
@@ -138,7 +138,7 @@ export default function FAQsPage() {
                         {faq.q}
                       </span>
                       <ChevronDown
-                        className={`h-4 w-4 text-muted-foreground flex-shrink-0 transition-transform ${
+                        className={`h-4 w-4 text-muted-foreground shrink-0 transition-transform ${
                           isOpen ? "rotate-180" : ""
                         }`}
                       />

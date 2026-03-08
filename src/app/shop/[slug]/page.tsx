@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, use } from "react";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -17,6 +17,7 @@ import {
   Check,
   Play,
   Share2,
+  Zap,
 } from "lucide-react";
 import { getProductBySlug, products } from "@/lib/products";
 import { useCart } from "@/context/CartContext";
@@ -29,6 +30,7 @@ export default function ProductDetailPage({
 }) {
   const { slug } = use(params);
   const product = getProductBySlug(slug);
+  const router = useRouter();
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -90,8 +92,8 @@ export default function ProductDetailPage({
       </div>
 
       {/* Product Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid lg:grid-cols-2 gap-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Image Gallery */}
           <div>
             {/* Main Image */}
@@ -99,13 +101,13 @@ export default function ProductDetailPage({
               key={selectedImage}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="relative aspect-square bg-muted rounded-2xl overflow-hidden mb-4"
+              className="relative aspect-[4/3] bg-muted rounded-2xl overflow-hidden mb-3"
             >
               <Image
                 src={product.images[selectedImage]}
                 alt={product.name}
                 fill
-                className="object-contain p-8"
+                className="object-contain p-6"
                 priority
                 onError={(e) => {
                   const target = e.currentTarget;
@@ -116,7 +118,7 @@ export default function ProductDetailPage({
                 }}
               />
               <div className="fallback hidden absolute inset-0 items-center justify-center">
-                <div className="w-32 h-52 bg-gradient-to-b from-red-500 to-red-600 rounded-xl shadow-lg" />
+                <div className="w-32 h-52 bg-linear-to-b from-red-500 to-red-600 rounded-xl shadow-lg" />
               </div>
 
               {/* Badge */}
@@ -135,12 +137,12 @@ export default function ProductDetailPage({
 
             {/* Thumbnails */}
             {product.images.length > 1 && (
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 {product.images.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedImage(i)}
-                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-colors ${
+                    className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
                       selectedImage === i
                         ? "border-primary"
                         : "border-border hover:border-primary/50"
@@ -161,7 +163,7 @@ export default function ProductDetailPage({
                       }}
                     />
                     <div className="fallback hidden absolute inset-0 items-center justify-center bg-gray-100">
-                      <div className="w-6 h-10 bg-gradient-to-b from-red-500 to-red-600 rounded" />
+                      <div className="w-6 h-10 bg-linear-to-b from-red-500 to-red-600 rounded" />
                     </div>
                   </button>
                 ))}
@@ -171,20 +173,20 @@ export default function ProductDetailPage({
 
           {/* Product Info */}
           <div>
-            <p className="text-sm font-medium text-primary uppercase tracking-wide">
+            <p className="text-xs font-medium text-primary uppercase tracking-wide">
               {product.categoryLabel}
             </p>
-            <h1 className="mt-2 text-3xl sm:text-4xl font-heading font-bold">
+            <h1 className="mt-1 text-2xl sm:text-3xl font-heading font-bold">
               {product.name}
             </h1>
 
             {/* Rating */}
-            <div className="flex items-center gap-3 mt-4">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2 mt-3">
+              <div className="flex items-center gap-0.5">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-5 w-5 ${
+                    className={`h-4 w-4 ${
                       i < Math.floor(product.rating)
                         ? "fill-yellow-400 text-yellow-400"
                         : "fill-gray-200 text-gray-200"
@@ -201,42 +203,44 @@ export default function ProductDetailPage({
             </div>
 
             {/* Price */}
-            <div className="mt-6 flex items-baseline gap-3">
-              <span className="text-4xl font-bold">
+            <div className="mt-4 flex items-baseline gap-3">
+              <span className="text-3xl font-bold">
                 ₹{product.price.toLocaleString()}
               </span>
-              <span className="text-xl text-muted-foreground line-through">
+              <span className="text-lg text-muted-foreground line-through">
                 ₹{product.originalPrice.toLocaleString()}
               </span>
-              <span className="px-2.5 py-1 bg-green-500/10 text-green-500 text-sm font-semibold rounded-full">
-                {discount}% OFF
-              </span>
+              {discount > 0 && (
+                <span className="px-2 py-0.5 bg-green-500/10 text-green-500 text-xs font-semibold rounded-full">
+                  {discount}% OFF
+                </span>
+              )}
             </div>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-xs text-muted-foreground">
               Inclusive of all taxes. Free shipping on orders above ₹999.
             </p>
 
             {/* Description */}
-            <p className="mt-6 text-muted-foreground leading-relaxed">
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
               {product.longDescription}
             </p>
 
             {/* Quantity + Add to Cart */}
-            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
               {/* Quantity */}
               <div className="flex items-center border border-border rounded-xl overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-4 py-3 hover:bg-muted transition-colors"
+                  className="px-3 py-2.5 hover:bg-muted transition-colors"
                 >
                   <Minus className="h-4 w-4" />
                 </button>
-                <span className="w-14 text-center text-sm font-semibold">
+                <span className="w-10 text-center text-sm font-semibold">
                   {quantity}
                 </span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="px-4 py-3 hover:bg-muted transition-colors"
+                  className="px-3 py-2.5 hover:bg-muted transition-colors"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
@@ -245,7 +249,7 @@ export default function ProductDetailPage({
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
-                className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98] ${
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98] text-sm ${
                   alreadyInCart
                     ? "bg-green-600 hover:bg-green-700"
                     : "bg-primary hover:bg-primary-dark"
@@ -253,47 +257,70 @@ export default function ProductDetailPage({
               >
                 {alreadyInCart ? (
                   <>
-                    <Check className="h-5 w-5" /> Added to Cart
+                    <Check className="h-4 w-4" /> Added to Cart
                   </>
                 ) : (
                   <>
-                    <ShoppingCart className="h-5 w-5" /> Add to Cart
+                    <ShoppingCart className="h-4 w-4" /> Add to Cart
                   </>
                 )}
               </button>
 
               {/* Share */}
-              <button className="p-3.5 border border-border rounded-xl hover:bg-muted transition-colors">
-                <Share2 className="h-5 w-5 text-secondary" />
+              <button className="p-2.5 border border-border rounded-xl hover:bg-muted transition-colors">
+                <Share2 className="h-4 w-4 text-secondary" />
               </button>
             </div>
 
+            {/* Buy Now */}
+            <button
+              onClick={() => {
+                if (!alreadyInCart) {
+                  addItem(
+                    {
+                      id: product.id,
+                      slug: product.slug,
+                      name: product.name,
+                      price: product.price,
+                      originalPrice: product.originalPrice,
+                      image: product.images[0],
+                    },
+                    quantity
+                  );
+                }
+                router.push("/cart");
+              }}
+              className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-all text-sm"
+            >
+              <Zap className="h-4 w-4" /> Buy Now
+            </button>
+
             {/* Trust Badges */}
-            <div className="mt-8 grid grid-cols-3 gap-4">
-              <div className="flex items-center gap-2 text-sm text-secondary">
-                <Shield className="h-5 w-5 text-primary flex-shrink-0" />
+            <div className="mt-6 grid grid-cols-3 gap-3">
+              <div className="flex items-center gap-1.5 text-xs text-secondary">
+                <Shield className="h-4 w-4 text-primary shrink-0" />
                 <span>5 Year Warranty</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-secondary">
-                <Truck className="h-5 w-5 text-primary flex-shrink-0" />
+              <div className="flex items-center gap-1.5 text-xs text-secondary">
+                <Truck className="h-4 w-4 text-primary shrink-0" />
                 <span>Free Shipping</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-secondary">
-                <RotateCcw className="h-5 w-5 text-primary flex-shrink-0" />
+              <div className="flex items-center gap-1.5 text-xs text-secondary">
+                <RotateCcw className="h-4 w-4 text-primary shrink-0" />
                 <span>Easy Returns</span>
               </div>
             </div>
 
             {/* Stock Status */}
-            <div className="mt-6">
+            <div className="mt-4">
               {product.inStock ? (
-                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600">
-                  <span className="w-2 h-2 bg-green-500 rounded-full" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-green-600">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
                   In Stock — Ships within 24 hours
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-red-600">
-                  <span className="w-2 h-2 bg-red-500 rounded-full" />
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-red-600">
+                  <span className="w-1.5 h-1.5 bg-red-500 rounded-full" />
                   Out of Stock
                 </span>
               )}
@@ -334,7 +361,7 @@ export default function ProductDetailPage({
               >
                 {product.features.map((feature, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
                     <span className="text-secondary">{feature}</span>
                   </div>
                 ))}
@@ -495,6 +522,32 @@ export default function ProductDetailPage({
           </div>
         </div>
 
+        {/* Video Demo Section */}
+        {product.video && (
+          <div className="mt-12 border-t border-border pt-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                <Play className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-heading font-bold">Watch it in Action</h2>
+                <p className="text-sm text-muted-foreground">
+                  See how {product.name} works in a real scenario
+                </p>
+              </div>
+            </div>
+            <div className="relative w-full max-w-3xl aspect-video rounded-2xl overflow-hidden border border-border bg-black">
+              <iframe
+                src={product.video}
+                title={`${product.name} demo video`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Related Products */}
         {related.length > 0 && (
           <div className="mt-12 border-t border-border pt-10">
@@ -524,7 +577,7 @@ export default function ProductDetailPage({
                       }}
                     />
                     <div className="fallback hidden absolute inset-0 items-center justify-center">
-                      <div className="w-12 h-20 bg-gradient-to-b from-red-500 to-red-600 rounded-lg shadow-md" />
+                      <div className="w-12 h-20 bg-linear-to-b from-red-500 to-red-600 rounded-lg shadow-md" />
                     </div>
                     <span className="absolute top-3 left-3 px-2 py-1 bg-primary text-white text-[10px] font-semibold rounded-full z-10">
                       {rp.badge}

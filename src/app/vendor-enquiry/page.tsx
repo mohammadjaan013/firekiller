@@ -57,11 +57,11 @@ export default function VendorEnquiryPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-muted flex items-center justify-center px-4">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4 pt-16">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-2xl p-12 text-center max-w-md shadow-lg"
+          className="bg-card rounded-2xl p-12 text-center max-w-md shadow-lg border border-border"
         >
           <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-secondary mb-2">
@@ -78,14 +78,14 @@ export default function VendorEnquiryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted">
+    <div className="min-h-screen bg-background pt-16">
       {/* Header */}
-      <div className="bg-gradient-to-r from-secondary to-slate-800 text-white">
+      <div className="bg-surface border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-3xl sm:text-4xl font-bold">
+          <h1 className="text-3xl sm:text-4xl font-bold text-secondary">
             Vendor <span className="text-primary">Enquiry</span>
           </h1>
-          <p className="mt-3 text-gray-300 max-w-xl">
+          <p className="mt-3 text-muted-foreground max-w-xl">
             Interested in becoming a FireKiller distributor or retailer? Fill
             out the form below and our business development team will reach out
             to you.
@@ -97,7 +97,7 @@ export default function VendorEnquiryPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Benefits Sidebar */}
           <div className="lg:col-span-1 space-y-6">
-            <div className="bg-white rounded-2xl p-6 border border-border">
+            <div className="bg-card rounded-2xl p-6 border border-border">
               <h3 className="font-bold text-secondary mb-4">
                 Why Partner With Us?
               </h3>
@@ -111,7 +111,7 @@ export default function VendorEnquiryPage() {
                   "Fast-growing fire safety market",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
                     {item}
                   </li>
                 ))}
@@ -123,7 +123,7 @@ export default function VendorEnquiryPage() {
           <div className="lg:col-span-2">
             <form
               onSubmit={handleSubmit}
-              className="bg-white rounded-2xl p-6 sm:p-8 border border-border space-y-6"
+              className="bg-card rounded-2xl p-6 sm:p-8 border border-border space-y-6"
             >
               <h2 className="text-xl font-bold text-secondary">
                 Fill Your Details
@@ -229,7 +229,7 @@ export default function VendorEnquiryPage() {
                   name="businessType"
                   value={form.businessType}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                  className="w-full px-4 py-2.5 rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                 >
                   <option>Select business type</option>
                   <option>Distributor</option>

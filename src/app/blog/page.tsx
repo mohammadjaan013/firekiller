@@ -65,18 +65,18 @@ const blogPosts = [
 ];
 
 const categoryColors: Record<string, string> = {
-  "Safety Tips": "bg-blue-100 text-blue-700",
-  Education: "bg-purple-100 text-purple-700",
-  Product: "bg-red-100 text-red-700",
-  "Car Safety": "bg-orange-100 text-orange-700",
-  Industry: "bg-green-100 text-green-700",
+  "Safety Tips": "bg-blue-500/10 text-blue-400 dark:text-blue-300",
+  Education: "bg-purple-500/10 text-purple-400 dark:text-purple-300",
+  Product: "bg-red-500/10 text-red-400 dark:text-red-300",
+  "Car Safety": "bg-orange-500/10 text-orange-400 dark:text-orange-300",
+  Industry: "bg-green-500/10 text-green-400 dark:text-green-300",
 };
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-muted">
+    <div className="min-h-screen bg-background pt-16">
       {/* Header */}
-      <div className="bg-white border-b border-border">
+      <div className="bg-surface border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-3xl sm:text-4xl font-bold text-secondary">
             Fire Safety <span className="text-primary">Blog</span>
@@ -90,11 +90,11 @@ export default function BlogPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Featured Post */}
-        <div className="bg-white rounded-2xl border border-border overflow-hidden mb-12 hover:shadow-lg transition-shadow">
+        <div className="bg-card rounded-2xl border border-border overflow-hidden mb-12 hover:shadow-lg transition-shadow">
           <div className="grid lg:grid-cols-2">
-            <div className="h-64 lg:h-auto bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center">
+            <div className="h-64 lg:h-auto bg-muted flex items-center justify-center">
               <div className="text-center p-8">
-                <div className="w-24 h-32 mx-auto bg-gradient-to-b from-red-500 to-red-600 rounded-lg opacity-40" />
+                <div className="w-24 h-32 mx-auto bg-linear-to-b from-red-500 to-red-600 rounded-lg opacity-40" />
                 <p className="mt-2 text-xs text-muted-foreground">Featured Image</p>
               </div>
             </div>
@@ -134,10 +134,10 @@ export default function BlogPage() {
           {blogPosts.slice(1).map((post) => (
             <article
               key={post.id}
-              className="bg-white rounded-2xl border border-border overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all"
+              className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all"
             >
-              <div className="h-44 bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
-                <div className="w-16 h-20 bg-gradient-to-b from-red-400 to-red-500 rounded-lg opacity-30" />
+              <div className="h-44 bg-muted flex items-center justify-center">
+                <div className="w-16 h-20 bg-linear-to-b from-red-400 to-red-500 rounded-lg opacity-30" />
               </div>
               <div className="p-5">
                 <span

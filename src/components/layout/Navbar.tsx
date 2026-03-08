@@ -23,6 +23,7 @@ import { useTheme } from "@/components/providers/ThemeProvider";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
+  { href: "/how-it-works", label: "How it Works" },
   { href: "/vendor-enquiry", label: "Vendor Enquiry" },
   { href: "/faqs", label: "FAQs" },
   { href: "/blog", label: "Blog" },

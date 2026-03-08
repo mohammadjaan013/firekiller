@@ -49,14 +49,14 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted">
+    <div className="min-h-screen bg-background pt-16">
       {/* Header */}
-      <div className="bg-gradient-to-r from-secondary to-slate-800 text-white">
+      <div className="bg-surface border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-3xl sm:text-4xl font-bold">
+          <h1 className="text-3xl sm:text-4xl font-bold text-secondary">
             Contact <span className="text-primary">Us</span>
           </h1>
-          <p className="mt-3 text-gray-300 max-w-xl">
+          <p className="mt-3 text-muted-foreground max-w-xl">
             Have questions about our products or need assistance? We&apos;re
             here to help 24/7.
           </p>
@@ -95,7 +95,7 @@ export default function ContactPage() {
             ].map(({ icon: Icon, title, detail, sub }) => (
               <div
                 key={title}
-                className="flex items-start gap-4 bg-white rounded-xl p-5 border border-border"
+                className="flex items-start gap-4 bg-card rounded-xl p-5 border border-border"
               >
                 <div className="p-2.5 bg-primary/10 rounded-lg">
                   <Icon className="h-5 w-5 text-primary" />
@@ -117,7 +117,7 @@ export default function ContactPage() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white rounded-2xl p-12 text-center border border-border"
+                className="bg-card rounded-2xl p-12 text-center border border-border"
               >
                 <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                 <h2 className="text-2xl font-bold text-secondary mb-2">
@@ -131,7 +131,7 @@ export default function ContactPage() {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="bg-white rounded-2xl p-6 sm:p-8 border border-border space-y-6"
+                className="bg-card rounded-2xl p-6 sm:p-8 border border-border space-y-6"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <MessageSquare className="h-5 w-5 text-primary" />
@@ -193,7 +193,7 @@ export default function ContactPage() {
                     name="subject"
                     value={form.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                   >
                     <option>General Inquiry</option>
                     <option>Product Question</option>

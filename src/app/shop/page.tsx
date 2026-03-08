@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { useSearchParams, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
   SlidersHorizontal,
@@ -12,6 +12,11 @@ import {
   ChevronDown,
   X,
   Check,
+  Plus,
+  Minus,
+  Zap,
+  Trash2,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -44,12 +49,14 @@ export default function ShopPage() {
 
 function ShopPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const initialCategory = searchParams.get("category") || "all";
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedSort, setSelectedSort] = useState("popular");
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  const { addItem, isInCart } = useCart();
+  const [miniCartOpen, setMiniCartOpen] = useState(false);
+  const { addItem, isInCart, items, removeItem, updateQuantity, subtotal, totalItems } = useCart();
   const { showToast } = useToast();
 
   // Sync when URL changes (e.g. from CategoriesSection links)
@@ -68,6 +75,25 @@ function ShopPageContent() {
       image: product.images[0],
     });
     showToast(`${product.name} added to cart!`);
+  };
+
+  const handleBuyNow = (product: (typeof products)[0]) => {
+    if (!isInCart(product.id)) {
+      addItem({
+        id: product.id,
+        slug: product.slug,
+        name: product.name,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        image: product.images[0],
+      });
+    }
+    router.push("/cart");
+  };
+
+  const getCartQuantity = (productId: number) => {
+    const item = items.find((i) => i.id === productId);
+    return item ? item.quantity : 0;
   };
 
   const filtered = products
@@ -140,7 +166,7 @@ function ShopPageContent() {
           {/* Filter Toggle (Mobile) */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="sm:hidden flex items-center gap-2 px-4 py-3 bg-white rounded-xl border border-border text-sm font-medium"
+            className="sm:hidden flex items-center gap-2 px-4 py-3 bg-card rounded-xl border border-border text-sm font-medium"
           >
             <SlidersHorizontal className="h-4 w-4" />
             Filters
@@ -152,7 +178,7 @@ function ShopPageContent() {
           <aside
             className={`${
               showFilters ? "block" : "hidden"
-            } sm:block w-full sm:w-56 flex-shrink-0`}
+            } sm:block w-full sm:w-56 shrink-0`}
           >
             <div className="bg-card rounded-2xl border border-border p-5 sticky top-24">
               <div className="flex items-center justify-between mb-4">
@@ -242,7 +268,7 @@ function ShopPageContent() {
                         }}
                       />
                       <div className="fallback hidden absolute inset-0 items-center justify-center">
-                        <div className="w-14 h-24 bg-gradient-to-b from-red-500 to-red-600 rounded-lg shadow-md" />
+                        <div className="w-14 h-24 bg-linear-to-b from-red-500 to-red-600 rounded-lg shadow-md" />
                       </div>
                       <span className="absolute top-3 left-3 px-2.5 py-1 bg-primary text-white text-[11px] font-semibold rounded-full z-10">
                         {product.badge}
@@ -268,7 +294,7 @@ function ShopPageContent() {
                     {/* Details */}
                     <div className="p-4">
                       <Link href={`/shop/${product.slug}`}>
-                        <h3 className="text-sm font-semibold text-secondary line-clamp-2 min-h-[2.5rem] hover:text-primary transition-colors">
+                        <h3 className="text-sm font-semibold text-secondary line-clamp-2 min-h-10 hover:text-primary transition-colors">
                           {product.name}
                         </h3>
                       </Link>
@@ -301,23 +327,40 @@ function ShopPageContent() {
                         </span>
                       </div>
 
+                      {alreadyInCart ? (
+                        <div className="mt-4 w-full py-2 text-sm font-semibold rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-between px-2">
+                          <button
+                            onClick={() => {
+                              const qty = getCartQuantity(product.id);
+                              if (qty <= 1) removeItem(product.id);
+                              else updateQuantity(product.id, qty - 1);
+                            }}
+                            className="p-1.5 rounded-lg hover:bg-primary/20 transition-colors"
+                          >
+                            <Minus className="h-3.5 w-3.5" />
+                          </button>
+                          <span className="font-bold text-sm">{getCartQuantity(product.id)} in cart</span>
+                          <button
+                            onClick={() => updateQuantity(product.id, getCartQuantity(product.id) + 1)}
+                            className="p-1.5 rounded-lg hover:bg-primary/20 transition-colors"
+                          >
+                            <Plus className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleAddToCart(product)}
+                          className="mt-4 w-full py-2.5 text-sm font-semibold rounded-xl bg-primary text-white hover:bg-primary-dark transition-colors flex items-center justify-center gap-2"
+                        >
+                          <ShoppingCart className="h-4 w-4" /> Add to Cart
+                        </button>
+                      )}
+
                       <button
-                        onClick={() => handleAddToCart(product)}
-                        className={`mt-4 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 ${
-                          alreadyInCart
-                            ? "bg-green-600 text-white"
-                            : "bg-secondary text-white hover:bg-primary"
-                        }`}
+                        onClick={() => handleBuyNow(product)}
+                        className="mt-2 w-full py-2.5 text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 border border-primary text-primary hover:bg-primary hover:text-white"
                       >
-                        {alreadyInCart ? (
-                          <>
-                            <Check className="h-4 w-4" /> Added
-                          </>
-                        ) : (
-                          <>
-                            <ShoppingCart className="h-4 w-4" /> Add to Cart
-                          </>
-                        )}
+                        <Zap className="h-4 w-4" /> Buy Now
                       </button>
                     </div>
                   </motion.div>
@@ -335,6 +378,102 @@ function ShopPageContent() {
           </div>
         </div>
       </div>
+
+      {/* Amazon-style Mini Cart Sidebar - fixed right side */}
+      {items.length > 0 && (
+        <div className="fixed top-20 right-4 z-30 hidden lg:block">
+          <div className={`bg-card border border-border rounded-2xl shadow-xl transition-all duration-300 overflow-hidden ${
+            miniCartOpen ? "w-72" : "w-auto"
+          }`}>
+            {/* Toggle Header */}
+            <button
+              onClick={() => setMiniCartOpen(!miniCartOpen)}
+              className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-muted/50 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <ShoppingCart className="h-4 w-4 text-primary" />
+                <span className="text-sm font-bold text-secondary">
+                  {miniCartOpen ? "Cart" : ""} ({totalItems})
+                </span>
+              </div>
+              {miniCartOpen ? (
+                <ChevronDown className="h-4 w-4 text-muted-foreground rotate-0" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-muted-foreground -rotate-90" />
+              )}
+            </button>
+
+            {/* Collapsible content */}
+            <AnimatePresence>
+              {miniCartOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="border-t border-border max-h-80 overflow-y-auto">
+                    {items.map((item) => (
+                      <div key={item.id} className="flex gap-3 px-4 py-3 border-b border-border/50 last:border-0">
+                        <div className="relative w-12 h-12 bg-muted rounded-lg overflow-hidden shrink-0">
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fill
+                            className="object-contain p-1"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-secondary truncate">
+                            {item.name}
+                          </p>
+                          <p className="text-xs font-bold text-primary">
+                            ₹{item.price.toLocaleString()}
+                          </p>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <button
+                              onClick={() => {
+                                if (item.quantity <= 1) removeItem(item.id);
+                                else updateQuantity(item.id, item.quantity - 1);
+                              }}
+                              className="p-0.5 rounded border border-border hover:bg-muted transition-colors"
+                            >
+                              <Trash2 className="h-2.5 w-2.5" />
+                            </button>
+                            <span className="text-xs font-bold w-4 text-center">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              className="p-0.5 rounded border border-border hover:bg-muted transition-colors"
+                            >
+                              <Plus className="h-2.5 w-2.5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="border-t border-border px-4 py-3 space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="font-bold text-primary">₹{subtotal.toLocaleString()}</span>
+                    </div>
+                    <Link
+                      href="/cart"
+                      className="flex items-center justify-center gap-1.5 w-full py-2 bg-primary text-white text-xs font-semibold rounded-lg hover:bg-primary-dark transition-all"
+                    >
+                      Go to Cart <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

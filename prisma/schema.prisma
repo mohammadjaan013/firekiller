@@ -92,6 +92,8 @@ model Product {
   categoryId    String
   category      Category @relation(fields: [categoryId], references: [id])
 
+  facebookCatalogId String?
+
   images        ProductImage[]
   reviews       Review[]
   cartItems     CartItem[]
@@ -168,8 +170,21 @@ model Order {
   discount      Float       @default(0)
   total         Float
   paymentMethod String?
-  paymentId     String?
+  paymentId     String?      // Razorpay payment_id
+  razorpayOrderId String?    // Razorpay order_id
+  paymentStatus String?      @default("pending") // pending | paid | failed | refunded
   notes         String?
+
+  // Shiprocket fields
+  shiprocketOrderId    String?
+  shiprocketShipmentId String?
+  awbCode              String?
+  trackingUrl          String?
+
+  // COD verification
+  codVerified          Boolean   @default(false)
+  codVerificationSentAt DateTime?
+
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
@@ -179,6 +194,7 @@ model Order {
   address       Address     @relation(fields: [addressId], references: [id])
 
   items         OrderItem[]
+  whatsappLogs  WhatsappLog[]
 
   @@map("orders")
 }
@@ -275,4 +291,25 @@ model Coupon {
   createdAt     DateTime @default(now())
 
   @@map("coupons")
+}
+
+// ─── WHATSAPP LOGS ───────────────────────────────────────
+
+model WhatsappLog {
+  id           String           @id @default(cuid())
+  phone        String
+  templateName String
+  message      String?
+  status       WhatsappStatus   @default(SENT)
+  orderId      String?
+  order        Order?           @relation(fields: [orderId], references: [id])
+  sentAt       DateTime         @default(now())
+
+  @@map("whatsapp_logs")
+}
+
+enum WhatsappStatus {
+  SENT
+  FAILED
+  DELIVERED
 }

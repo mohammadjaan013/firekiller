@@ -63,6 +63,7 @@ export const products: Product[] = [
       Certifications: "ISI, BIS, CE",
     },
     images: ["/images/products/firekiller-1.webp"],
+    video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
     inStock: true,
   },
 
@@ -100,6 +101,7 @@ export const products: Product[] = [
       Certifications: "ISI, BIS, CE",
     },
     images: ["/images/products/firekiller-2.webp"],
+    video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
     inStock: true,
   },
 
@@ -137,6 +139,7 @@ export const products: Product[] = [
       Certifications: "ISI, BIS, CE",
     },
     images: ["/images/products/firekiller-3.webp"],
+    video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
     inStock: true,
   },
 
@@ -173,6 +176,7 @@ export const products: Product[] = [
       Certifications: "ISI, NABL tested",
     },
     images: ["/images/products/pansafe-1.webp"],
+    video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
     inStock: true,
   },
 
@@ -209,6 +213,7 @@ export const products: Product[] = [
       Certifications: "ISI, NABL tested",
     },
     images: ["/images/products/pansafe-3.webp"],
+    video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
     inStock: true,
   },
 
@@ -245,6 +250,7 @@ export const products: Product[] = [
       Certifications: "ISI, NABL tested",
     },
     images: ["/images/products/pansafe-5.webp"],
+    video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
     inStock: true,
   },
 ];

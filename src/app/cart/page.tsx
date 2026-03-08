@@ -7,19 +7,17 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Tag } from "lucide-react"
 import { useCart } from "@/context/CartContext";
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, subtotal, savings, totalItems } = useCart();
+  const { items, removeItem, updateQuantity, subtotal, savings, totalItems, discount, appliedCoupon, applyCoupon, removeCoupon } = useCart();
   const [coupon, setCoupon] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
-  const [discount, setDiscount] = useState(0);
-  const [appliedCoupon, setAppliedCoupon] = useState("");
 
   const shipping = subtotal > 999 ? 0 : 99;
   const total = subtotal + shipping - discount;
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-muted flex items-center justify-center px-4">
+      <div className="min-h-screen bg-background flex items-center justify-center px-4 pt-16">
         <div className="text-center">
           <ShoppingBag className="h-20 w-20 text-muted-foreground/30 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-secondary mb-2">
@@ -41,8 +39,8 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted">
-      <div className="bg-white border-b border-border">
+    <div className="min-h-screen bg-background pt-16">
+      <div className="bg-surface border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-3xl font-bold text-secondary">
             Shopping <span className="text-primary">Cart</span>
@@ -60,12 +58,12 @@ export default function CartPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-2xl border border-border p-5 flex gap-4"
+                className="bg-card rounded-2xl border border-border p-5 flex gap-4"
               >
                 {/* Product Image */}
                 <Link
                   href={`/shop/${item.slug}`}
-                  className="relative w-20 h-20 bg-gradient-to-b from-gray-50 to-gray-100 rounded-xl overflow-hidden flex-shrink-0"
+                  className="relative w-20 h-20 bg-muted rounded-xl overflow-hidden shrink-0"
                 >
                   <Image
                     src={item.image}
@@ -80,7 +78,7 @@ export default function CartPage() {
                     }}
                   />
                   <div className="fallback hidden absolute inset-0 items-center justify-center">
-                    <div className="w-8 h-14 bg-gradient-to-b from-red-500 to-red-600 rounded" />
+                    <div className="w-8 h-14 bg-linear-to-b from-red-500 to-red-600 rounded" />
                   </div>
                 </Link>
 
@@ -133,7 +131,7 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div>
-            <div className="bg-white rounded-2xl border border-border p-6 sticky top-24">
+            <div className="bg-card rounded-2xl border border-border p-6 sticky top-24">
               <h3 className="text-lg font-bold text-secondary mb-4">
                 Order Summary
               </h3>
@@ -165,18 +163,16 @@ export default function CartPage() {
                       if (!res.ok || !data.valid) {
                         throw new Error(data.error || "Invalid coupon");
                       }
-                      setDiscount(data.discount);
-                      setAppliedCoupon(data.coupon.code);
+                      applyCoupon(data.coupon.code, data.discount);
                     } catch (err) {
                       setCouponError(err instanceof Error ? err.message : "Invalid coupon");
-                      setDiscount(0);
-                      setAppliedCoupon("");
+                      removeCoupon();
                     } finally {
                       setCouponLoading(false);
                     }
                   }}
                   disabled={couponLoading}
-                  className="px-4 py-2.5 bg-secondary text-white text-sm font-semibold rounded-xl hover:bg-primary transition-colors flex-shrink-0 disabled:opacity-50"
+                  className="px-4 py-2.5 bg-secondary text-white text-sm font-semibold rounded-xl hover:bg-primary transition-colors shrink-0 disabled:opacity-50"
                 >
                   {couponLoading ? "..." : "Apply"}
                 </button>
@@ -230,10 +226,13 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <button className="mt-6 w-full flex items-center justify-center gap-2 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all">
+              <Link
+                href="/checkout"
+                className="mt-6 w-full flex items-center justify-center gap-2 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all"
+              >
                 Proceed to Checkout
                 <ArrowRight className="h-4 w-4" />
-              </button>
+              </Link>
 
               <p className="mt-3 text-center text-xs text-muted-foreground">
                 Free shipping on orders above ₹999

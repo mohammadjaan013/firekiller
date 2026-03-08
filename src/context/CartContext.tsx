@@ -26,11 +26,15 @@ interface CartContextType {
   totalItems: number;
   subtotal: number;
   savings: number;
+  discount: number;
+  appliedCoupon: string;
   addItem: (item: Omit<CartItem, "quantity">, qty?: number) => void;
   removeItem: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
   clearCart: () => void;
   isInCart: (id: number) => boolean;
+  applyCoupon: (code: string, discount: number) => void;
+  removeCoupon: () => void;
 }
 
 // ─── Context ────────────────────────────────────────────
@@ -38,19 +42,26 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const STORAGE_KEY = "firekiller-cart";
+const COUPON_KEY = "firekiller-coupon";
 
 // ─── Provider ───────────────────────────────────────────
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [discount, setDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState("");
   const [hydrated, setHydrated] = useState(false);
 
-  // Load cart from localStorage on mount
+  // Load cart + coupon from localStorage on mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        setItems(JSON.parse(saved));
+      if (saved) setItems(JSON.parse(saved));
+      const savedCoupon = localStorage.getItem(COUPON_KEY);
+      if (savedCoupon) {
+        const { code, discount: d } = JSON.parse(savedCoupon);
+        setAppliedCoupon(code);
+        setDiscount(d);
       }
     } catch {
       // ignore
@@ -64,6 +75,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     }
   }, [items, hydrated]);
+
+  // Persist coupon
+  useEffect(() => {
+    if (hydrated) {
+      if (appliedCoupon) {
+        localStorage.setItem(COUPON_KEY, JSON.stringify({ code: appliedCoupon, discount }));
+      } else {
+        localStorage.removeItem(COUPON_KEY);
+      }
+    }
+  }, [appliedCoupon, discount, hydrated]);
 
   const addItem = useCallback(
     (item: Omit<CartItem, "quantity">, qty = 1) => {
@@ -96,6 +118,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => {
     setItems([]);
+    setDiscount(0);
+    setAppliedCoupon("");
+  }, []);
+
+  const applyCoupon = useCallback((code: string, amt: number) => {
+    setAppliedCoupon(code);
+    setDiscount(amt);
+  }, []);
+
+  const removeCoupon = useCallback(() => {
+    setAppliedCoupon("");
+    setDiscount(0);
   }, []);
 
   const isInCart = useCallback(
@@ -117,11 +151,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
         totalItems,
         subtotal,
         savings,
+        discount,
+        appliedCoupon,
         addItem,
         removeItem,
         updateQuantity,
         clearCart,
         isInCart,
+        applyCoupon,
+        removeCoupon,
       }}
     >
       {children}
