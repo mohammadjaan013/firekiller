@@ -23,6 +23,28 @@ import { getProductBySlug, products } from "@/lib/products";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
 
+// Map each product to its "line" so we can show pack variants
+function getProductLine(slug: string): string {
+  if (slug.startsWith("firekiller")) return "firekiller";
+  if (slug.startsWith("pansafe")) return "pansafe";
+  return slug;
+}
+
+function getPackVariants(slug: string) {
+  const line = getProductLine(slug);
+  return products.filter((p) => p.slug.startsWith(line));
+}
+
+function getPackLabel(product: { slug: string; name: string; price: number }) {
+  if (product.slug === "firekiller-1") return "1 Unit";
+  if (product.slug === "firekiller-2") return "2 Units";
+  if (product.slug === "firekiller-3") return "3 Units";
+  if (product.slug === "pansafe-1") return "1 Pc";
+  if (product.slug === "pansafe-3") return "3 Pcs";
+  if (product.slug === "pansafe-5") return "5 Pcs";
+  return product.name;
+}
+
 export default function ProductDetailPage({
   params,
 }: {
@@ -225,6 +247,40 @@ export default function ProductDetailPage({
               {product.longDescription}
             </p>
 
+            {/* Pack Selector — Blinkit/Swiggy style */}
+            {(() => {
+              const variants = getPackVariants(product.slug);
+              if (variants.length <= 1) return null;
+              return (
+                <div className="mt-5">
+                  <p className="text-xs font-semibold text-secondary uppercase tracking-wide mb-2">
+                    Choose Pack
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {variants.map((v) => {
+                      const isSelected = v.slug === product.slug;
+                      return (
+                        <Link
+                          key={v.slug}
+                          href={`/shop/${v.slug}`}
+                          className={`px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                            isSelected
+                              ? "border-primary bg-primary/5 text-primary ring-1 ring-primary"
+                              : "border-border bg-white text-secondary hover:border-primary/50"
+                          }`}
+                        >
+                          <span className="block font-semibold">{getPackLabel(v)}</span>
+                          <span className="block text-xs text-muted-foreground mt-0.5">
+                            ₹{v.price.toLocaleString()}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* Quantity + Add to Cart */}
             <div className="mt-6 flex flex-col sm:flex-row gap-3">
               {/* Quantity */}
@@ -329,7 +385,7 @@ export default function ProductDetailPage({
         </div>
 
         {/* Tabs Section */}
-        <div className="mt-16 border-t border-border pt-10">
+        <div className="mt-10 border-t border-border pt-6">
           <div className="flex gap-6 border-b border-border">
             {(
               [
@@ -524,7 +580,7 @@ export default function ProductDetailPage({
 
         {/* Video Demo Section */}
         {product.video && (
-          <div className="mt-12 border-t border-border pt-10">
+          <div className="mt-8 border-t border-border pt-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
                 <Play className="h-5 w-5 text-primary" />
@@ -550,7 +606,7 @@ export default function ProductDetailPage({
 
         {/* Related Products */}
         {related.length > 0 && (
-          <div className="mt-12 border-t border-border pt-10">
+          <div className="mt-8 border-t border-border pt-6">
             <h2 className="text-2xl font-heading font-bold mb-6">
               You May Also Like
             </h2>

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ─── Light mode (default) ─────────────────────────────── */
+/* ─── Light mode (only) ───────────────────────────────── */
 @theme {
   --color-background: #fafafa;
   --color-foreground: #171717;
@@ -20,36 +20,16 @@
   --font-sans: var(--font-inter);
 }
 
-/* ─── Dark mode ────────────────────────────────────────── */
-.dark {
-  --color-background: #0F1117;
-  --color-foreground: #E5E5E5;
-  --color-primary: #CC1F1F;
-  --color-primary-dark: #FF4444;
-  --color-primary-light: #3D1111;
-  --color-accent: #FF4444;
-  --color-secondary: #E5E5E5;
-  --color-muted: #1A1D27;
-  --color-muted-foreground: #94a3b8;
-  --color-border: #2A2D37;
-  --color-card: #16181F;
-  --color-card-foreground: #E5E5E5;
-  --color-surface: #16181F;
-  --color-surface-elevated: #1E2028;
-}
-
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar – light */
+/* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-.dark ::-webkit-scrollbar-thumb { background: #475569; }
-.dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
 /* Selection color */
 ::selection {

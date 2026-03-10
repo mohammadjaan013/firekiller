@@ -2,94 +2,94 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Home, Flame, Car, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const categories = [
   {
     title: "Home Safety",
-    description: "FireKiller Extinguisher — 1, 2 or 3 Units",
-    icon: Home,
-    href: "/shop?category=home",
+    description: "FireKiller Extinguisher — compact, powerful, zero maintenance.",
+    href: "/shop/firekiller-1",
     image: "/images/categories/home.png",
   },
   {
     title: "Kitchen Safety",
-    description: "PanSafe Sachet — 1, 3 or 5 Pcs",
-    icon: Flame,
-    href: "/shop?category=kitchen",
+    description: "PanSafe Sachet — just toss into a burning pan. Done.",
+    href: "/shop/pansafe-1",
     image: "/images/categories/kitchen.png",
+    highlighted: true,
   },
   {
     title: "Car Safety",
-    description: "FireKiller Car — 1, 2 or 3 Units",
-    icon: Car,
-    href: "/shop?category=car",
+    description: "FireKiller for your car — fits under the seat, always ready.",
+    href: "/shop/firekiller-1",
     image: "/images/categories/car.png",
   },
 ];
 
 export default function CategoriesSection() {
   return (
-    <section className="py-20 lg:py-28 bg-muted">
+    <section className="py-10 lg:py-14 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-14"
+          transition={{ duration: 0.4 }}
+          className="text-center mb-8"
         >
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold">
-            Choose <span className="text-primary">Your</span> Protection
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <span className="h-px w-10 bg-primary" />
+            <span className="text-xs font-semibold text-primary uppercase tracking-widest">
+              Categories
+            </span>
+            <span className="h-px w-10 bg-primary" />
+          </div>
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-secondary">
+            Choose Your Protection
           </h2>
-          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Select the right fire safety solution for every area of your life
-          </p>
         </motion.div>
 
         {/* Category Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((cat, i) => (
             <motion.div
               key={cat.title}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: i * 0.12, duration: 0.5 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.4 }}
             >
               <Link
                 href={cat.href}
-                className="group block overflow-hidden rounded-2xl bg-card border border-border transition-all hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1.5 hover:border-primary/30"
+                className={`group block rounded-2xl overflow-hidden border transition-all hover:shadow-lg hover:-translate-y-1 ${
+                  cat.highlighted
+                    ? "border-primary shadow-md"
+                    : "border-border"
+                }`}
               >
                 {/* Image */}
-                <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted">
+                <div className="relative w-full aspect-[16/9] bg-muted overflow-hidden">
                   <Image
                     src={cat.image}
                     alt={cat.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  {/* Icon badge */}
-                  <div className="absolute top-4 left-4 p-2.5 bg-white/90 dark:bg-card/90 backdrop-blur-sm rounded-xl shadow-lg">
-                    <cat.icon className="h-5 w-5 text-primary" />
-                  </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-5">
-                  <h3 className="text-lg font-heading font-bold">
+                <div className="px-4 py-3 bg-white">
+                  <h3 className="text-sm font-heading font-bold text-secondary">
                     {cat.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
                     {cat.description}
                   </p>
-                  <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary group-hover:gap-3 transition-all">
-                    Shop Now
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                  <div className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-semibold text-primary group-hover:gap-2.5 transition-all">
+                    Explore
+                    <ArrowRight className="h-4 w-4" />
                   </div>
                 </div>
               </Link>

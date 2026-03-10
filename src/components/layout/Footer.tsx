@@ -11,7 +11,7 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import { useTheme } from "@/components/providers/ThemeProvider";
+
 
 const footerLinks = {
   Products: [
@@ -36,30 +36,28 @@ const footerLinks = {
 };
 
 export default function Footer() {
-  const { theme } = useTheme();
-
   return (
     <footer className="bg-card border-t border-border">
       {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center mb-5">
+            <Link href="/" className="flex items-center mb-3">
               <Image
-                src={theme === "dark" ? "/images/brand/oustfire-dark.png" : "/images/brand/oustfire-light.png"}
+                src="/images/brand/oustfire-light.png"
                 alt="FireKiller"
-                width={180}
-                height={45}
-                className="h-10 w-auto object-contain"
+                width={160}
+                height={40}
+                className="h-9 w-auto object-contain"
               />
             </Link>
-            <p className="text-muted-foreground text-sm leading-relaxed mb-6 max-w-sm">
+            <p className="text-muted-foreground text-sm leading-relaxed mb-4 max-w-sm">
               India&apos;s most trusted compact fire extinguisher brand.
               Protecting homes, kitchens, and cars with innovative fire safety
               solutions since 2020.
             </p>
-            <div className="space-y-3 text-sm text-muted-foreground">
+            <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-primary" />
                 <span>+91 98765 43210</span>
@@ -78,10 +76,10 @@ export default function Footer() {
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
+              <h3 className="text-sm font-semibold uppercase tracking-wider mb-3">
                 {title}
               </h3>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link
@@ -100,7 +98,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} FireKiller. All rights reserved.
           </p>
