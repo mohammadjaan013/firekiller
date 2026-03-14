@@ -102,8 +102,91 @@ export async function sendOrderEmailToAdmin(data: OrderEmailData) {
 
   await transporter.sendMail({
     from: process.env.SMTP_FROM || '"FireKiller Orders" <noreply@oustfire.com>',
-    to: "sales@oustfire.com",
+    // to: "sales@oustfire.com",  // Production email — uncomment when going live
+    to: "mulanimohammadjaan@gmail.com",  // Testing email
     subject: `🔥 New Order #${data.orderNumber} — ₹${data.total.toLocaleString("en-IN")}`,
+    html,
+  });
+}
+
+/**
+ * Send order confirmation email to the customer
+ */
+export async function sendOrderConfirmationToCustomer(data: OrderEmailData) {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn("SMTP not configured — skipping customer email for order", data.orderNumber);
+    return;
+  }
+
+  const itemRows = data.items
+    .map(
+      (i) =>
+        `<tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee">${i.name}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:center">${i.quantity}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #eee;text-align:right">₹${(i.price * i.quantity).toLocaleString("en-IN")}</td>
+        </tr>`
+    )
+    .join("");
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
+      <div style="background:#CC1F1F;color:#fff;padding:24px;text-align:center;border-radius:8px 8px 0 0">
+        <h1 style="margin:0;font-size:24px">🔥 Order Confirmed!</h1>
+        <p style="margin:8px 0 0;font-size:15px;opacity:0.9">Thank you for your purchase, ${data.customerName}!</p>
+      </div>
+
+      <div style="padding:24px;background:#fff;border:1px solid #eee;border-top:none">
+        <p style="font-size:15px;color:#475569;margin:0 0 16px">
+          Your order <strong style="color:#1e293b">#${data.orderNumber}</strong> has been confirmed and is being processed.
+        </p>
+
+        <h2 style="color:#1e293b;font-size:16px;margin:0 0 12px">Order Summary</h2>
+        <table style="width:100%;border-collapse:collapse;font-size:14px;color:#475569">
+          <thead>
+            <tr style="background:#f8fafc">
+              <th style="padding:10px 12px;text-align:left;border-bottom:2px solid #e2e8f0">Product</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #e2e8f0">Qty</th>
+              <th style="padding:10px 12px;text-align:right;border-bottom:2px solid #e2e8f0">Amount</th>
+            </tr>
+          </thead>
+          <tbody>${itemRows}</tbody>
+        </table>
+
+        <table style="width:100%;font-size:14px;color:#475569;margin-top:16px">
+          <tr><td style="padding:4px 0">Subtotal</td><td style="text-align:right">₹${data.subtotal.toLocaleString("en-IN")}</td></tr>
+          <tr><td style="padding:4px 0">GST (18%)</td><td style="text-align:right">₹${data.gstAmount.toLocaleString("en-IN")}</td></tr>
+          <tr><td style="padding:4px 0">Shipping</td><td style="text-align:right">${data.shipping === 0 ? "FREE" : "₹" + data.shipping}</td></tr>
+          <tr style="font-size:16px;font-weight:bold;color:#1e293b">
+            <td style="padding:10px 0;border-top:2px solid #e2e8f0">Total Paid</td>
+            <td style="text-align:right;padding:10px 0;border-top:2px solid #e2e8f0">₹${data.total.toLocaleString("en-IN")}</td>
+          </tr>
+        </table>
+
+        <div style="margin-top:20px;padding:16px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0">
+          <p style="margin:0;font-size:14px;color:#166534">
+            <strong>📦 Shipping Address:</strong><br>
+            ${data.address.line1}${data.address.line2 ? ", " + data.address.line2 : ""}<br>
+            ${data.address.city}, ${data.address.state} — ${data.address.pincode}
+          </p>
+        </div>
+
+        <p style="font-size:13px;color:#94a3b8;margin-top:16px">
+          Payment: ${data.paymentMethod.toUpperCase()} ${data.paymentId ? `(${data.paymentId})` : ""}
+        </p>
+      </div>
+
+      <div style="padding:16px;background:#f8fafc;text-align:center;font-size:12px;color:#94a3b8;border-radius:0 0 8px 8px;border:1px solid #eee;border-top:none">
+        <p style="margin:0">If you have any questions, reply to this email or contact us at support@oustfire.com</p>
+        <p style="margin:8px 0 0"><a href="${process.env.NEXTAUTH_URL || "https://firekiller.vercel.app"}/orders" style="color:#CC1F1F;font-weight:600">Track Your Order →</a></p>
+      </div>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM || '"FireKiller" <noreply@oustfire.com>',
+    to: data.customerEmail,
+    subject: `✅ Order Confirmed — #${data.orderNumber} | FireKiller`,
     html,
   });
 }

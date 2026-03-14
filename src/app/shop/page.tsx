@@ -14,7 +14,7 @@ const mainProducts = [
     rating: 4.8,
     reviews: 324,
     badge: "Best Seller",
-    image: "/images/products/firekiller-1.webp",
+    image: "/images/products/f2.png",
     href: "/shop/firekiller-1",
     packs: "Available in 1, 2 & 3 Unit packs",
   },
@@ -26,7 +26,7 @@ const mainProducts = [
     rating: 4.7,
     reviews: 456,
     badge: "Kitchen Essential",
-    image: "/images/products/pansafe-1.webp",
+    image: "/images/products/p1.png",
     href: "/shop/pansafe-1",
     packs: "Available in 1, 3 & 5 Pc packs",
   },
@@ -42,7 +42,7 @@ export default function ShopPage() {
             Shop <span className="text-primary">Fire Safety</span>
           </h1>
           <p className="mt-2 text-muted-foreground max-w-md mx-auto">
-            Two products. Complete protection for your home and kitchen.
+            Complete protection for your home and kitchen.
           </p>
         </div>
       </div>

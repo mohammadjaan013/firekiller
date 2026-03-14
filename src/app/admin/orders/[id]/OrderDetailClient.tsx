@@ -114,7 +114,7 @@ export default function OrderDetailClient({ order: initialOrder }: OrderProps) {
       });
       if (!res.ok) throw new Error("Failed");
       setOrder((prev) => ({ ...prev, emailSentToAdmin: true }));
-      setMessage("Email sent to sales@oustfire.com!");
+      setMessage("Email sent successfully!");
     } catch {
       setMessage("Failed to send email");
     } finally {
@@ -356,7 +356,7 @@ export default function OrderDetailClient({ order: initialOrder }: OrderProps) {
           <p className="text-sm text-muted-foreground mb-3">
             {order.emailSentToAdmin
               ? "✅ Email has been sent to sales@oustfire.com"
-              : "Send order details to the company email."}
+              : "Send order details via email."}
           </p>
 
           <button

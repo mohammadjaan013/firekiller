@@ -126,7 +126,12 @@ async function main() {
       features: ["Works on Oil, Gas & Electrical fires", "Zero maintenance for 5 years", "One-hand squeeze operation", "Non-toxic, eco-friendly agent", "Wall-mount bracket included", "ISI certified & BIS approved"],
       specifications: { Quantity: "1 × FireKiller", Weight: "500 g", Type: "Clean Agent (ABC + Electrical)", Range: "2-3 meters", "Discharge Time": "8-10 seconds", "Shelf Life": "5 years", Certifications: "ISI, BIS, CE" },
       video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
-      images: [{ url: "/images/products/firekiller-1.webp", isPrimary: true, sortOrder: 0 }],
+      images: [
+        { url: "/images/products/f2.png", isPrimary: true, sortOrder: 0 },
+        { url: "/images/products/firekiller-1.webp", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/1.png", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/2.png", isPrimary: false, sortOrder: 3 },
+      ],
     },
     // ── FireKiller × 2 ──────────────────────────────────
     {
@@ -152,7 +157,12 @@ async function main() {
       features: ["Two extinguishers for multi-area safety", "Save more vs buying individually", "Zero maintenance for 5 years each", "One-hand squeeze operation", "Two wall-mount brackets included", "ISI certified & BIS approved"],
       specifications: { Quantity: "2 × FireKiller", Weight: "500 g per unit", Type: "Clean Agent (ABC + Electrical)", Range: "2-3 meters", "Discharge Time": "8-10 seconds", "Shelf Life": "5 years", Certifications: "ISI, BIS, CE" },
       video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
-      images: [{ url: "/images/products/firekiller-2.webp", isPrimary: true, sortOrder: 0 }],
+      images: [
+        { url: "/images/products/firekiller-2.webp", isPrimary: true, sortOrder: 0 },
+        { url: "/images/products/firekiller-1.webp", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/1.png", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/2.png", isPrimary: false, sortOrder: 3 },
+      ],
     },
     // ── FireKiller × 3 ──────────────────────────────────
     {
@@ -178,7 +188,12 @@ async function main() {
       features: ["Three extinguishers for maximum safety", "Biggest savings on per-unit cost", "Zero maintenance for 5 years each", "One-hand squeeze operation", "Three wall-mount brackets included", "ISI certified & BIS approved"],
       specifications: { Quantity: "3 × FireKiller", Weight: "500 g per unit", Type: "Clean Agent (ABC + Electrical)", Range: "2-3 meters", "Discharge Time": "8-10 seconds", "Shelf Life": "5 years", Certifications: "ISI, BIS, CE" },
       video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
-      images: [{ url: "/images/products/firekiller-3.webp", isPrimary: true, sortOrder: 0 }],
+      images: [
+        { url: "/images/products/firekiller-3.webp", isPrimary: true, sortOrder: 0 },
+        { url: "/images/products/firekiller-1.webp", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/1.png", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/2.png", isPrimary: false, sortOrder: 3 },
+      ],
     },
     // ── PanSafe × 1 ─────────────────────────────────────
     {
@@ -204,7 +219,12 @@ async function main() {
       features: ["Just throw into burning pan — that's it", "Activates on contact with fire", "Specifically made for cooking oil fires", "Child & elderly friendly - no training needed", "Compact - fits in a kitchen drawer"],
       specifications: { Quantity: "1 × PanSafe Sachet", Weight: "100 g", Type: "Kitchen Oil Fire Suppression", Activation: "Automatic on contact", "Shelf Life": "3 years", Certifications: "ISI, NABL tested" },
       video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
-      images: [{ url: "/images/products/pansafe-1.webp", isPrimary: true, sortOrder: 0 }],
+      images: [
+        { url: "/images/products/p1.png", isPrimary: true, sortOrder: 0 },
+        { url: "/images/products/pansafe-1.webp", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/3.png", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/4.png", isPrimary: false, sortOrder: 3 },
+      ],
     },
     // ── PanSafe × 3 ─────────────────────────────────────
     {
@@ -230,7 +250,12 @@ async function main() {
       features: ["Three sachets for extended protection", "Save vs buying individually", "Activates on contact with fire", "Child & elderly friendly - no training needed", "Perfect housewarming gift"],
       specifications: { Quantity: "3 × PanSafe Sachet", Weight: "100 g per sachet", Type: "Kitchen Oil Fire Suppression", Activation: "Automatic on contact", "Shelf Life": "3 years", Certifications: "ISI, NABL tested" },
       video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
-      images: [{ url: "/images/products/pansafe-3.webp", isPrimary: true, sortOrder: 0 }],
+      images: [
+        { url: "/images/products/pansafe-3.webp", isPrimary: true, sortOrder: 0 },
+        { url: "/images/products/pansafe-1.webp", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/3.png", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/4.png", isPrimary: false, sortOrder: 3 },
+      ],
     },
     // ── PanSafe × 5 ─────────────────────────────────────
     {
@@ -256,7 +281,12 @@ async function main() {
       features: ["Five sachets for maximum coverage", "Best per-unit value", "Share with family & neighbours", "Activates on contact with fire", "3-year shelf life"],
       specifications: { Quantity: "5 × PanSafe Sachet", Weight: "100 g per sachet", Type: "Kitchen Oil Fire Suppression", Activation: "Automatic on contact", "Shelf Life": "3 years", Certifications: "ISI, NABL tested" },
       video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
-      images: [{ url: "/images/products/pansafe-5.webp", isPrimary: true, sortOrder: 0 }],
+      images: [
+        { url: "/images/products/pansafe-5.webp", isPrimary: true, sortOrder: 0 },
+        { url: "/images/products/pansafe-1.webp", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/3.png", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/4.png", isPrimary: false, sortOrder: 3 },
+      ],
     },
   ];
 

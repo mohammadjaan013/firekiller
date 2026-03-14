@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendOrderConfirmation } from "@/lib/interakt";
-import { sendOrderEmailToAdmin } from "@/lib/email";
+import { sendOrderEmailToAdmin, sendOrderConfirmationToCustomer } from "@/lib/email";
 
 /**
  * Generate a unique order number: FK-YYYYMMDD-XXXX
@@ -198,6 +198,32 @@ export async function POST(req: NextRequest) {
         }).catch((e) => console.error("Failed to update email flag:", e));
       })
       .catch((err) => console.error("Admin email error:", err));
+
+    // Send order confirmation email to customer (fire-and-forget)
+    sendOrderConfirmationToCustomer({
+      orderNumber: order.orderNumber,
+      customerName: address.name,
+      customerEmail: address.email,
+      customerPhone: address.phone,
+      address: {
+        line1: address.line1,
+        line2: address.line2,
+        city: address.city,
+        state: address.state,
+        pincode: address.pincode,
+      },
+      items: items.map((item: { name: string; quantity: number; price: number }) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      subtotal,
+      gstAmount,
+      shipping,
+      total: order.total,
+      paymentMethod: "razorpay",
+      paymentId: razorpayPaymentId,
+    }).catch((err) => console.error("Customer email error:", err));
 
     return NextResponse.json({
       orderNumber: order.orderNumber,

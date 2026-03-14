@@ -42,7 +42,7 @@ const pansafeSteps = [
     number: "03",
     title: "Fire Goes Out",
     description: "The sachet bursts on contact and suppresses the fire instantly.",
-    image: "/images/products/p-s-3.png",
+    image: "/images/products/p-s-6.png",
   },
 ];
 

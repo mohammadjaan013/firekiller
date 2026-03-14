@@ -10,20 +10,20 @@ const categories = [
     title: "Home Safety",
     description: "FireKiller Extinguisher — compact, powerful, zero maintenance.",
     href: "/shop/firekiller-1",
-    image: "/images/categories/home.png",
+    image: "/images/categories/f-c-h.png",
   },
   {
     title: "Kitchen Safety",
     description: "PanSafe Sachet — just toss into a burning pan. Done.",
     href: "/shop/pansafe-1",
-    image: "/images/categories/kitchen.png",
+    image: "/images/categories/kittu.png",
     highlighted: true,
   },
   {
     title: "Car Safety",
     description: "FireKiller for your car — fits under the seat, always ready.",
     href: "/shop/firekiller-1",
-    image: "/images/categories/car.png",
+    image: "/images/categories/f-c-c.png",
   },
 ];
 
