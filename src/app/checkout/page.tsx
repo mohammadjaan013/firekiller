@@ -540,10 +540,10 @@ export default function CheckoutPage() {
 
                 {/* Trust */}
                 <div className="mt-5 space-y-2">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  {/* <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Truck className="h-3.5 w-3.5 text-primary" />
                     Free shipping on orders above ₹999
-                  </div>
+                  </div> */}
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Shield className="h-3.5 w-3.5 text-primary" />
                     Secure checkout powered by Razorpay

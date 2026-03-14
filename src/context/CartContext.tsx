@@ -102,11 +102,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     []
   );
 
-  const removeItem = useCallback((id: number) => {
+  const removeItem = useCallback((id: number | string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
-  const updateQuantity = useCallback((id: number, quantity: number) => {
+  const updateQuantity = useCallback((id: number | string, quantity: number) => {
     if (quantity <= 0) {
       setItems((prev) => prev.filter((i) => i.id !== id));
     } else {
@@ -133,7 +133,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const isInCart = useCallback(
-    (id: number) => items.some((i) => i.id === id),
+    (id: number | string) => items.some((i) => i.id === id),
     [items]
   );
 

@@ -71,7 +71,7 @@ const productLines = [
       },
     ],
     highlights: [
-      { icon: Shield, text: "Non-toxic, food-safe agent" },
+      // { icon: Shield, text: "Non-toxic, food-safe agent" },
       { icon: Clock, text: "3-year shelf life" },
       { icon: Zap, text: "No pins, no training, no panic" },
     ],

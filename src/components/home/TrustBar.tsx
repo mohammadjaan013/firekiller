@@ -1,19 +1,18 @@
 "use client";
 
-import { Truck, ShieldCheck, Headphones, Award } from "lucide-react";
+import { Truck, ShieldCheck, Headphones } from "lucide-react";
 
 const features = [
   { icon: Truck, title: "Fast Shipping", subtitle: "All India Delivery" },
   { icon: ShieldCheck, title: "Secure Checkout", subtitle: "100% Safe" },
   { icon: Headphones, title: "Customer Support", subtitle: "24/7 WhatsApp" },
-  { icon: Award, title: "1 Year Warranty", subtitle: "Guaranteed" },
 ];
 
 export default function TrustBar() {
   return (
     <section className="bg-[#8B1A1A] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4">
+        <div className="flex justify-center gap-8 md:gap-16 py-4">
           {features.map(({ icon: Icon, title, subtitle }) => (
             <div key={title} className="flex items-center gap-3">
               <div className="p-2 bg-white/10 rounded-lg">

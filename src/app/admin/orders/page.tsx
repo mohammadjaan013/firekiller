@@ -40,16 +40,19 @@ export default async function AdminOrdersPage() {
                 <th className="text-left px-4 py-3 font-semibold text-secondary">Payment</th>
                 <th className="text-left px-4 py-3 font-semibold text-secondary">Status</th>
                 <th className="text-left px-4 py-3 font-semibold text-secondary">Date</th>
+                <th className="text-left px-4 py-3 font-semibold text-secondary">Actions</th>
               </tr>
             </thead>
             <tbody>
               {orders.map((order) => (
                 <tr key={order.id} className="border-b border-border last:border-0 hover:bg-muted/30">
                   <td className="px-4 py-3">
-                    <p className="font-medium text-secondary">{order.orderNumber}</p>
-                    {order.awbCode && (
-                      <p className="text-xs text-muted-foreground">AWB: {order.awbCode}</p>
-                    )}
+                    <Link href={`/admin/orders/${order.id}`} className="hover:text-primary transition-colors">
+                      <p className="font-medium text-secondary hover:text-primary">{order.orderNumber}</p>
+                      {order.awbCode && (
+                        <p className="text-xs text-muted-foreground">AWB: {order.awbCode}</p>
+                      )}
+                    </Link>
                   </td>
                   <td className="px-4 py-3">
                     <p className="text-secondary">{order.address?.name || order.user?.name}</p>
@@ -101,11 +104,19 @@ export default async function AdminOrdersPage() {
                       year: "numeric",
                     })}
                   </td>
+                  <td className="px-4 py-3">
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      className="px-3 py-1.5 text-xs font-semibold text-primary bg-primary/5 rounded-lg hover:bg-primary/10 transition-colors"
+                    >
+                      View
+                    </Link>
+                  </td>
                 </tr>
               ))}
               {orders.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-muted-foreground">
+                  <td colSpan={8} className="px-4 py-12 text-center text-muted-foreground">
                     No orders yet.
                   </td>
                 </tr>

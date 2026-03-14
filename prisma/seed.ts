@@ -97,16 +97,21 @@ async function main() {
     }
   }
 
+  // All prices are BASE prices EXCLUDING 18% GST
+  // FireKiller: 799, 1598, 2397  (+18% GST = 943, 1886, 2828)
+  // PanSafe:    899, 2427, 3820  (+18% GST = 1061, 2864, 4507)
+
   const productsData = [
-    // ── FireKiller × 1 (Home + Car) ─────────────────────
+    // ── FireKiller × 1 ──────────────────────────────────
     {
       name: "FireKiller — 1 Unit",
       slug: "firekiller-1",
-      description: "Single compact fire extinguisher for home or car",
-      shortDesc:
-        "India's most trusted compact fire extinguisher. Works on Class A, B, C, and electrical fires. No maintenance needed for 5 years.",
-      price: 943,
-      originalPrice: 943,
+      description: "Single compact fire extinguisher — perfect for a room, office, or car.",
+      shortDesc: "India's most trusted compact fire extinguisher.",
+      longDescription: "The FireKiller is India's most trusted compact fire extinguisher. Works on Class A, B, C, and electrical fires with zero maintenance for 5 years. Just grab, point, and spray — one-hand operation means anyone in the family can use it.",
+      price: 799,
+      originalPrice: 999,
+      gstRate: 0.18,
       sku: "FK-1",
       stock: 200,
       isActive: true,
@@ -114,20 +119,25 @@ async function main() {
       badge: "Best Seller",
       weight: 0.5,
       dimensions: "28 × 9 cm",
+      packSize: 1,
+      productLine: "firekiller",
+      categoryLabel: "Home & Car Safety",
       categoryId: homeCat.id,
-      images: [
-        { url: "/images/products/firekiller-1.webp", isPrimary: true, sortOrder: 0 },
-      ],
+      features: ["Works on Oil, Gas & Electrical fires", "Zero maintenance for 5 years", "One-hand squeeze operation", "Non-toxic, eco-friendly agent", "Wall-mount bracket included", "ISI certified & BIS approved"],
+      specifications: { Quantity: "1 × FireKiller", Weight: "500 g", Type: "Clean Agent (ABC + Electrical)", Range: "2-3 meters", "Discharge Time": "8-10 seconds", "Shelf Life": "5 years", Certifications: "ISI, BIS, CE" },
+      video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
+      images: [{ url: "/images/products/firekiller-1.webp", isPrimary: true, sortOrder: 0 }],
     },
-    // ── FireKiller × 2 (Home + Car) ─────────────────────
+    // ── FireKiller × 2 ──────────────────────────────────
     {
       name: "FireKiller — 2 Units",
       slug: "firekiller-2",
-      description: "Two extinguishers for multi-room or multi-vehicle coverage",
-      shortDesc:
-        "Cover bedroom + living room, or place one in each car. Same trusted clean-agent formula. Save over \u20B9200.",
-      price: 1650,
-      originalPrice: 1850,
+      description: "Two extinguishers — cover bedroom + living room, or equip two cars.",
+      shortDesc: "Cover two critical areas with the FireKiller 2-unit pack.",
+      longDescription: "Cover two critical areas with the FireKiller 2-unit pack. Bedroom + living room, or one per car. Same trusted clean-agent formula, same zero-maintenance promise.",
+      price: 1598,
+      originalPrice: 1998,
+      gstRate: 0.18,
       sku: "FK-2",
       stock: 150,
       isActive: true,
@@ -135,20 +145,25 @@ async function main() {
       badge: "Popular",
       weight: 1.0,
       dimensions: "28 × 9 cm (each)",
+      packSize: 2,
+      productLine: "firekiller",
+      categoryLabel: "Home & Car Safety",
       categoryId: homeCat.id,
-      images: [
-        { url: "/images/products/firekiller-2.webp", isPrimary: true, sortOrder: 0 },
-      ],
+      features: ["Two extinguishers for multi-area safety", "Save more vs buying individually", "Zero maintenance for 5 years each", "One-hand squeeze operation", "Two wall-mount brackets included", "ISI certified & BIS approved"],
+      specifications: { Quantity: "2 × FireKiller", Weight: "500 g per unit", Type: "Clean Agent (ABC + Electrical)", Range: "2-3 meters", "Discharge Time": "8-10 seconds", "Shelf Life": "5 years", Certifications: "ISI, BIS, CE" },
+      video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
+      images: [{ url: "/images/products/firekiller-2.webp", isPrimary: true, sortOrder: 0 }],
     },
-    // ── FireKiller × 3 (Home + Car) ─────────────────────
+    // ── FireKiller × 3 ──────────────────────────────────
     {
       name: "FireKiller — 3 Units",
       slug: "firekiller-3",
-      description: "Three extinguishers for whole-home or fleet protection",
-      shortDesc:
-        "Protect bedroom, living room, kitchen, or all three vehicles. Best value with ₹400 savings.",
-      price: 2358,
-      originalPrice: 2758,
+      description: "Three extinguishers — whole-home protection or equip your fleet.",
+      shortDesc: "The 3-unit pack gives you complete coverage.",
+      longDescription: "The 3-unit pack gives you complete coverage. Place one in every room or equip multiple vehicles. The best value with the biggest savings — protect your family without leaving any blind spots.",
+      price: 2397,
+      originalPrice: 2997,
+      gstRate: 0.18,
       sku: "FK-3",
       stock: 100,
       isActive: true,
@@ -156,21 +171,25 @@ async function main() {
       badge: "Best Value",
       weight: 1.5,
       dimensions: "28 × 9 cm (each)",
+      packSize: 3,
+      productLine: "firekiller",
+      categoryLabel: "Home & Car Safety",
       categoryId: homeCat.id,
-      images: [
-        { url: "/images/products/firekiller-3.webp", isPrimary: true, sortOrder: 0 },
-      ],
+      features: ["Three extinguishers for maximum safety", "Biggest savings on per-unit cost", "Zero maintenance for 5 years each", "One-hand squeeze operation", "Three wall-mount brackets included", "ISI certified & BIS approved"],
+      specifications: { Quantity: "3 × FireKiller", Weight: "500 g per unit", Type: "Clean Agent (ABC + Electrical)", Range: "2-3 meters", "Discharge Time": "8-10 seconds", "Shelf Life": "5 years", Certifications: "ISI, BIS, CE" },
+      video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
+      images: [{ url: "/images/products/firekiller-3.webp", isPrimary: true, sortOrder: 0 }],
     },
-
-    // ── PanSafe × 1 (Kitchen) ───────────────────────────
+    // ── PanSafe × 1 ─────────────────────────────────────
     {
       name: "PanSafe Sachet — 1 Pc",
       slug: "pansafe-1",
-      description: "Single fire suppression sachet for cooking oil fires",
-      shortDesc:
-        "Revolutionary throw-and-forget sachet. Toss into a burning pan — it activates on contact. No aiming, no pins.",
-      price: 1299,
-      originalPrice: 1299,
+      description: "Single fire suppression sachet — toss into a burning pan, fire goes out instantly.",
+      shortDesc: "Revolutionary throw-and-forget fire sachet.",
+      longDescription: "PanSafe is a revolutionary throw-and-forget fire sachet for cooking oil fires — the #1 cause of kitchen fires in India. Simply toss into the burning pan; it bursts on contact, instantly suppressing the fire. No aiming, no pins, no panic.",
+      price: 899,
+      originalPrice: 1149,
+      gstRate: 0.18,
       sku: "PS-1",
       stock: 500,
       isActive: true,
@@ -178,20 +197,25 @@ async function main() {
       badge: "Starter",
       weight: 0.1,
       dimensions: "15 × 10 cm",
+      packSize: 1,
+      productLine: "pansafe",
+      categoryLabel: "Kitchen Safety",
       categoryId: kitchenCat.id,
-      images: [
-        { url: "/images/products/pansafe-1.webp", isPrimary: true, sortOrder: 0 },
-      ],
+      features: ["Just throw into burning pan — that's it", "Activates on contact with fire", "Specifically made for cooking oil fires", "Child & elderly friendly - no training needed", "Compact - fits in a kitchen drawer"],
+      specifications: { Quantity: "1 × PanSafe Sachet", Weight: "100 g", Type: "Kitchen Oil Fire Suppression", Activation: "Automatic on contact", "Shelf Life": "3 years", Certifications: "ISI, NABL tested" },
+      video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
+      images: [{ url: "/images/products/pansafe-1.webp", isPrimary: true, sortOrder: 0 }],
     },
-    // ── PanSafe × 3 (Kitchen) ───────────────────────────
+    // ── PanSafe × 3 ─────────────────────────────────────
     {
       name: "PanSafe Sachet — 3 Pcs",
       slug: "pansafe-3",
-      description: "Pack of 3 sachets for months of kitchen protection",
-      shortDesc:
-        "Three sachets — stove, drawer, spare. Daily confidence for families who cook with oil. Save ₹399.",
-      price: 3498,
-      originalPrice: 3897,
+      description: "Pack of 3 sachets — months of kitchen protection with backups ready.",
+      shortDesc: "Three sachets for extended protection.",
+      longDescription: "The 3-pack keeps your kitchen protected long-term. Keep one by the stove, one in the drawer, and one spare. Ideal for families that cook daily with oil.",
+      price: 2427,
+      originalPrice: 3447,
+      gstRate: 0.18,
       sku: "PS-3",
       stock: 300,
       isActive: true,
@@ -199,20 +223,25 @@ async function main() {
       badge: "Best Seller",
       weight: 0.3,
       dimensions: "15 × 10 cm (each)",
+      packSize: 3,
+      productLine: "pansafe",
+      categoryLabel: "Kitchen Safety",
       categoryId: kitchenCat.id,
-      images: [
-        { url: "/images/products/pansafe-3.webp", isPrimary: true, sortOrder: 0 },
-      ],
+      features: ["Three sachets for extended protection", "Save vs buying individually", "Activates on contact with fire", "Child & elderly friendly - no training needed", "Perfect housewarming gift"],
+      specifications: { Quantity: "3 × PanSafe Sachet", Weight: "100 g per sachet", Type: "Kitchen Oil Fire Suppression", Activation: "Automatic on contact", "Shelf Life": "3 years", Certifications: "ISI, NABL tested" },
+      video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
+      images: [{ url: "/images/products/pansafe-3.webp", isPrimary: true, sortOrder: 0 }],
     },
-    // ── PanSafe × 5 (Kitchen) ───────────────────────────
+    // ── PanSafe × 5 ─────────────────────────────────────
     {
       name: "PanSafe Sachet — 5 Pcs",
       slug: "pansafe-5",
-      description: "Mega pack of 5 sachets for year-round kitchen safety",
-      shortDesc:
-        "Under ₹1,099 per sachet. Share with family or stock up for the year. Best per-unit value.",
-      price: 5495,
-      originalPrice: 6495,
+      description: "Mega pack of 5 sachets — share with family or stock up for the year.",
+      shortDesc: "The ultimate kitchen safety investment.",
+      longDescription: "The 5-pack is the ultimate kitchen safety investment. Keep sachets in your kitchen, give extras to parents or neighbours. The most affordable fire protection you can buy.",
+      price: 3820,
+      originalPrice: 5745,
+      gstRate: 0.18,
       sku: "PS-5",
       stock: 200,
       isActive: true,
@@ -220,18 +249,22 @@ async function main() {
       badge: "Family Pack",
       weight: 0.5,
       dimensions: "15 × 10 cm (each)",
+      packSize: 5,
+      productLine: "pansafe",
+      categoryLabel: "Kitchen Safety",
       categoryId: kitchenCat.id,
-      images: [
-        { url: "/images/products/pansafe-5.webp", isPrimary: true, sortOrder: 0 },
-      ],
+      features: ["Five sachets for maximum coverage", "Best per-unit value", "Share with family & neighbours", "Activates on contact with fire", "3-year shelf life"],
+      specifications: { Quantity: "5 × PanSafe Sachet", Weight: "100 g per sachet", Type: "Kitchen Oil Fire Suppression", Activation: "Automatic on contact", "Shelf Life": "3 years", Certifications: "ISI, NABL tested" },
+      video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
+      images: [{ url: "/images/products/pansafe-5.webp", isPrimary: true, sortOrder: 0 }],
     },
   ];
 
-  for (const { images, ...productData } of productsData) {
+  for (const { images, specifications, ...productData } of productsData) {
     const product = await prisma.product.upsert({
       where: { slug: productData.slug },
-      update: productData,
-      create: productData,
+      update: { ...productData, specifications },
+      create: { ...productData, specifications },
     });
 
     // Delete existing images and re-create

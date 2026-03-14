@@ -8,10 +8,10 @@ import {
   DollarSign,
   FileText,
   MessageSquare,
-  MessageCircle,
   ShieldCheck,
   Tag,
   ArrowRight,
+  IndianRupee,
 } from "lucide-react";
 
 export default async function AdminDashboard() {
@@ -26,7 +26,6 @@ export default async function AdminDashboard() {
     blogCount,
     contactCount,
     couponCount,
-    whatsappLogCount,
     codPendingCount,
     recentRevenue,
   ] = await Promise.all([
@@ -37,7 +36,6 @@ export default async function AdminDashboard() {
     prisma.blogPost.count(),
     prisma.contactMessage.count(),
     prisma.coupon.count(),
-    prisma.whatsappLog.count(),
     prisma.order.count({
       where: { paymentMethod: "cod", codVerified: false, status: { not: "CANCELLED" } },
     }),
@@ -49,14 +47,13 @@ export default async function AdminDashboard() {
 
   const stats = [
     { label: "Orders", value: orderCount, icon: ShoppingCart, color: "bg-purple-50 text-purple-600", href: "/admin/orders" },
-    { label: "Revenue", value: `₹${(recentRevenue._sum.total || 0).toLocaleString("en-IN")}`, icon: DollarSign, color: "bg-green-50 text-green-600", href: "/admin/orders" },
-    { label: "COD Pending", value: codPendingCount, icon: ShieldCheck, color: "bg-amber-50 text-amber-600", href: "/admin/cod-orders" },
-    { label: "WhatsApp Sent", value: whatsappLogCount, icon: MessageCircle, color: "bg-emerald-50 text-emerald-600", href: "/admin/whatsapp-logs" },
+    { label: "Revenue", value: `₹${(recentRevenue._sum.total || 0).toLocaleString("en-IN")}`, icon: IndianRupee, color: "bg-green-50 text-green-600", href: "/admin/orders" },
+    // { label: "COD Pending", value: codPendingCount, icon: ShieldCheck, color: "bg-amber-50 text-amber-600", href: "/admin/cod-orders" },
     { label: "Products", value: productCount, icon: Package, color: "bg-blue-50 text-blue-600", href: "/admin/products" },
     { label: "Users", value: userCount, icon: Users, color: "bg-indigo-50 text-indigo-600", href: "/admin/users" },
     { label: "Categories", value: categoryCount, icon: Tag, color: "bg-orange-50 text-orange-600", href: "/admin/categories" },
-    { label: "Blog Posts", value: blogCount, icon: FileText, color: "bg-pink-50 text-pink-600", href: "/admin/blog" },
-    { label: "Messages", value: contactCount, icon: MessageSquare, color: "bg-yellow-50 text-yellow-600", href: "/admin/messages" },
+    // { label: "Blog Posts", value: blogCount, icon: FileText, color: "bg-pink-50 text-pink-600", href: "/admin/blog" },
+    // { label: "Messages", value: contactCount, icon: MessageSquare, color: "bg-yellow-50 text-yellow-600", href: "/admin/messages" },
     { label: "Coupons", value: couponCount, icon: DollarSign, color: "bg-teal-50 text-teal-600", href: "/admin/coupons" },
   ];
 
@@ -106,20 +103,13 @@ export default async function AdminDashboard() {
             <ShoppingCart className="h-5 w-5 text-primary" />
             <span className="text-sm font-medium text-secondary">View Orders</span>
           </Link>
-          <Link
+          {/* <Link
             href="/admin/cod-orders"
             className="flex items-center gap-3 p-4 rounded-lg border border-border hover:bg-muted transition-colors"
           >
             <ShieldCheck className="h-5 w-5 text-amber-600" />
             <span className="text-sm font-medium text-secondary">COD Verification</span>
-          </Link>
-          <Link
-            href="/admin/whatsapp-logs"
-            className="flex items-center gap-3 p-4 rounded-lg border border-border hover:bg-muted transition-colors"
-          >
-            <MessageCircle className="h-5 w-5 text-emerald-600" />
-            <span className="text-sm font-medium text-secondary">WhatsApp Logs</span>
-          </Link>
+          </Link> */}
           <Link
             href="/admin/products"
             className="flex items-center gap-3 p-4 rounded-lg border border-border hover:bg-muted transition-colors"

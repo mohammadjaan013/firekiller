@@ -2,20 +2,19 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   ShoppingCart,
-  MessageCircle,
   ShieldCheck,
   Package,
   Users,
   Tag,
   DollarSign,
   ArrowLeft,
+  IndianRupee,
 } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
-  { href: "/admin/cod-orders", label: "COD Orders", icon: ShieldCheck },
-  { href: "/admin/whatsapp-logs", label: "WhatsApp Logs", icon: MessageCircle },
+  // { href: "/admin/cod-orders", label: "COD Orders", icon: ShieldCheck },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/coupons", label: "Coupons", icon: DollarSign },
@@ -28,7 +27,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex bg-muted">
+    <div className="min-h-screen flex bg-muted pt-16">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-border shrink-0 hidden lg:block">
         <div className="p-5 border-b border-border">
@@ -56,7 +55,7 @@ export default function AdminLayout({
       </aside>
 
       {/* Mobile header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-border px-4 py-3 flex items-center gap-3">
+      <div className="lg:hidden fixed top-16 left-0 right-0 z-40 bg-white border-b border-border px-4 py-3 flex items-center gap-3">
         <Link href="/" className="text-muted-foreground hover:text-secondary">
           <ArrowLeft className="h-4 w-4" />
         </Link>
@@ -64,7 +63,7 @@ export default function AdminLayout({
       </div>
 
       {/* Main content */}
-      <main className="flex-1 lg:pt-0 pt-14 overflow-x-hidden">{children}</main>
+      <main className="flex-1 lg:pt-0 pt-28 overflow-x-hidden">{children}</main>
     </div>
   );
 }

@@ -4,72 +4,70 @@ import { Calendar, Clock, ArrowRight, Tag } from "lucide-react";
 const blogPosts = [
   {
     id: 1,
-    title: "5 Essential Fire Safety Tips Every Indian Home Needs",
+    title: "Massive Fire Breaks Out in Mumbai High-Rise — Lessons for Every Homeowner",
     excerpt:
-      "Fire emergencies can happen anywhere, anytime. Here are 5 critical fire safety measures that every household in India should implement today.",
-    category: "Safety Tips",
-    date: "Feb 28, 2026",
-    readTime: "5 min read",
-    slug: "fire-safety-tips-indian-home",
+      "A devastating fire in a Mumbai residential building has once again highlighted the critical need for fire safety equipment in every Indian home.",
+    category: "Fire News",
+    date: "Mar 8, 2026",
+    readTime: "4 min read",
+    slug: "mumbai-highrise-fire-lessons",
   },
   {
     id: 2,
     title: "Kitchen Oil Fires: Why Water Makes It Worse",
     excerpt:
-      "Most kitchen fires start with cooking oil. Learn why throwing water on an oil fire is the worst thing you can do and what to do instead.",
-    category: "Education",
-    date: "Feb 20, 2026",
+      "Most kitchen fires in India start with cooking oil. Learn why throwing water on an oil fire is the worst thing you can do and what to do instead.",
+    category: "Fire Safety",
+    date: "Mar 5, 2026",
     readTime: "4 min read",
     slug: "kitchen-oil-fires-water",
   },
   {
     id: 3,
-    title: "FireKiller vs Traditional Extinguishers: A Complete Comparison",
+    title: "India's Fire Safety Market Growing at 12% — What It Means for You",
     excerpt:
-      "How does FireKiller stack up against bulky traditional fire extinguishers? We compare size, ease of use, effectiveness, and maintenance.",
-    category: "Product",
-    date: "Feb 15, 2026",
-    readTime: "7 min read",
-    slug: "firekiller-vs-traditional",
-  },
-  {
-    id: 4,
-    title: "How to Choose the Right Fire Extinguisher for Your Car",
-    excerpt:
-      "Your car is a highly flammable environment. Learn what type of extinguisher you need and where to keep it for maximum safety.",
-    category: "Car Safety",
-    date: "Feb 10, 2026",
-    readTime: "4 min read",
-    slug: "fire-extinguisher-car-guide",
-  },
-  {
-    id: 5,
-    title: "The Growing Fire Safety Market in India: 2026 Trends",
-    excerpt:
-      "India's fire safety market is growing at 12% annually. Here's what's driving the growth and what it means for homeowners and businesses.",
+      "With over 17,000 fire deaths annually, India is finally waking up to fire safety. Here's what's driving the change and how to stay protected.",
     category: "Industry",
-    date: "Feb 5, 2026",
+    date: "Mar 1, 2026",
     readTime: "6 min read",
     slug: "fire-safety-market-india-2026",
   },
   {
-    id: 6,
-    title: "PanSafe Sachet: The Revolutionary Kitchen Fire Solution",
+    id: 4,
+    title: "5 Essential Fire Safety Tips Every Indian Household Needs",
     excerpt:
-      "Meet PanSafe — the throw-and-forget fire sachet designed specifically for cooking oil fires. Here's the science behind it.",
-    category: "Product",
-    date: "Jan 28, 2026",
+      "Fire emergencies can happen anywhere, anytime. Here are 5 critical fire safety measures that every household in India should implement today.",
+    category: "Fire Safety",
+    date: "Feb 25, 2026",
     readTime: "5 min read",
-    slug: "pansafe-sachet-guide",
+    slug: "fire-safety-tips-indian-home",
+  },
+  {
+    id: 5,
+    title: "Delhi Factory Fire Claims 7 Lives — Why Compact Extinguishers Matter",
+    excerpt:
+      "Yet another industrial fire tragedy in Delhi. Experts say compact extinguishers at every workstation could have prevented the casualties.",
+    category: "Fire News",
+    date: "Feb 20, 2026",
+    readTime: "3 min read",
+    slug: "delhi-factory-fire-compact-extinguishers",
+  },
+  {
+    id: 6,
+    title: "How to Choose the Right Fire Extinguisher for Your Car",
+    excerpt:
+      "Your car is a highly flammable environment. Learn what type of extinguisher you need and where to keep it for maximum safety.",
+    category: "Fire Safety",
+    date: "Feb 15, 2026",
+    readTime: "4 min read",
+    slug: "fire-extinguisher-car-guide",
   },
 ];
 
 const categoryColors: Record<string, string> = {
-  "Safety Tips": "bg-blue-500/10 text-blue-400 dark:text-blue-300",
-  Education: "bg-purple-500/10 text-purple-400 dark:text-purple-300",
-  Product: "bg-red-500/10 text-red-400 dark:text-red-300",
-  "Car Safety": "bg-orange-500/10 text-orange-400 dark:text-orange-300",
-  Industry: "bg-green-500/10 text-green-400 dark:text-green-300",
+  "Fire News": "bg-red-500/10 text-red-600",
+  "Fire Safety": "bg-blue-500/10 text-blue-600",
+  Industry: "bg-green-500/10 text-green-600",
 };
 
 export default function BlogPage() {
@@ -82,8 +80,8 @@ export default function BlogPage() {
             Fire Safety <span className="text-primary">Blog</span>
           </h1>
           <p className="mt-3 text-muted-foreground max-w-xl">
-            Tips, guides, and insights to keep you and your family safe from
-            fire hazards
+            Latest fire news, safety tips, and insights to keep you and your
+            family protected
           </p>
         </div>
       </div>

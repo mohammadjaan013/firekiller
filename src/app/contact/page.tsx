@@ -71,20 +71,20 @@ export default function ContactPage() {
               {
                 icon: Phone,
                 title: "Call Us",
-                detail: "+91 98765 43210",
+                detail: "+91 93242 59477",
                 sub: "Mon-Sat, 9AM-8PM IST",
               },
               {
                 icon: Mail,
                 title: "Email Us",
-                detail: "support@firekiller.in",
+                detail: "sales@oustfire.com",
                 sub: "We reply within 24 hours",
               },
               {
                 icon: MapPin,
                 title: "Visit Us",
-                detail: "FireKiller HQ",
-                sub: "New Delhi, India 110001",
+                detail: "OustFire Safety Engineers Pvt. Ltd.",
+                sub: "Laxmiwadi, Patil House, 394, Thane - Belapur Rd, near SI Group, MIDC Industrial Area, Juinagar, Navi Mumbai, MH 400705",
               },
               {
                 icon: Clock,

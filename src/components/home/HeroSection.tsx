@@ -7,12 +7,11 @@ import { motion } from "framer-motion";
 
 const features = [
   "No Maintenance Required",
-  "Easy to Use — Anyone Can Operate",
-  "Multi-Class Fire Protection",
+  "Easy to Use - Anyone Can Operate",
 ];
 
 const trustMicro = [
-  { icon: Truck, label: "COD Available" },
+  // { icon: Truck, label: "COD Available" },
   { icon: ShieldCheck, label: "Fast Shipping" },
   { icon: Award, label: "Tested & Trusted" },
 ];
@@ -29,12 +28,12 @@ export default function HeroSection() {
             transition={{ duration: 0.6 }}
           >
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
+            {/* <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
               <Award className="h-3.5 w-3.5 text-primary" />
               <span className="text-xs font-semibold text-primary tracking-wide uppercase">
                 #1 Home Fire Safety Device
               </span>
-            </div>
+            </div> */}
 
             <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-secondary">
               Protect Your Home
@@ -99,22 +98,12 @@ export default function HeroSection() {
                 width={900}
                 height={750}
                 className="w-full object-contain"
-                style={{ mask: 'linear-gradient(to top, black 85%, transparent 100%)', WebkitMask: 'linear-gradient(to top, black 85%, transparent 100%)' }}
+                style={{ mask: 'linear-gradient(to top, black 80%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)', maskComposite: 'intersect', WebkitMask: 'linear-gradient(to top, black 80%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)', WebkitMaskComposite: 'source-in' }}
                 priority
               />
             </div>
 
-            {/* Floating Badge */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className="absolute top-8 right-4 lg:right-0 bg-white rounded-xl shadow-lg p-3 border border-border"
-            >
-              <p className="text-xs text-muted-foreground">Works on</p>
-              <p className="text-sm font-bold text-secondary">Oil, Gas &</p>
-              <p className="text-sm font-bold text-primary">Electrical Fires</p>
-            </motion.div>
+
           </motion.div>
         </div>
       </div>

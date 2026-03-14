@@ -1,45 +1,60 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
-const steps = [
+const firekillerSteps = [
   {
     number: "01",
     title: "Remove the Seal",
     description: "Pull the safety pin to unlock the handle. Takes 1 second.",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-10 h-10">
-        <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth="2" className="text-primary/20" />
-        <path d="M24 12v12l8 8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-primary" />
-      </svg>
-    ),
+    image: "/images/products/f-s-1.png",
   },
   {
     number: "02",
     title: "Aim at Base",
-    description: "Point the nozzle at the base of the fire — not the flames.",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-10 h-10">
-        <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth="2" className="text-primary/20" />
-        <circle cx="24" cy="24" r="6" stroke="currentColor" strokeWidth="2.5" className="text-primary" />
-        <circle cx="24" cy="24" r="12" stroke="currentColor" strokeWidth="2" className="text-primary/50" />
-      </svg>
-    ),
+    description: "Point the nozzle at the base of the fire - not the flames.",
+    image: "/images/products/f-s-2.png",
   },
   {
     number: "03",
     title: "Squeeze & Spray",
     description: "Press the handle and sweep side to side. Fire out in seconds.",
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-10 h-10">
-        <circle cx="24" cy="24" r="22" stroke="currentColor" strokeWidth="2" className="text-primary/20" />
-        <path d="M14 24h20M30 18l6 6-6 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-primary" />
-      </svg>
-    ),
+    image: "/images/products/f-s-3.png",
   },
 ];
 
+const pansafeSteps = [
+  {
+    number: "01",
+    title: "Detect the Fire",
+    description: "Keep PanSafe near your stove - always within arm's reach.",
+    image: "/images/products/p-s-1.png",
+  },
+  {
+    number: "02",
+    title: "Drop Into the Pan",
+    description: "Simply drop the sachet into the burning pan. No aiming needed.",
+    image: "/images/products/p-s-2.png",
+  },
+  {
+    number: "03",
+    title: "Fire Goes Out",
+    description: "The sachet bursts on contact and suppresses the fire instantly.",
+    image: "/images/products/p-s-3.png",
+  },
+];
+
+const tabs = [
+  { key: "firekiller", label: "FireKiller", steps: firekillerSteps },
+  { key: "pansafe", label: "PanSafe", steps: pansafeSteps },
+] as const;
+
 export default function HowItWorks() {
+  const [active, setActive] = useState<"firekiller" | "pansafe">("firekiller");
+  const current = tabs.find((t) => t.key === active)!;
+
   return (
     <section id="how-it-works" className="py-10 lg:py-14 bg-[#fafafa]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,22 +79,44 @@ export default function HowItWorks() {
           <p className="mt-3 text-muted-foreground max-w-md mx-auto">
             No training needed. Anyone in the family can use it.
           </p>
+
+          {/* Product Toggle */}
+          <div className="mt-6 inline-flex bg-white rounded-full border border-border p-1 shadow-sm">
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActive(tab.key as "firekiller" | "pansafe")}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
+                  active === tab.key
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-muted-foreground hover:text-secondary"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Steps */}
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-          {steps.map((step, i) => (
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-10">
+          {current.steps.map((step, i) => (
             <motion.div
-              key={step.number}
+              key={`${active}-${step.number}`}
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.12, duration: 0.4 }}
               className="text-center"
             >
-              <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border border-border mb-5 shadow-sm">
-                {step.icon}
-                <span className="absolute -top-2 -right-2 w-7 h-7 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">
+              <div className="relative inline-block mb-5">
+                <Image
+                  src={step.image}
+                  alt={step.title}
+                  width={280}
+                  height={220}
+                  className="w-64 h-48 object-cover rounded-2xl shadow-md"
+                />
+                <span className="absolute -top-3 -right-3 w-9 h-9 bg-primary text-white text-sm font-bold rounded-full flex items-center justify-center shadow-lg ring-2 ring-white">
                   {step.number}
                 </span>
               </div>

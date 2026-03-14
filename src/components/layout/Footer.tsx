@@ -22,12 +22,12 @@ const footerLinks = {
   Company: [
     { label: "About Us", href: "/about" },
     { label: "Blog", href: "/blog" },
-    { label: "Vendor Enquiry", href: "/vendor-enquiry" },
-    { label: "Careers", href: "/careers" },
+    // { label: "Vendor Enquiry", href: "/vendor-enquiry" },
+    // { label: "Careers", href: "/careers" },
     { label: "Contact Us", href: "/contact" },
   ],
   Support: [
-    { label: "FAQs", href: "/faqs" },
+    // { label: "FAQs", href: "/faqs" },
     { label: "Shipping Policy", href: "/shipping-policy" },
     { label: "Return Policy", href: "/return-policy" },
     { label: "Privacy Policy", href: "/privacy-policy" },
@@ -52,23 +52,23 @@ export default function Footer() {
                 className="h-9 w-auto object-contain"
               />
             </Link>
-            <p className="text-muted-foreground text-sm leading-relaxed mb-4 max-w-sm">
+            {/* <p className="text-muted-foreground text-sm leading-relaxed mb-4 max-w-sm">
               India&apos;s most trusted compact fire extinguisher brand.
               Protecting homes, kitchens, and cars with innovative fire safety
               solutions since 2020.
-            </p>
+            </p> */}
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-primary" />
-                <span>+91 98765 43210</span>
+                <a href="tel:+919324259477" className="hover:text-primary transition-colors">+91 93242 59477</a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary" />
-                <span>support@firekiller.in</span>
+                <a href="mailto:sales@oustfire.com" className="hover:text-primary transition-colors">sales@oustfire.com</a>
               </div>
               <div className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 text-primary mt-0.5" />
-                <span>New Delhi, India</span>
+                <MapPin className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                <span>Laxmiwadi, Patil House, 394, Thane - Belapur Rd, near SI Group, MIDC Industrial Area, Juinagar, Navi Mumbai, Maharashtra 400705</span>
               </div>
             </div>
           </div>

@@ -17,7 +17,7 @@ export default async function OrdersPage() {
   });
 
   return (
-    <div className="min-h-screen bg-muted py-10">
+    <div className="min-h-screen bg-muted pt-24 pb-10">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <h1 className="text-2xl font-bold text-secondary mb-6">My Orders</h1>
 

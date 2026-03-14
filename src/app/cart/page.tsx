@@ -13,7 +13,10 @@ export default function CartPage() {
   const [couponError, setCouponError] = useState("");
 
   const shipping = subtotal > 999 ? 0 : 99;
-  const total = subtotal + shipping - discount;
+  const GST_RATE = 0.18;
+  // Since prices are now BASE (excl. GST), calculate GST forward
+  const gstAmount = Math.round(subtotal * GST_RATE);
+  const total = subtotal + gstAmount + shipping - discount;
 
   if (items.length === 0) {
     return (
@@ -188,9 +191,15 @@ export default function CartPage() {
 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="text-muted-foreground">Subtotal (excl. GST)</span>
                   <span className="font-medium text-secondary">
                     ₹{subtotal.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">GST (18%)</span>
+                  <span className="font-medium text-secondary">
+                    ₹{gstAmount.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between text-green-600">
@@ -234,9 +243,9 @@ export default function CartPage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
 
-              <p className="mt-3 text-center text-xs text-muted-foreground">
+              {/* <p className="mt-3 text-center text-xs text-muted-foreground">
                 Free shipping on orders above ₹999
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

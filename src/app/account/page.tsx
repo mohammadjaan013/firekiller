@@ -1,6 +1,6 @@
 import { requireAuth } from "@/lib/auth-utils";
 import Link from "next/link";
-import { User, Package, Heart, MapPin, Settings } from "lucide-react";
+import { User, Package, Heart } from "lucide-react";
 
 export default async function AccountPage() {
   const user = await requireAuth();
@@ -8,12 +8,10 @@ export default async function AccountPage() {
   const menuItems = [
     { label: "My Orders", href: "/orders", icon: Package, description: "Track and manage your orders" },
     { label: "Wishlist", href: "/wishlist", icon: Heart, description: "Your saved products" },
-    { label: "Addresses", href: "/account/addresses", icon: MapPin, description: "Manage delivery addresses" },
-    { label: "Settings", href: "/account/settings", icon: Settings, description: "Account settings" },
   ];
 
   return (
-    <div className="min-h-screen bg-muted py-10">
+    <div className="min-h-screen bg-muted pt-24 pb-10">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Profile Header */}
         <div className="bg-white rounded-2xl border border-border p-6 mb-6">

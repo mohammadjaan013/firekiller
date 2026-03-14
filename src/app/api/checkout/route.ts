@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendOrderConfirmation } from "@/lib/interakt";
+import { sendOrderEmailToAdmin } from "@/lib/email";
 
 /**
  * Generate a unique order number: FK-YYYYMMDD-XXXX
@@ -160,6 +161,43 @@ export async function POST(req: NextRequest) {
       total: order.total,
       orderId: order.id,
     }).catch((err) => console.error("WhatsApp order confirmation error:", err));
+
+    // Send email to admin (fire-and-forget)
+    const GST_RATE = 0.18;
+    const gstAmount = Math.round(subtotal * GST_RATE);
+    
+    sendOrderEmailToAdmin({
+      orderNumber: order.orderNumber,
+      customerName: address.name,
+      customerEmail: address.email,
+      customerPhone: address.phone,
+      address: {
+        line1: address.line1,
+        line2: address.line2,
+        city: address.city,
+        state: address.state,
+        pincode: address.pincode,
+      },
+      items: items.map((item: { name: string; quantity: number; price: number }) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      subtotal,
+      gstAmount,
+      shipping,
+      total: order.total,
+      paymentMethod: "razorpay",
+      paymentId: razorpayPaymentId,
+    })
+      .then(() => {
+        // Mark email as sent
+        prisma.order.update({
+          where: { id: order.id },
+          data: { emailSentToAdmin: true, customerEmail: address.email },
+        }).catch((e) => console.error("Failed to update email flag:", e));
+      })
+      .catch((err) => console.error("Admin email error:", err));
 
     return NextResponse.json({
       orderNumber: order.orderNumber,

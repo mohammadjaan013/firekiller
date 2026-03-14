@@ -77,8 +77,10 @@ model Product {
   slug          String   @unique
   description   String
   shortDesc     String?
-  price         Float
-  originalPrice Float?
+  longDescription String?
+  price         Float            // BASE price excl. GST
+  originalPrice Float?           // MRP excl. GST (for strike-through)
+  gstRate       Float    @default(0.18)
   sku           String   @unique
   stock         Int      @default(0)
   isActive      Boolean  @default(true)
@@ -86,6 +88,12 @@ model Product {
   badge         String?
   weight        Float?
   dimensions    String?
+  features      String[]         // feature bullet points
+  specifications Json?           // key-value specs
+  video         String?          // YouTube embed URL
+  packSize      Int      @default(1)
+  productLine   String?          // "firekiller" or "pansafe"
+  categoryLabel String?          // e.g. "Home & Car Safety"
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -185,6 +193,10 @@ model Order {
   codVerified          Boolean   @default(false)
   codVerificationSentAt DateTime?
 
+  // Admin email notification
+  customerEmail        String?
+  emailSentToAdmin     Boolean   @default(false)
+
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
@@ -252,6 +264,9 @@ model BlogPost {
   category    String?
   readTime    String?
   isPublished Boolean  @default(false)
+  isScraped   Boolean  @default(false)
+  sourceUrl   String?
+  source      String?
   publishedAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

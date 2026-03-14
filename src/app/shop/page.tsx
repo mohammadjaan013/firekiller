@@ -10,7 +10,7 @@ const mainProducts = [
     title: "FireKiller Extinguisher",
     description:
       "Compact fire extinguisher for home, car & office. Works on Oil, Gas & Electrical fires. Zero maintenance for 5 years.",
-    price: 943,
+    price: 799,
     rating: 4.8,
     reviews: 324,
     badge: "Best Seller",
@@ -22,7 +22,7 @@ const mainProducts = [
     title: "PanSafe Sachet",
     description:
       "Kitchen fire sachet — just toss into a burning pan. Activates on contact. No pins, no aiming, no panic.",
-    price: 1299,
+    price: 899,
     rating: 4.7,
     reviews: 456,
     badge: "Kitchen Essential",
@@ -106,6 +106,7 @@ export default function ShopPage() {
                       <span className="text-2xl font-bold text-secondary">
                         ₹{product.price.toLocaleString()}
                       </span>
+                      {/* <span className="text-sm text-muted-foreground ml-1">+GST</span> */}
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {product.packs}
                       </p>
