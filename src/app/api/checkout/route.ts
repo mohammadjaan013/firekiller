@@ -162,45 +162,11 @@ export async function POST(req: NextRequest) {
       orderId: order.id,
     }).catch((err) => console.error("WhatsApp order confirmation error:", err));
 
-    // Send email to admin (fire-and-forget)
+    // Prepare email data
     const GST_RATE = 0.18;
     const gstAmount = Math.round(subtotal * GST_RATE);
-    
-    sendOrderEmailToAdmin({
-      orderNumber: order.orderNumber,
-      customerName: address.name,
-      customerEmail: address.email,
-      customerPhone: address.phone,
-      address: {
-        line1: address.line1,
-        line2: address.line2,
-        city: address.city,
-        state: address.state,
-        pincode: address.pincode,
-      },
-      items: items.map((item: { name: string; quantity: number; price: number }) => ({
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-      })),
-      subtotal,
-      gstAmount,
-      shipping,
-      total: order.total,
-      paymentMethod: "razorpay",
-      paymentId: razorpayPaymentId,
-    })
-      .then(() => {
-        // Mark email as sent
-        prisma.order.update({
-          where: { id: order.id },
-          data: { emailSentToAdmin: true, customerEmail: address.email },
-        }).catch((e) => console.error("Failed to update email flag:", e));
-      })
-      .catch((err) => console.error("Admin email error:", err));
 
-    // Send order confirmation email to customer (fire-and-forget)
-    sendOrderConfirmationToCustomer({
+    const emailData = {
       orderNumber: order.orderNumber,
       customerName: address.name,
       customerEmail: address.email,
@@ -223,7 +189,22 @@ export async function POST(req: NextRequest) {
       total: order.total,
       paymentMethod: "razorpay",
       paymentId: razorpayPaymentId,
-    }).catch((err) => console.error("Customer email error:", err));
+    };
+
+    // Send both emails in parallel and AWAIT them so Vercel doesn't kill the function early
+    try {
+      await Promise.all([
+        sendOrderEmailToAdmin(emailData).then(() =>
+          prisma.order.update({
+            where: { id: order.id },
+            data: { emailSentToAdmin: true, customerEmail: address.email },
+          }).catch((e) => console.error("Failed to update email flag:", e))
+        ),
+        sendOrderConfirmationToCustomer(emailData),
+      ]);
+    } catch (err) {
+      console.error("Email sending error (non-blocking):", err);
+    }
 
     return NextResponse.json({
       orderNumber: order.orderNumber,

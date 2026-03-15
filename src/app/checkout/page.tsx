@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
@@ -65,6 +66,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, savings, discount, appliedCoupon, clearCart } = useCart();
   const { showToast } = useToast();
+  const { data: session } = useSession();
 
   const shipping = subtotal > 999 ? 0 : 99;
   const total = subtotal + shipping - discount;
@@ -84,6 +86,39 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<"address" | "payment">("address");
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+
+  // Pre-fill from session (name/email) and last order address
+  useEffect(() => {
+    // Start with session user data
+    if (session?.user) {
+      setAddress((prev) => ({
+        ...prev,
+        name: prev.name || session.user.name || "",
+        email: prev.email || session.user.email || "",
+      }));
+    }
+
+    // Fetch last order address for returning customers
+    if (session?.user?.id) {
+      fetch("/api/account/last-address")
+        .then((res) => res.json())
+        .then((data) => {
+          const u = data.user;
+          const addr = data.address;
+          setAddress((prev) => ({
+            name: prev.name || u?.name || "",
+            phone: prev.phone || u?.phone || addr?.phone || "",
+            email: prev.email || u?.email || "",
+            line1: prev.line1 || addr?.line1 || "",
+            line2: prev.line2 || addr?.line2 || "",
+            city: prev.city || addr?.city || "",
+            state: prev.state || addr?.state || "",
+            pincode: prev.pincode || addr?.pincode || "",
+          }));
+        })
+        .catch(() => {});
+    }
+  }, [session]);
 
   // Redirect if cart is empty
   if (items.length === 0) {
