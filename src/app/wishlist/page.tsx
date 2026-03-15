@@ -79,7 +79,7 @@ export default function WishlistPage() {
           <div className="space-y-4">
             {items.map((item) => {
               const imgUrl =
-                item.product.images?.[0]?.url || "/images/products/f20.png";
+                item.product.images?.[0]?.url || "/images/products/f30.png";
               return (
                 <div
                   key={item.id}

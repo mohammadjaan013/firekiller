@@ -62,7 +62,7 @@ export const products: Product[] = [
       "Shelf Life": "5 years",
       Certifications: "ISI, BIS, CE",
     },
-    images: ["/images/products/f20.png", "/images/products/firekiller-1.webp", "/images/products/1.png", "/images/products/2.png"],
+    images: ["/images/products/f30.png", "/images/products/firekiller-1.webp", "/images/products/1.png", "/images/products/2.png"],
     video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
     inStock: true,
   },

@@ -1,14 +1,22 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_SECURE === "true",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+function createTransporter() {
+  const host = process.env.SMTP_HOST || "smtp.gmail.com";
+  const port = parseInt(process.env.SMTP_PORT || "587");
+  const secure = process.env.SMTP_SECURE === "true"; // false for port 587 (STARTTLS)
+  
+  console.log("[Email] Creating transporter:", { host, port, secure, user: process.env.SMTP_USER ? "***set***" : "NOT SET", pass: process.env.SMTP_PASS ? "***set***" : "NOT SET" });
+  
+  return nodemailer.createTransport({
+    host,
+    port,
+    secure,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+}
 
 interface OrderEmailData {
   orderNumber: string;
@@ -33,9 +41,11 @@ interface OrderEmailData {
 
 export async function sendOrderEmailToAdmin(data: OrderEmailData) {
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn("SMTP not configured - skipping admin email for order", data.orderNumber);
+    console.warn("[Email] SMTP not configured - skipping admin email for order", data.orderNumber);
     return;
   }
+
+  console.log("[Email] Sending admin notification for order", data.orderNumber);
 
   const itemRows = data.items
     .map(
@@ -100,13 +110,19 @@ export async function sendOrderEmailToAdmin(data: OrderEmailData) {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || '"FireKiller Orders" <noreply@oustfire.com>',
-    // to: "sales@oustfire.com",  // Production email - uncomment when going live
-    to: "mulanimohammadjaan@gmail.com",  // Testing email
-    subject: `🔥 New Order #${data.orderNumber} - ₹${data.total.toLocaleString("en-IN")}`,
-    html,
-  });
+  try {
+    const transporter = createTransporter();
+    const info = await transporter.sendMail({
+      from: process.env.SMTP_FROM || `"FireKiller Orders" <${process.env.SMTP_USER}>`,
+      to: "mulanimohammadjaan@gmail.com",
+      subject: `🔥 New Order #${data.orderNumber} - ₹${data.total.toLocaleString("en-IN")}`,
+      html,
+    });
+    console.log("[Email] Admin email sent successfully:", info.messageId);
+  } catch (error) {
+    console.error("[Email] Failed to send admin email:", error);
+    throw error;
+  }
 }
 
 /**
@@ -114,9 +130,11 @@ export async function sendOrderEmailToAdmin(data: OrderEmailData) {
  */
 export async function sendOrderConfirmationToCustomer(data: OrderEmailData) {
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn("SMTP not configured - skipping customer email for order", data.orderNumber);
+    console.warn("[Email] SMTP not configured - skipping customer email for order", data.orderNumber);
     return;
   }
+
+  console.log("[Email] Sending customer confirmation for order", data.orderNumber, "to", data.customerEmail);
 
   const itemRows = data.items
     .map(
@@ -183,10 +201,17 @@ export async function sendOrderConfirmationToCustomer(data: OrderEmailData) {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || '"FireKiller" <noreply@oustfire.com>',
-    to: data.customerEmail,
-    subject: `✅ Order Confirmed - #${data.orderNumber} | FireKiller`,
-    html,
-  });
+  try {
+    const transporter = createTransporter();
+    const info = await transporter.sendMail({
+      from: process.env.SMTP_FROM || `"FireKiller" <${process.env.SMTP_USER}>`,
+      to: data.customerEmail,
+      subject: `✅ Order Confirmed - #${data.orderNumber} | FireKiller`,
+      html,
+    });
+    console.log("[Email] Customer email sent successfully:", info.messageId);
+  } catch (error) {
+    console.error("[Email] Failed to send customer email:", error);
+    throw error;
+  }
 }

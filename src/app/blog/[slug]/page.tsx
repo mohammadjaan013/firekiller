@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { blogPosts } from "@/data/blogPosts";
@@ -45,7 +46,7 @@ export default async function BlogDetailPage({
         </Link>
 
         {/* Header */}
-        <header className="mb-10">
+        <header className="mb-8">
           <span
             className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${
               post.category === "Product Guide"
@@ -57,10 +58,10 @@ export default async function BlogDetailPage({
           >
             {post.category}
           </span>
-          <h1 className="mt-4 text-3xl sm:text-4xl font-bold text-secondary leading-tight">
+          <h1 className="mt-3 text-2xl sm:text-3xl font-bold text-secondary leading-tight">
             {post.title}
           </h1>
-          <div className="flex items-center gap-4 mt-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-4 mt-3 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar className="h-4 w-4" />
               {post.date}
@@ -73,8 +74,19 @@ export default async function BlogDetailPage({
           </div>
         </header>
 
+        {/* Featured Image */}
+        <div className="relative w-full h-48 sm:h-64 rounded-xl overflow-hidden mb-8">
+          <Image
+            src={post.image}
+            alt={post.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
         {/* Content */}
-        <article className="prose prose-lg max-w-none prose-headings:text-secondary prose-a:text-primary prose-strong:text-secondary">
+        <article className="prose prose-sm sm:prose-base max-w-none prose-headings:text-secondary prose-a:text-primary prose-strong:text-secondary">
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </article>
 

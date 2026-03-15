@@ -128,7 +128,7 @@ async function main() {
       specifications: { Quantity: "1 × FireKiller", Weight: "500 g", Type: "Clean Agent (ABC + Electrical)", Range: "2-3 meters", "Discharge Time": "8-10 seconds", "Shelf Life": "5 years", Certifications: "ISI, BIS, CE" },
       video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
       images: [
-        { url: "/images/products/f20.png", isPrimary: true, sortOrder: 0 },
+        { url: "/images/products/f30.png", isPrimary: true, sortOrder: 0 },
         { url: "/images/products/firekiller-1.webp", isPrimary: false, sortOrder: 1 },
         { url: "/images/products/1.png", isPrimary: false, sortOrder: 2 },
         { url: "/images/products/2.png", isPrimary: false, sortOrder: 3 },
