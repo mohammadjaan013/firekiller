@@ -81,7 +81,7 @@ export default async function WhatsAppLogsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {log.order?.orderNumber || "—"}
+                    {log.order?.orderNumber || "-"}
                   </td>
                   <td className="px-4 py-3">
                     <span

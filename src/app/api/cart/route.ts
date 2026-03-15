@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 
 /**
- * GET /api/cart — get current user's cart
+ * GET /api/cart - get current user's cart
  */
 export async function GET() {
   try {
@@ -49,7 +49,7 @@ export async function GET() {
 }
 
 /**
- * POST /api/cart — add item to cart (or increment quantity)
+ * POST /api/cart - add item to cart (or increment quantity)
  * Body: { productId: string, quantity?: number }
  */
 export async function POST(req: NextRequest) {
@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * PUT /api/cart — update item quantity
+ * PUT /api/cart - update item quantity
  * Body: { productId: string, quantity: number }
  */
 export async function PUT(req: NextRequest) {
@@ -190,8 +190,8 @@ export async function PUT(req: NextRequest) {
 }
 
 /**
- * DELETE /api/cart — remove item or clear cart
- * Body: { productId?: string } — if no productId, clears entire cart
+ * DELETE /api/cart - remove item or clear cart
+ * Body: { productId?: string } - if no productId, clears entire cart
  */
 export async function DELETE(req: NextRequest) {
   try {

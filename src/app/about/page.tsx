@@ -45,8 +45,8 @@ export default function AboutPage() {
               protection that&apos;s affordable, easy to use, and always ready.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              Our flagship products — FireKiller compact extinguisher and
-              PanSafe kitchen sachet — are designed for ordinary people, not
+              Our flagship products - FireKiller compact extinguisher and
+              PanSafe kitchen sachet - are designed for ordinary people, not
               just firefighters. No training, no maintenance, no excuses.
             </p>
           </div>

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 
 /**
- * GET /api/products — list products with optional filters
+ * GET /api/products - list products with optional filters
  * Query params: category, search, sort, featured, page, limit
  */
 export async function GET(req: NextRequest) {
@@ -103,7 +103,7 @@ export async function GET(req: NextRequest) {
 }
 
 /**
- * POST /api/products — create a product (admin only)
+ * POST /api/products - create a product (admin only)
  */
 export async function POST(req: NextRequest) {
   try {

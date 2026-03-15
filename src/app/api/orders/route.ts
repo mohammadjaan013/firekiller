@@ -16,7 +16,7 @@ function generateOrderNumber(): string {
 }
 
 /**
- * GET /api/orders — list current user's orders
+ * GET /api/orders - list current user's orders
  */
 export async function GET() {
   try {
@@ -53,7 +53,7 @@ export async function GET() {
 }
 
 /**
- * POST /api/orders — place a new order
+ * POST /api/orders - place a new order
  * Body: {
  *   addressId: string,
  *   paymentMethod?: string,
@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
 
     const total = subtotal + shipping - discount;
 
-    // Create order + items + decrement stock + clear cart — all in a transaction
+    // Create order + items + decrement stock + clear cart - all in a transaction
     const order = await prisma.$transaction(async (tx) => {
       const created = await tx.order.create({
         data: {

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 
 /**
- * GET /api/blog — list blog posts
+ * GET /api/blog - list blog posts
  * Query params: category, page, limit, published (default: true for public)
  */
 export async function GET(req: NextRequest) {
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
 }
 
 /**
- * POST /api/blog — create a blog post (admin only)
+ * POST /api/blog - create a blog post (admin only)
  * Body: { title, slug, excerpt?, content, coverImage?, category?, readTime?, isPublished? }
  */
 export async function POST(req: NextRequest) {

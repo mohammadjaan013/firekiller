@@ -89,7 +89,7 @@ export default function ProductDetailPage({
     notFound();
   }
 
-  // Fetch reviews — use useCallback to stabilize the function reference
+  // Fetch reviews - use useCallback to stabilize the function reference
   const fetchReviews = useCallback(async () => {
     try {
       // Look up the DB product by slug to get the real productId
@@ -377,7 +377,7 @@ export default function ProductDetailPage({
               {product.longDescription}
             </p>
 
-            {/* Pack Selector — Blinkit/Swiggy style */}
+            {/* Pack Selector - Blinkit/Swiggy style */}
             {(() => {
               const variants = getPackVariants(product.slug);
               if (variants.length <= 1) return null;

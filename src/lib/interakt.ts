@@ -22,7 +22,7 @@ async function sendInteraktMessage(
 ): Promise<{ success: boolean; error?: string }> {
   const apiKey = process.env.INTERAKT_API_KEY;
   if (!apiKey) {
-    console.warn("INTERAKT_API_KEY not set — skipping WhatsApp message");
+    console.warn("INTERAKT_API_KEY not set - skipping WhatsApp message");
     return { success: false, error: "API key not configured" };
   }
 

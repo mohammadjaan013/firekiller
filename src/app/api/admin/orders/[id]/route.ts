@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { sendOrderEmailToAdmin } from "@/lib/email";
 
 /**
- * GET /api/admin/orders/[id] — get order details
+ * GET /api/admin/orders/[id] - get order details
  */
 export async function GET(
   _req: NextRequest,
@@ -46,7 +46,7 @@ export async function GET(
 }
 
 /**
- * PUT /api/admin/orders/[id] — update order status
+ * PUT /api/admin/orders/[id] - update order status
  * Body: { status?, paymentStatus?, notes?, trackingUrl?, awbCode? }
  */
 export async function PUT(
@@ -83,7 +83,7 @@ export async function PUT(
 }
 
 /**
- * POST /api/admin/orders/[id] — resend email notification
+ * POST /api/admin/orders/[id] - resend email notification
  * Body: { action: "send_email" }
  */
 export async function POST(

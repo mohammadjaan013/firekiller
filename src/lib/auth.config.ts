@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 
 /**
- * Edge-safe NextAuth config — NO Prisma, NO bcrypt, NO Node.js modules.
+ * Edge-safe NextAuth config - NO Prisma, NO bcrypt, NO Node.js modules.
  * Used by middleware.ts which runs in Edge Runtime.
  * The full auth config (with Credentials + Prisma) lives in auth.ts.
  */

@@ -8,7 +8,7 @@ const testimonials = [
     name: "Rajesh Kumar",
     location: "New Delhi",
     rating: 5,
-    text: "FireKiller saved my kitchen when an oil fire broke out. It was so easy to use — just point and press. Every home in India needs one!",
+    text: "FireKiller saved my kitchen when an oil fire broke out. It was so easy to use - just point and press. Every home in India needs one!",
     avatar: "RK",
     verified: true,
   },

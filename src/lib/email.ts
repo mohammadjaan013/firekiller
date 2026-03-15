@@ -33,7 +33,7 @@ interface OrderEmailData {
 
 export async function sendOrderEmailToAdmin(data: OrderEmailData) {
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn("SMTP not configured — skipping admin email for order", data.orderNumber);
+    console.warn("SMTP not configured - skipping admin email for order", data.orderNumber);
     return;
   }
 
@@ -62,7 +62,7 @@ export async function sendOrderEmailToAdmin(data: OrderEmailData) {
           <tr><td style="padding:4px 0"><strong>Email:</strong></td><td>${data.customerEmail}</td></tr>
           <tr><td style="padding:4px 0"><strong>Phone:</strong></td><td>${data.customerPhone}</td></tr>
           <tr><td style="padding:4px 0;vertical-align:top"><strong>Address:</strong></td>
-            <td>${data.address.line1}${data.address.line2 ? ", " + data.address.line2 : ""}<br>${data.address.city}, ${data.address.state} — ${data.address.pincode}</td>
+            <td>${data.address.line1}${data.address.line2 ? ", " + data.address.line2 : ""}<br>${data.address.city}, ${data.address.state} - ${data.address.pincode}</td>
           </tr>
         </table>
 
@@ -102,9 +102,9 @@ export async function sendOrderEmailToAdmin(data: OrderEmailData) {
 
   await transporter.sendMail({
     from: process.env.SMTP_FROM || '"FireKiller Orders" <noreply@oustfire.com>',
-    // to: "sales@oustfire.com",  // Production email — uncomment when going live
+    // to: "sales@oustfire.com",  // Production email - uncomment when going live
     to: "mulanimohammadjaan@gmail.com",  // Testing email
-    subject: `🔥 New Order #${data.orderNumber} — ₹${data.total.toLocaleString("en-IN")}`,
+    subject: `🔥 New Order #${data.orderNumber} - ₹${data.total.toLocaleString("en-IN")}`,
     html,
   });
 }
@@ -114,7 +114,7 @@ export async function sendOrderEmailToAdmin(data: OrderEmailData) {
  */
 export async function sendOrderConfirmationToCustomer(data: OrderEmailData) {
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn("SMTP not configured — skipping customer email for order", data.orderNumber);
+    console.warn("SMTP not configured - skipping customer email for order", data.orderNumber);
     return;
   }
 
@@ -167,7 +167,7 @@ export async function sendOrderConfirmationToCustomer(data: OrderEmailData) {
           <p style="margin:0;font-size:14px;color:#166534">
             <strong>📦 Shipping Address:</strong><br>
             ${data.address.line1}${data.address.line2 ? ", " + data.address.line2 : ""}<br>
-            ${data.address.city}, ${data.address.state} — ${data.address.pincode}
+            ${data.address.city}, ${data.address.state} - ${data.address.pincode}
           </p>
         </div>
 
@@ -186,7 +186,7 @@ export async function sendOrderConfirmationToCustomer(data: OrderEmailData) {
   await transporter.sendMail({
     from: process.env.SMTP_FROM || '"FireKiller" <noreply@oustfire.com>',
     to: data.customerEmail,
-    subject: `✅ Order Confirmed — #${data.orderNumber} | FireKiller`,
+    subject: `✅ Order Confirmed - #${data.orderNumber} | FireKiller`,
     html,
   });
 }

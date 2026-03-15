@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { scrapeFireNews } from "@/lib/scraper";
 
 /**
- * POST /api/blog/scrape — trigger fire news scraping (admin only)
+ * POST /api/blog/scrape - trigger fire news scraping (admin only)
  */
 export async function POST() {
   try {

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 
 /**
- * GET /api/reviews?productId=xxx — get reviews for a product
+ * GET /api/reviews?productId=xxx - get reviews for a product
  */
 export async function GET(req: NextRequest) {
   try {
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
 }
 
 /**
- * POST /api/reviews — submit a review (auth required)
+ * POST /api/reviews - submit a review (auth required)
  * Body: { productId: string, rating: number, title?: string, comment?: string }
  */
 export async function POST(req: NextRequest) {

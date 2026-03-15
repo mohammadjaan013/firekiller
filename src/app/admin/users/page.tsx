@@ -47,11 +47,11 @@ export default async function AdminUsersPage() {
                       <div className="w-8 h-8 bg-primary/10 text-primary font-semibold text-sm rounded-full flex items-center justify-center shrink-0">
                         {(user.name || user.email)[0].toUpperCase()}
                       </div>
-                      <span className="font-medium text-secondary">{user.name || "—"}</span>
+                      <span className="font-medium text-secondary">{user.name || "-"}</span>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">{user.email}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{user.phone || "—"}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{user.phone || "-"}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`px-2 py-0.5 text-xs font-semibold rounded-full ${

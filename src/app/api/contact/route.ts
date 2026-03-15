@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 /**
- * POST /api/contact — submit a contact message
+ * POST /api/contact - submit a contact message
  */
 export async function POST(req: NextRequest) {
   try {

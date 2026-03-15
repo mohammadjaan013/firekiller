@@ -149,7 +149,7 @@ export default function CheckoutPage() {
         amount,
         currency,
         name: "FireKiller",
-        description: `Order — ${items.length} item${items.length > 1 ? "s" : ""}`,
+        description: `Order - ${items.length} item${items.length > 1 ? "s" : ""}`,
         order_id: orderId,
         handler: async (response: RazorpayResponse) => {
           try {
@@ -263,7 +263,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="grid lg:grid-cols-5 gap-8">
-            {/* Left Column — Form */}
+            {/* Left Column - Form */}
             <div className="lg:col-span-3">
               {step === "address" && (
                 <div className="bg-card rounded-2xl border border-border p-6">
@@ -405,7 +405,7 @@ export default function CheckoutPage() {
                           {address.line2 && `, ${address.line2}`}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {address.city}, {address.state} — {address.pincode}
+                          {address.city}, {address.state} - {address.pincode}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
                           {address.phone} · {address.email}
@@ -456,7 +456,7 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            {/* Right Column — Order Summary */}
+            {/* Right Column - Order Summary */}
             <div className="lg:col-span-2">
               <div className="bg-card rounded-2xl border border-border p-5 sticky top-24">
                 <h3 className="text-base font-bold text-secondary mb-4">
@@ -550,7 +550,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Check className="h-3.5 w-3.5 text-primary" />
-                    Delivery via Shiprocket — trackable
+                    Delivery via Shiprocket - trackable
                   </div>
                 </div>
               </div>

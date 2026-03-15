@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 /**
- * POST /api/vendor-enquiry — submit a vendor/distributor enquiry
+ * POST /api/vendor-enquiry - submit a vendor/distributor enquiry
  */
 export async function POST(req: NextRequest) {
   try {

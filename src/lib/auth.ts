@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { authConfig } from "@/lib/auth.config";
 
 /**
- * Full NextAuth config — runs in Node.js runtime only (API routes, server components).
+ * Full NextAuth config - runs in Node.js runtime only (API routes, server components).
  * Extends the edge-safe authConfig with the Credentials provider (which needs Prisma + bcrypt).
  */
 export const { handlers, signIn, signOut, auth } = NextAuth({

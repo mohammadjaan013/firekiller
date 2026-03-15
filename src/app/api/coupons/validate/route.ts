@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 /**
- * POST /api/coupons/validate — validate a coupon code
+ * POST /api/coupons/validate - validate a coupon code
  * Body: { code: string, subtotal: number }
  */
 export async function POST(req: NextRequest) {

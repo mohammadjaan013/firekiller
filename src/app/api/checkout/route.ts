@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
 
     const orderNumber = generateOrderNumber();
 
-    // Create order items — map client product IDs to DB product IDs
+    // Create order items - map client product IDs to DB product IDs
     const orderItems: {
       productId: string;
       quantity: number;

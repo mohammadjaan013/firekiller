@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 
 /**
- * GET /api/admin/products — list all products (admin)
+ * GET /api/admin/products - list all products (admin)
  */
 export async function GET() {
   try {
@@ -29,7 +29,7 @@ export async function GET() {
 }
 
 /**
- * POST /api/admin/products — create a product
+ * POST /api/admin/products - create a product
  */
 export async function POST(req: NextRequest) {
   try {

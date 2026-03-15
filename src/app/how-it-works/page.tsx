@@ -57,7 +57,7 @@ const productLines = [
       {
         num: "01",
         title: "Detect the Fire",
-        desc: "Spot flames in your cooking pan — oil, gas, or grease fire.",
+        desc: "Spot flames in your cooking pan - oil, gas, or grease fire.",
       },
       {
         num: "02",
@@ -96,7 +96,7 @@ export default function HowItWorksPage() {
             How It <span className="text-primary">Works</span>
           </h1>
           <p className="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">
-            Watch the demo videos and learn how simple fire safety can be —
+            Watch the demo videos and learn how simple fire safety can be -
             no training needed, anyone can do it.
           </p>
         </motion.div>

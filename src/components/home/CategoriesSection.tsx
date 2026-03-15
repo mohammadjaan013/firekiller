@@ -8,20 +8,20 @@ import { motion } from "framer-motion";
 const categories = [
   {
     title: "Home Safety",
-    description: "FireKiller Extinguisher — compact, powerful, zero maintenance.",
+    description: "FireKiller Extinguisher - compact, powerful, zero maintenance.",
     href: "/shop/firekiller-1",
     image: "/images/categories/f-c-h.png",
   },
   {
     title: "Kitchen Safety",
-    description: "PanSafe Sachet — just toss into a burning pan. Done.",
+    description: "PanSafe Sachet - just toss into a burning pan. Done.",
     href: "/shop/pansafe-1",
     image: "/images/categories/kittu.png",
     highlighted: true,
   },
   {
     title: "Car Safety",
-    description: "FireKiller for your car — fits under the seat, always ready.",
+    description: "FireKiller for your car - fits under the seat, always ready.",
     href: "/shop/firekiller-1",
     image: "/images/categories/f-c-c.png",
   },

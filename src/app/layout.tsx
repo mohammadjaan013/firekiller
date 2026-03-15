@@ -18,7 +18,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "FireKiller — Seconds Save Lives",
+  title: "FireKiller - Seconds Save Lives",
   description:
     "India's most trusted compact fire extinguishers. Protect your home, kitchen & car. Free shipping, 1-year warranty, COD available.",
   icons: {

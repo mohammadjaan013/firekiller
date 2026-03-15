@@ -84,7 +84,7 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right Side — Product Image */}
+          {/* Right Side - Product Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
 /**
- * GET /api/products/[slug] — single product with full details
+ * GET /api/products/[slug] - single product with full details
  */
 export async function GET(
   _req: NextRequest,

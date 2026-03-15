@@ -124,7 +124,7 @@ export async function createShiprocketOrder(
 }
 
 /**
- * Generate AWB (airway bill) for a shipment — assigns a courier.
+ * Generate AWB (airway bill) for a shipment - assigns a courier.
  */
 export async function generateAWB(
   shipmentId: number,

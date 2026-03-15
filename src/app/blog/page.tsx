@@ -1,76 +1,17 @@
 import Link from "next/link";
 import { Calendar, Clock, ArrowRight, Tag } from "lucide-react";
-
-const blogPosts = [
-  {
-    id: 1,
-    title: "Massive Fire Breaks Out in Mumbai High-Rise — Lessons for Every Homeowner",
-    excerpt:
-      "A devastating fire in a Mumbai residential building has once again highlighted the critical need for fire safety equipment in every Indian home.",
-    category: "Fire News",
-    date: "Mar 8, 2026",
-    readTime: "4 min read",
-    slug: "mumbai-highrise-fire-lessons",
-  },
-  {
-    id: 2,
-    title: "Kitchen Oil Fires: Why Water Makes It Worse",
-    excerpt:
-      "Most kitchen fires in India start with cooking oil. Learn why throwing water on an oil fire is the worst thing you can do and what to do instead.",
-    category: "Fire Safety",
-    date: "Mar 5, 2026",
-    readTime: "4 min read",
-    slug: "kitchen-oil-fires-water",
-  },
-  {
-    id: 3,
-    title: "India's Fire Safety Market Growing at 12% — What It Means for You",
-    excerpt:
-      "With over 17,000 fire deaths annually, India is finally waking up to fire safety. Here's what's driving the change and how to stay protected.",
-    category: "Industry",
-    date: "Mar 1, 2026",
-    readTime: "6 min read",
-    slug: "fire-safety-market-india-2026",
-  },
-  {
-    id: 4,
-    title: "5 Essential Fire Safety Tips Every Indian Household Needs",
-    excerpt:
-      "Fire emergencies can happen anywhere, anytime. Here are 5 critical fire safety measures that every household in India should implement today.",
-    category: "Fire Safety",
-    date: "Feb 25, 2026",
-    readTime: "5 min read",
-    slug: "fire-safety-tips-indian-home",
-  },
-  {
-    id: 5,
-    title: "Delhi Factory Fire Claims 7 Lives — Why Compact Extinguishers Matter",
-    excerpt:
-      "Yet another industrial fire tragedy in Delhi. Experts say compact extinguishers at every workstation could have prevented the casualties.",
-    category: "Fire News",
-    date: "Feb 20, 2026",
-    readTime: "3 min read",
-    slug: "delhi-factory-fire-compact-extinguishers",
-  },
-  {
-    id: 6,
-    title: "How to Choose the Right Fire Extinguisher for Your Car",
-    excerpt:
-      "Your car is a highly flammable environment. Learn what type of extinguisher you need and where to keep it for maximum safety.",
-    category: "Fire Safety",
-    date: "Feb 15, 2026",
-    readTime: "4 min read",
-    slug: "fire-extinguisher-car-guide",
-  },
-];
+import { blogPosts } from "@/data/blogPosts";
 
 const categoryColors: Record<string, string> = {
-  "Fire News": "bg-red-500/10 text-red-600",
   "Fire Safety": "bg-blue-500/10 text-blue-600",
-  Industry: "bg-green-500/10 text-green-600",
+  "Product Guide": "bg-green-500/10 text-green-600",
+  "Product Review": "bg-amber-500/10 text-amber-600",
 };
 
 export default function BlogPage() {
+  const featured = blogPosts[blogPosts.length - 1];
+  const otherPosts = [...blogPosts].slice(0, -1).reverse();
+
   return (
     <div className="min-h-screen bg-background pt-16">
       {/* Header */}
@@ -102,23 +43,23 @@ export default function BlogPage() {
                 Featured
               </span>
               <h2 className="mt-4 text-2xl font-bold text-secondary">
-                {blogPosts[0].title}
+                {featured.title}
               </h2>
               <p className="mt-3 text-muted-foreground leading-relaxed">
-                {blogPosts[0].excerpt}
+                {featured.excerpt}
               </p>
               <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
-                  {blogPosts[0].date}
+                  {featured.date}
                 </span>
                 <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  {blogPosts[0].readTime}
+                  {featured.readTime}
                 </span>
               </div>
               <Link
-                href={`/blog/${blogPosts[0].slug}`}
+                href={`/blog/${featured.slug}`}
                 className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
               >
                 Read More <ArrowRight className="h-4 w-4" />
@@ -129,7 +70,7 @@ export default function BlogPage() {
 
         {/* Blog Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts.slice(1).map((post) => (
+          {otherPosts.map((post) => (
             <article
               key={post.id}
               className="bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all"

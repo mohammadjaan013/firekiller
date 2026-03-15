@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 
 /**
  * POST /api/orders/cod-confirm
- * Webhook for Interakt — customer replies YES/CONFIRM to verify COD,
+ * Webhook for Interakt - customer replies YES/CONFIRM to verify COD,
  * or NO/CANCEL to cancel the order.
  *
  * Interakt sends a payload with the customer's reply.
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Unrecognized response — do nothing
+    // Unrecognized response - do nothing
     return NextResponse.json({ status: "unrecognized_reply" });
   } catch (error) {
     console.error("COD confirm webhook error:", error);

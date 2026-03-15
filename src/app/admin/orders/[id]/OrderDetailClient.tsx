@@ -200,7 +200,7 @@ export default function OrderDetailClient({ order: initialOrder }: OrderProps) {
             <div>
               <p className="text-muted-foreground mb-1">Payment</p>
               <p className="font-medium text-secondary">
-                {order.paymentMethod?.toUpperCase()} — {order.paymentId || "N/A"}
+                {order.paymentMethod?.toUpperCase()} - {order.paymentId || "N/A"}
               </p>
             </div>
           </div>
@@ -213,7 +213,7 @@ export default function OrderDetailClient({ order: initialOrder }: OrderProps) {
               <p className="text-sm text-secondary">
                 {order.address.line1}
                 {order.address.line2 ? `, ${order.address.line2}` : ""}<br />
-                {order.address.city}, {order.address.state} — {order.address.pincode}
+                {order.address.city}, {order.address.state} - {order.address.pincode}
               </p>
             </div>
           )}

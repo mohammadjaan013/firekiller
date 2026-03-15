@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Star, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const mainProducts = [
@@ -11,10 +11,8 @@ const mainProducts = [
     description:
       "Compact fire extinguisher for home, car & office. Works on Oil, Gas & Electrical fires. Zero maintenance for 5 years.",
     price: 799,
-    rating: 4.8,
-    reviews: 324,
     badge: "Best Seller",
-    image: "/images/products/f2.png",
+    image: "/images/products/f20.png",
     href: "/shop/firekiller-1",
     packs: "Available in 1, 2 & 3 Unit packs",
   },
@@ -23,10 +21,8 @@ const mainProducts = [
     description:
       "Kitchen fire sachet — just toss into a burning pan. Activates on contact. No pins, no aiming, no panic.",
     price: 899,
-    rating: 4.7,
-    reviews: 456,
     badge: "Kitchen Essential",
-    image: "/images/products/p1.png",
+    image: "/images/products/p10.png",
     href: "/shop/pansafe-1",
     packs: "Available in 1, 3 & 5 Pc packs",
   },
@@ -82,24 +78,6 @@ export default function ShopPage() {
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                     {product.description}
                   </p>
-
-                  <div className="flex items-center gap-2 mt-3">
-                    <div className="flex items-center gap-0.5">
-                      {[...Array(5)].map((_, j) => (
-                        <Star
-                          key={j}
-                          className={`h-3.5 w-3.5 ${
-                            j < Math.floor(product.rating)
-                              ? "fill-yellow-400 text-yellow-400"
-                              : "fill-gray-200 text-gray-200"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-xs text-muted-foreground">
-                      {product.rating} ({product.reviews} reviews)
-                    </span>
-                  </div>
 
                   <div className="flex items-center justify-between mt-4">
                     <div>

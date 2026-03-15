@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 
 /**
- * GET /api/blog/[slug] — get a single blog post
+ * GET /api/blog/[slug] - get a single blog post
  */
 export async function GET(
   _req: NextRequest,
@@ -45,7 +45,7 @@ export async function GET(
 }
 
 /**
- * PUT /api/blog/[slug] — update a blog post (admin only)
+ * PUT /api/blog/[slug] - update a blog post (admin only)
  */
 export async function PUT(
   req: NextRequest,
@@ -100,7 +100,7 @@ export async function PUT(
 }
 
 /**
- * DELETE /api/blog/[slug] — delete a blog post (admin only)
+ * DELETE /api/blog/[slug] - delete a blog post (admin only)
  */
 export async function DELETE(
   _req: NextRequest,

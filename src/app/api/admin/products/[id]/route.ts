@@ -36,7 +36,7 @@ export async function GET(
 }
 
 /**
- * PUT /api/admin/products/[id] — update product
+ * PUT /api/admin/products/[id] - update product
  */
 export async function PUT(
   req: NextRequest,
