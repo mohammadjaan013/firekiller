@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Lora } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import ChatBot from "@/components/ChatBot";
 import { CartProvider } from "@/context/CartContext";
 import { ToastProvider } from "@/context/ToastContext";
 import AuthProvider from "@/components/providers/AuthProvider";
@@ -14,6 +15,11 @@ const inter = Inter({
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+const lora = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
 });
 
@@ -43,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased bg-background text-foreground`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${lora.variable} font-sans antialiased bg-background text-foreground`}
       >
         <AuthProvider>
           <CartProvider>
@@ -51,6 +57,7 @@ export default function RootLayout({
               <Navbar />
               <main className="min-h-screen">{children}</main>
               <Footer />
+              <ChatBot />
             </ToastProvider>
           </CartProvider>
         </AuthProvider>

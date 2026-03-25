@@ -52,7 +52,7 @@ export default async function AdminDashboard() {
     { label: "Products", value: productCount, icon: Package, color: "bg-blue-50 text-blue-600", href: "/admin/products" },
     { label: "Users", value: userCount, icon: Users, color: "bg-indigo-50 text-indigo-600", href: "/admin/users" },
     { label: "Categories", value: categoryCount, icon: Tag, color: "bg-orange-50 text-orange-600", href: "/admin/categories" },
-    // { label: "Blog Posts", value: blogCount, icon: FileText, color: "bg-pink-50 text-pink-600", href: "/admin/blog" },
+    { label: "Blog Posts", value: blogCount, icon: FileText, color: "bg-pink-50 text-pink-600", href: "/admin/blogs" },
     // { label: "Messages", value: contactCount, icon: MessageSquare, color: "bg-yellow-50 text-yellow-600", href: "/admin/messages" },
     { label: "Coupons", value: couponCount, icon: DollarSign, color: "bg-teal-50 text-teal-600", href: "/admin/coupons" },
   ];

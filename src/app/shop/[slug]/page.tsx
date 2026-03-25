@@ -47,6 +47,100 @@ function getPackLabel(product: { slug: string; name: string; price: number }) {
   return product.name;
 }
 
+/* ── Video Carousel with arrows ─────────────────────────── */
+function VideoCarousel({
+  videos,
+  productName,
+}: {
+  videos: { src: string; label: string }[];
+  productName: string;
+}) {
+  const [current, setCurrent] = useState(0);
+  const total = videos.length;
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
+
+  return (
+    <div id="video-demo" className="mt-8 border-t border-border pt-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+          <Play className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-heading font-bold">Watch it in Action</h2>
+          <p className="text-sm text-muted-foreground">
+            See how {productName} works in a real scenario
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center gap-3">
+          {/* Left arrow */}
+          {total > 1 && (
+            <button
+              onClick={prev}
+              className="shrink-0 w-10 h-10 bg-white border border-border rounded-full flex items-center justify-center shadow-md hover:bg-muted transition-colors"
+              aria-label="Previous video"
+            >
+              <ChevronLeft className="h-5 w-5 text-secondary" />
+            </button>
+          )}
+
+          {/* Active video */}
+          <div className="relative flex-1 aspect-video rounded-2xl overflow-hidden border border-border bg-black shadow-lg">
+            <video
+              key={videos[current].src}
+              src={videos[current].src}
+              controls
+              preload="metadata"
+              playsInline
+              className="w-full h-full object-contain"
+            />
+            {videos[current].label && (
+              <div className="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-sm rounded-full pointer-events-none">
+                <p className="text-white text-xs font-medium">{videos[current].label}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Right arrow */}
+          {total > 1 && (
+            <button
+              onClick={next}
+              className="shrink-0 w-10 h-10 bg-white border border-border rounded-full flex items-center justify-center shadow-md hover:bg-muted transition-colors"
+              aria-label="Next video"
+            >
+              <ChevronRight className="h-5 w-5 text-secondary" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Dots + counter */}
+      {total > 1 && (
+        <div className="flex items-center justify-center gap-3 mt-4">
+          <span className="text-xs text-muted-foreground font-medium">
+            {current + 1} / {total}
+          </span>
+          <div className="flex gap-1.5">
+            {videos.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  i === current ? "bg-primary" : "bg-border"
+                }`}
+                aria-label={`Go to video ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ProductDetailPage({
   params,
 }: {
@@ -58,6 +152,7 @@ export default function ProductDetailPage({
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState<"features" | "specs" | "reviews">(
     "features"
   );
@@ -210,8 +305,8 @@ export default function ProductDetailPage({
       </div>
 
       {/* Product Section */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14">
           {/* Image Gallery */}
           <div>
             {/* Main Image */}
@@ -219,7 +314,7 @@ export default function ProductDetailPage({
               key={selectedImage}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="relative aspect-[4/3] bg-muted rounded-2xl overflow-hidden mb-3"
+              className="relative aspect-4/3 bg-muted rounded-3xl overflow-hidden mb-3 shadow-sm"
             >
               <Image
                 src={product.images[selectedImage]}
@@ -240,7 +335,7 @@ export default function ProductDetailPage({
               </div>
 
               {/* Badge */}
-              <span className="absolute top-4 left-4 px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-full">
+              <span className="absolute top-4 left-4 px-3.5 py-1.5 bg-primary text-white text-xs font-semibold rounded-full shadow-lg shadow-primary/25">
                 {product.badge}
               </span>
 
@@ -271,7 +366,7 @@ export default function ProductDetailPage({
               )}
 
               {/* Video play button */}
-              {product.video && (
+              {product.videos && product.videos.length > 0 && (
                 <button
                   onClick={() =>
                     document
@@ -293,9 +388,9 @@ export default function ProductDetailPage({
                   <button
                     key={i}
                     onClick={() => setSelectedImage(i)}
-                    className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
+                    className={`relative w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${
                       selectedImage === i
-                        ? "border-primary"
+                        ? "border-primary shadow-sm shadow-primary/20"
                         : "border-border hover:border-primary/50"
                     }`}
                   >
@@ -353,25 +448,6 @@ export default function ProductDetailPage({
               </span>
             </div>
 
-            {/* Price */}
-            <div className="mt-4 flex items-baseline gap-3">
-              <span className="text-3xl font-bold">
-                ₹{product.price.toLocaleString()}
-              </span>
-              {/* <span className="text-sm text-muted-foreground">+GST</span> */}
-              <span className="text-lg text-muted-foreground line-through">
-                ₹{product.originalPrice.toLocaleString()}
-              </span>
-              {discount > 0 && (
-                <span className="px-2 py-0.5 bg-green-500/10 text-green-500 text-xs font-semibold rounded-full">
-                  {discount}% OFF
-                </span>
-              )}
-            </div>
-            <p className="mt-1 text-xs text-muted-foreground">
-              18% GST will be added at checkout.
-            </p>
-
             {/* Description */}
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
               {product.longDescription}
@@ -389,19 +465,22 @@ export default function ProductDetailPage({
                   <div className="flex flex-wrap gap-2">
                     {variants.map((v) => {
                       const isSelected = v.slug === product.slug;
+                      // Calculate unit count from slug
+                      const unitCount = parseInt(v.slug.split("-").pop() || "1");
+                      const perUnit = Math.round(v.price / unitCount);
                       return (
                         <Link
                           key={v.slug}
                           href={`/shop/${v.slug}`}
-                          className={`px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                          className={`px-5 py-3 rounded-2xl border text-sm font-medium transition-all ${
                             isSelected
-                              ? "border-primary bg-primary/5 text-primary ring-1 ring-primary"
-                              : "border-border bg-white text-secondary hover:border-primary/50"
+                              ? "border-primary bg-primary/5 text-primary ring-1 ring-primary shadow-sm shadow-primary/10"
+                              : "border-border bg-card text-secondary hover:border-primary/40 hover:shadow-sm"
                           }`}
                         >
                           <span className="block font-semibold">{getPackLabel(v)}</span>
-                          {/* <span className="block text-xs text-muted-foreground mt-0.5">
-                            ₹{v.price.toLocaleString()} +GST
+                          {/* <span className={`block text-xs mt-0.5 ${isSelected ? "text-primary/70" : "text-muted-foreground"}`}>
+                            ₹{v.price.toLocaleString()}{unitCount > 1 && ` (₹${perUnit}/unit)`}
                           </span> */}
                         </Link>
                       );
@@ -411,13 +490,31 @@ export default function ProductDetailPage({
               );
             })()}
 
+            {/* Price */}
+            <div className="mt-5 flex items-baseline gap-3">
+              <span className="text-3xl font-bold text-secondary">
+                ₹{product.price.toLocaleString()}
+              </span>
+              <span className="text-lg text-muted-foreground line-through">
+                ₹{product.originalPrice.toLocaleString()}
+              </span>
+              {discount > 0 && (
+                <span className="px-2.5 py-1 bg-green-500/10 text-green-600 text-xs font-semibold rounded-full">
+                  {discount}% OFF
+                </span>
+              )}
+            </div>
+            <p className="mt-1.5 text-xs text-muted-foreground">
+              18% GST will be added at checkout.
+            </p>
+
             {/* Quantity + Add to Cart */}
-            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <div className="mt-4 flex flex-col sm:flex-row gap-3">
               {/* Quantity */}
-              <div className="flex items-center border border-border rounded-xl overflow-hidden">
+              <div className="flex items-center border border-border rounded-2xl overflow-hidden bg-card">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-3 py-2.5 hover:bg-muted transition-colors"
+                  className="px-3.5 py-3 hover:bg-muted transition-colors"
                 >
                   <Minus className="h-4 w-4" />
                 </button>
@@ -426,7 +523,7 @@ export default function ProductDetailPage({
                 </span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="px-3 py-2.5 hover:bg-muted transition-colors"
+                  className="px-3.5 py-3 hover:bg-muted transition-colors"
                 >
                   <Plus className="h-4 w-4" />
                 </button>
@@ -435,10 +532,10 @@ export default function ProductDetailPage({
               {/* Add to Cart Button */}
               <button
                 onClick={handleAddToCart}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-[0.98] text-sm ${
+                className={`flex-1 flex items-center justify-center gap-2 py-3 text-white font-semibold rounded-2xl transition-all shadow-md hover:shadow-lg active:scale-[0.98] text-sm ${
                   alreadyInCart
-                    ? "bg-green-600 hover:bg-green-700"
-                    : "bg-primary hover:bg-primary-dark"
+                    ? "bg-green-600 hover:bg-green-700 shadow-green-600/25"
+                    : "bg-primary hover:bg-primary-dark shadow-primary/25"
                 }`}
               >
                 {alreadyInCart ? (
@@ -466,18 +563,27 @@ export default function ProductDetailPage({
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({ productId: dbId }),
                     });
-                    if (res.status === 409) showToast("Already in wishlist!");
-                    else if (res.ok) showToast("Added to wishlist!");
-                    else showToast("Login to add to wishlist");
+                    if (res.status === 409) {
+                      showToast("Already in wishlist!");
+                      setWishlisted(true);
+                    } else if (res.ok) {
+                      setWishlisted(true);
+                      showToast("Added to wishlist!");
+                    } else showToast("Login to add to wishlist");
                   } catch { showToast("Failed to add to wishlist"); }
                 }}
-                className="p-2.5 border border-border rounded-xl hover:bg-red-50 transition-colors group/heart"
+                className="p-3 border border-border rounded-2xl hover:bg-red-50 transition-colors group/heart"
               >
-                <Heart className="h-4 w-4 text-secondary group-hover/heart:text-red-500 transition-colors" />
+                <motion.div
+                  animate={wishlisted ? { scale: [1, 1.4, 1] } : {}}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                >
+                  <Heart className={`h-4 w-4 transition-colors ${wishlisted ? "fill-pink-500 text-pink-500" : "text-secondary group-hover/heart:text-red-500"}`} />
+                </motion.div>
               </button>
 
               {/* Share */}
-              <button className="p-2.5 border border-border rounded-xl hover:bg-muted transition-colors">
+              <button className="p-3 border border-border rounded-2xl hover:bg-muted transition-colors">
                 <Share2 className="h-4 w-4 text-secondary" />
               </button>
             </div>
@@ -500,24 +606,24 @@ export default function ProductDetailPage({
                 }
                 router.push("/cart");
               }}
-              className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-all text-sm"
+              className="mt-3 w-full flex items-center justify-center gap-2 py-3 border-2 border-primary text-primary font-semibold rounded-2xl hover:bg-primary hover:text-white transition-all text-sm"
             >
               <Zap className="h-4 w-4" /> Buy Now
             </button>
 
             {/* Trust Badges */}
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              {/* <div className="flex items-center gap-1.5 text-xs text-secondary">
-                <Shield className="h-4 w-4 text-primary shrink-0" />
-                <span>5 Year Warranty</span>
-              </div> */}
-              <div className="flex items-center gap-1.5 text-xs text-secondary">
-                <Truck className="h-4 w-4 text-primary shrink-0" />
-                <span>Free Shipping</span>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-muted rounded-full text-xs font-medium text-secondary">
+                <Truck className="h-3.5 w-3.5 text-primary" />
+                Free Shipping
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-secondary">
-                <RotateCcw className="h-4 w-4 text-primary shrink-0" />
-                <span>Easy Returns</span>
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-muted rounded-full text-xs font-medium text-secondary">
+                <RotateCcw className="h-3.5 w-3.5 text-primary" />
+                Easy Returns
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-muted rounded-full text-xs font-medium text-secondary">
+                <Shield className="h-3.5 w-3.5 text-primary" />
+                ISI Certified
               </div>
             </div>
 
@@ -539,8 +645,8 @@ export default function ProductDetailPage({
         </div>
 
         {/* Tabs Section */}
-        <div className="mt-10 border-t border-border pt-6">
-          <div className="flex gap-6 border-b border-border">
+        <div className="mt-12 border-t border-border pt-8">
+          <div className="flex gap-1 bg-muted p-1 rounded-2xl w-fit mb-8">
             {(
               [
                 { key: "features", label: "Features" },
@@ -551,10 +657,10 @@ export default function ProductDetailPage({
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`pb-3 text-sm font-semibold transition-colors border-b-2 ${
+                className={`px-5 py-2.5 text-sm font-semibold transition-all rounded-xl ${
                   activeTab === tab.key
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:text-secondary"
+                    ? "bg-white text-primary shadow-sm"
+                    : "text-muted-foreground hover:text-secondary"
                 }`}
               >
                 {tab.label}
@@ -562,17 +668,24 @@ export default function ProductDetailPage({
             ))}
           </div>
 
-          <div className="py-8">
+          <div className="py-2">
             {activeTab === "features" && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="grid sm:grid-cols-2 gap-3"
+                className="space-y-2"
               >
                 {product.features.map((feature, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                    <span className="text-secondary">{feature}</span>
+                  <div
+                    key={i}
+                    className="flex items-start gap-3 p-3 rounded-xl bg-muted/50 border border-border/60 hover:border-primary/30 hover:bg-primary/5 transition-colors"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center shrink-0 mt-0.5">
+                      <Check className="h-3.5 w-3.5 text-green-600" />
+                    </div>
+                    <span className="text-sm text-secondary leading-relaxed">
+                      {feature}
+                    </span>
                   </div>
                 ))}
               </motion.div>
@@ -584,25 +697,27 @@ export default function ProductDetailPage({
                 animate={{ opacity: 1, y: 0 }}
                 className="max-w-lg"
               >
-                <table className="w-full">
-                  <tbody>
-                    {Object.entries(product.specifications).map(
-                      ([key, value], i) => (
-                        <tr
-                          key={key}
-                          className={i % 2 === 0 ? "bg-muted" : "bg-card"}
-                        >
-                          <td className="px-4 py-3 text-sm font-medium text-secondary">
-                            {key}
-                          </td>
-                          <td className="px-4 py-3 text-sm text-muted-foreground">
-                            {value}
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
+                <div className="bg-card rounded-2xl border border-border overflow-hidden">
+                  <table className="w-full">
+                    <tbody>
+                      {Object.entries(product.specifications).map(
+                        ([key, value], i) => (
+                          <tr
+                            key={key}
+                            className={i % 2 === 0 ? "bg-muted/50" : ""}
+                          >
+                            <td className="px-5 py-3.5 text-sm font-medium text-secondary">
+                              {key}
+                            </td>
+                            <td className="px-5 py-3.5 text-sm text-muted-foreground">
+                              {value}
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </motion.div>
             )}
 
@@ -678,7 +793,7 @@ export default function ProductDetailPage({
                       {reviews.map((review) => (
                         <div
                           key={review.id}
-                          className="border border-border rounded-xl p-4"
+                          className="border border-border rounded-2xl p-5 hover:shadow-sm transition-shadow"
                         >
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
@@ -755,14 +870,14 @@ export default function ProductDetailPage({
                         value={reviewComment}
                         onChange={(e) => setReviewComment(e.target.value)}
                         rows={3}
-                        className="w-full border border-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+                        className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
                         placeholder="Share your experience with this product..."
                       />
                     </div>
                     <button
                       onClick={handleSubmitReview}
                       disabled={reviewSubmitting}
-                      className="px-6 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all disabled:opacity-50"
+                      className="px-6 py-2.5 bg-primary text-white text-sm font-semibold rounded-full hover:bg-primary-dark transition-all disabled:opacity-50 shadow-md shadow-primary/20"
                     >
                       {reviewSubmitting ? "Submitting..." : "Submit Review"}
                     </button>
@@ -774,29 +889,8 @@ export default function ProductDetailPage({
         </div>
 
         {/* Video Demo Section */}
-        {product.video && (
-          <div id="video-demo" className="mt-8 border-t border-border pt-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
-                <Play className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-heading font-bold">Watch it in Action</h2>
-                <p className="text-sm text-muted-foreground">
-                  See how {product.name} works in a real scenario
-                </p>
-              </div>
-            </div>
-            <div className="relative w-full max-w-3xl aspect-video rounded-2xl overflow-hidden border border-border bg-black">
-              <iframe
-                src={product.video}
-                title={`${product.name} demo video`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-              />
-            </div>
-          </div>
+        {product.videos && product.videos.length > 0 && (
+          <VideoCarousel videos={product.videos} productName={product.name} />
         )}
 
         {/* Related Products */}
@@ -810,7 +904,7 @@ export default function ProductDetailPage({
                 <Link
                   key={rp.id}
                   href={`/shop/${rp.slug}`}
-                  className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1"
+                  className="group bg-card rounded-3xl border border-border overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1"
                 >
                     <div className="relative h-44 bg-muted overflow-hidden">
                     <Image

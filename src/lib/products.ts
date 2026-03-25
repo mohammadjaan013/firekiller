@@ -18,7 +18,7 @@ export interface Product {
   features: string[];
   specifications: Record<string, string>;
   images: string[];          // paths relative to /public
-  video?: string;
+  videos?: { src: string; label: string }[];
   inStock: boolean;
 }
 
@@ -63,7 +63,10 @@ export const products: Product[] = [
       Certifications: "ISI, BIS, CE",
     },
     images: ["/images/products/f30.png", "/images/products/firekiller-1.webp", "/images/products/1.png", "/images/products/2.png"],
-    video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
+    videos: [
+      { src: "/videos/firekiller-d1.mp4", label: "FireKiller Demo" },
+      { src: "/videos/firekiller-d2.mp4", label: "FireKiller in Action" },
+    ],
     inStock: true,
   },
 
@@ -101,7 +104,10 @@ export const products: Product[] = [
       Certifications: "ISI, BIS, CE",
     },
     images: ["/images/products/firekiller-2.webp", "/images/products/firekiller-1.webp", "/images/products/1.png", "/images/products/2.png"],
-    video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
+    videos: [
+      { src: "/videos/firekiller-d1.mp4", label: "FireKiller Demo" },
+      { src: "/videos/firekiller-d2.mp4", label: "FireKiller in Action" },
+    ],
     inStock: true,
   },
 
@@ -139,7 +145,10 @@ export const products: Product[] = [
       Certifications: "ISI, BIS, CE",
     },
     images: ["/images/products/firekiller-3.webp", "/images/products/firekiller-1.webp", "/images/products/1.png", "/images/products/2.png"],
-    video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
+    videos: [
+      { src: "/videos/firekiller-d1.mp4", label: "FireKiller Demo" },
+      { src: "/videos/firekiller-d2.mp4", label: "FireKiller in Action" },
+    ],
     inStock: true,
   },
 
@@ -156,9 +165,9 @@ export const products: Product[] = [
     categories: ["kitchen"],
     categoryLabel: "Kitchen Safety",
     description:
-      "Single fire suppression sachet - toss into a burning pan, fire goes out instantly.",
+      "OustFire's patented fire suppression sachet - toss into a burning pan, fire goes out instantly.",
     longDescription:
-      "PanSafe is a revolutionary throw-and-forget fire sachet for cooking oil fires - the #1 cause of kitchen fires in India. Simply toss into the burning pan; it bursts on contact, instantly suppressing the fire. No aiming, no pins, no panic.",
+      "PanSafe is an OustFire patented, revolutionary throw-and-forget fire sachet for cooking oil fires - the #1 cause of kitchen fires in India. Simply toss into the burning pan; it bursts on contact, instantly suppressing the fire. No aiming, no pins, no panic.",
     features: [
       "Just throw into burning pan - that's it",
       "Activates on contact with fire",
@@ -176,7 +185,11 @@ export const products: Product[] = [
       Certifications: "ISI, NABL tested",
     },
     images: ["/images/products/p10.png", "/images/products/pansafe-1.webp", "/images/products/3.png", "/images/products/4.png"],
-    video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
+    videos: [
+      { src: "/videos/pansafe-d1.mp4", label: "PanSafe Demo" },
+      { src: "/videos/pansafe-d2.mp4", label: "PanSafe in Action" },
+      { src: "/videos/pansafe-advt.mp4", label: "PanSafe × Vishnu Manohar" },
+    ],
     inStock: true,
   },
 
@@ -193,9 +206,9 @@ export const products: Product[] = [
     categories: ["kitchen"],
     categoryLabel: "Kitchen Safety",
     description:
-      "Pack of 3 sachets - months of kitchen protection with backups ready.",
+      "Pack of 3 OustFire patented sachets - months of kitchen protection with backups ready.",
     longDescription:
-      "The 3-pack keeps your kitchen protected long-term. Keep one by the stove, one in the drawer, and one spare. Save ₹598 compared to buying individually. Ideal for families that cook daily with oil.",
+      "The 3-pack of OustFire's patented PanSafe keeps your kitchen protected long-term. Keep one by the stove, one in the drawer, and one spare. Save ₹598 compared to buying individually. Ideal for families that cook daily with oil.",
     features: [
       "Three sachets for extended protection",
       "Save ₹598 vs buying individually",
@@ -213,7 +226,11 @@ export const products: Product[] = [
       Certifications: "ISI, NABL tested",
     },
     images: ["/images/products/pansafe-3.webp", "/images/products/pansafe-1.webp", "/images/products/3.png", "/images/products/4.png"],
-    video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
+    videos: [
+      { src: "/videos/pansafe-d1.mp4", label: "PanSafe Demo" },
+      { src: "/videos/pansafe-d2.mp4", label: "PanSafe in Action" },
+      { src: "/videos/pansafe-advt.mp4", label: "PanSafe × Vishnu Manohar" },
+    ],
     inStock: true,
   },
 
@@ -230,9 +247,9 @@ export const products: Product[] = [
     categories: ["kitchen"],
     categoryLabel: "Kitchen Safety",
     description:
-      "Mega pack of 5 sachets - share with family or stock up for the year.",
+      "Mega pack of 5 OustFire patented sachets - share with family or stock up for the year.",
     longDescription:
-      "The 5-pack is the ultimate kitchen safety investment. Keep sachets in your kitchen, give extras to parents or neighbours. At under ₹280 per sachet, it's the most affordable fire protection you can buy.",
+      "The 5-pack of OustFire's patented PanSafe is the ultimate kitchen safety investment. Keep sachets in your kitchen, give extras to parents or neighbours. At under ₹280 per sachet, it's the most affordable fire protection you can buy.",
     features: [
       "Five sachets for maximum coverage",
       "Save ₹1,096 vs buying individually",
@@ -250,7 +267,11 @@ export const products: Product[] = [
       Certifications: "ISI, NABL tested",
     },
     images: ["/images/products/pansafe-5.webp", "/images/products/pansafe-1.webp", "/images/products/3.png", "/images/products/4.png"],
-    video: "https://www.youtube.com/embed/ZE2HtUVYZfw",
+    videos: [
+      { src: "/videos/pansafe-d1.mp4", label: "PanSafe Demo" },
+      { src: "/videos/pansafe-d2.mp4", label: "PanSafe in Action" },
+      { src: "/videos/pansafe-advt.mp4", label: "PanSafe × Vishnu Manohar" },
+    ],
     inStock: true,
   },
 ];

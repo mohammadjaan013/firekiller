@@ -15,15 +15,14 @@ import {
 
 const footerLinks = {
   Products: [
-    { label: "Home Extinguishers", href: "/shop?category=home" },
-    { label: "Kitchen Safety", href: "/shop?category=kitchen" },
-    { label: "Car Extinguishers", href: "/shop?category=car" },
+    { label: "Home Extinguishers", href: "/shop/firekiller-1" },
+    { label: "Kitchen Fire Safety", href: "/shop/pansafe-1" },
+    { label: "Car Extinguishers", href: "/shop/firekiller-1" },
   ],
   Company: [
     { label: "About Us", href: "/about" },
     { label: "Blog", href: "/blog" },
-    // { label: "Vendor Enquiry", href: "/vendor-enquiry" },
-    // { label: "Careers", href: "/careers" },
+    { label: "FAQs", href: "/faqs" },
     { label: "Contact Us", href: "/contact" },
   ],
   Support: [
@@ -45,7 +44,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center mb-3">
               <Image
-                src="/images/brand/oustfire-light.png"
+                src="/images/brand/man2.png"
                 alt="FireKiller"
                 width={160}
                 height={40}
@@ -81,7 +80,7 @@ export default function Footer() {
               </h3>
               <ul className="space-y-2">
                 {links.map((link) => (
-                  <li key={link.href}>
+                  <li key={link.label}>
                     <Link
                       href={link.href}
                       className="text-sm text-muted-foreground hover:text-primary transition-colors"

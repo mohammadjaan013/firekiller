@@ -22,6 +22,7 @@ const navLinks = [
   { href: "/about", label: "About Us" },
   { href: "/shop", label: "Shop" },
   { href: "/blog", label: "Blog" },
+  { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact Us" },
 ];
 
@@ -55,7 +56,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0">
             <Image
-              src="/images/brand/oustfire-light.png"
+              src="/images/brand/man2.png"
               alt="FireKiller"
               width={160}
               height={40}

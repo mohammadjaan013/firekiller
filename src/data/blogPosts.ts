@@ -18,7 +18,7 @@ export const blogPosts: BlogPost[] = [
     slug: "protect-your-home-from-cooking-fires-with-one-smart-sachet",
     excerpt:
       "Your kitchen may be the heart of your home — but it's also one of the most common places for fires to start. Learn how one smart sachet can protect your family.",
-    category: "Fire Safety",
+    category: "PanSafe",
     date: "Jun 11, 2025",
     readTime: "5 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/06/1920_111219holidaycookingfireengulfed19088646067-763080.jpg",
@@ -74,7 +74,7 @@ Don't wait for a scare to act. Be prepared. Stay safe.
     slug: "firekiller-fire-extinguisher-for-all-types-of-fire",
     excerpt:
       "One powerful shield — from car engine sparks to kitchen oil fires. Discover how FireKiller handles all types of fire with one compact device.",
-    category: "Product Guide",
+    category: "FireKiller",
     date: "Jun 23, 2025",
     readTime: "5 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/06/Fire-Killer-Fire-Extingusiher-for-all-type-of-fire-1-scaled.jpg",
@@ -126,7 +126,7 @@ Fire safety isn't just about having an extinguisher — it's about having the ri
     slug: "pansafe-kitchen-safety-device-the-secret-weapon-every-kitchen-needs",
     excerpt:
       "When it comes to kitchen safety, everyone talks about smoke alarms and fire extinguishers. But there's a secret weapon most people don't know about — PanSafe.",
-    category: "Fire Safety",
+    category: "PanSafe",
     date: "Jun 25, 2025",
     readTime: "5 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/06/PanSafe-Kitchen-Safety-Devices-scaled.jpg",
@@ -182,7 +182,7 @@ Don't wait for a grease fire to realize you're unprepared. The PanSafe Kitchen S
     slug: "what-if-your-cooktop-caught-fire-while-cooking-heres-a-5-second-cooktop-fire-safety-fix",
     excerpt:
       "You're in your kitchen cooking your favorite meal when suddenly flames erupt from the pan. Here's a 5-second fix that could save your kitchen.",
-    category: "Fire Safety",
+    category: "PanSafe",
     date: "Jun 26, 2025",
     readTime: "4 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/06/Cooktop-Fire-Safety-scaled.jpg",
@@ -243,7 +243,7 @@ Kitchen fires don't announce themselves. But with PanSafe, you don't need to be 
     slug: "home-fire-safety-in-india",
     excerpt:
       "Most Indian families assume they're being careful about fire safety. But the truth is — home fire safety in India is often overlooked until it's too late.",
-    category: "Fire Safety",
+    category: "General",
     date: "Jul 3, 2025",
     readTime: "6 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/07/FIREKILLER-FIRE-EXTINGUISHER-1024x512.png",
@@ -304,7 +304,7 @@ Don't wait for a scare — get prepared, get protected, and give your loved ones
     slug: "fire-in-the-frying-pan",
     excerpt:
       "A frying pan fire can erupt in seconds. Many people rely on old advice — cover it with a lid or throw a wet cloth — but here's the shocking truth.",
-    category: "Fire Safety",
+    category: "General",
     date: "Jul 11, 2025",
     readTime: "5 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/07/FRYING-PAN-FIRE-scaled.jpg",
@@ -372,7 +372,7 @@ Don't wait for a scare to act. Be prepared. Stay safe.
     slug: "firekiller-fire-extinguisher-game-changer",
     excerpt:
       "When it comes to emergencies, every second counts — especially during a fire. Discover why FireKiller is redefining how we approach fire protection.",
-    category: "Product Guide",
+    category: "FireKiller",
     date: "Jul 14, 2025",
     readTime: "6 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/07/Blue-And-Yellow-Modern-Electrical-Services-Banner-scaled.jpg",
@@ -441,7 +441,7 @@ Don't wait for a disaster to realize what you could've done. Equip yourself with
     slug: "kitchen-fire-extinguisher-sachet",
     excerpt:
       "A sudden fire in the kitchen can be terrifying. One spark, one overheated pan — and your peaceful cooking routine turns into chaos. Here's the instant solution.",
-    category: "Fire Safety",
+    category: "PanSafe",
     date: "Jul 15, 2025",
     readTime: "5 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/07/Pansafe-Kitchen-Pouch.jpg",
@@ -493,7 +493,7 @@ Secure your kitchen. Secure your peace of mind.
     slug: "is-your-car-fire-safe-why-firekiller-fire-extinguisher-is-a-must-have-in-every-vehicle",
     excerpt:
       "Imagine cruising down the highway when suddenly — you smell something burning. Smoke billows from under the hood. Is your car prepared for a fire emergency?",
-    category: "Fire Safety",
+    category: "FireKiller",
     date: "Jul 21, 2025",
     readTime: "6 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/07/firekiller-fire-extimgyisher-1024x576.png",
@@ -558,7 +558,7 @@ So, ask yourself: Is your car fire-safe? If the answer is "I'm not sure," then i
     slug: "is-pansafe-fire-extinguisher-sachet-safe-to-use",
     excerpt:
       "Kitchen fires are fast, furious, and frightening. We put the PanSafe fire extinguisher sachet to the test — here's what actually happened when flames roared.",
-    category: "Product Review",
+    category: "PanSafe",
     date: "Jul 26, 2025",
     readTime: "5 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/07/Pansafe-1.jpg",
@@ -617,7 +617,7 @@ For anyone searching how to stop an oil pan fire safely, without stress or spray
     slug: "kitchen-fire-safety",
     excerpt:
       "Think your kitchen is safe? Think again. From a tiny spark to a roaring flame, your cozy cooking space can turn into a danger zone in seconds.",
-    category: "Fire Safety",
+    category: "General",
     date: "Jul 30, 2025",
     readTime: "5 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/07/kitchen-fire-safety-1024x576.png",
@@ -670,7 +670,7 @@ Because the real recipe for a safe kitchen? A dash of awareness. A spoon of prev
     slug: "protect-your-car-home-workplace-with-firekiller-fire-extinguisher",
     excerpt:
       "When it comes to fire safety, prevention and quick action can save lives. Whether you want to protect your car, home, or workplace — FireKiller has you covered.",
-    category: "Product Guide",
+    category: "FireKiller",
     date: "Sep 9, 2025",
     readTime: "6 min read",
     image: "https://firekiller.in/wp-content/uploads/2025/09/fire-killer-fire-extinguisher-1-1024x576.png",

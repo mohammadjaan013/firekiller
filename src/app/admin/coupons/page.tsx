@@ -1,7 +1,8 @@
 import { requireAdmin } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { CouponForm, CouponActions } from "./CouponActions";
 
 export default async function AdminCouponsPage() {
   await requireAdmin();
@@ -23,12 +24,7 @@ export default async function AdminCouponsPage() {
             <p className="text-sm text-muted-foreground">{coupons.length} coupons</p>
           </div>
         </div>
-        <button
-          disabled
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary/70 text-white text-sm font-semibold cursor-not-allowed"
-        >
-          <Plus className="h-4 w-4" /> Add Coupon
-        </button>
+        <CouponForm />
       </div>
 
       <div className="bg-white rounded-xl border border-border overflow-hidden">
@@ -43,6 +39,7 @@ export default async function AdminCouponsPage() {
                 <th className="text-left px-4 py-3 font-semibold text-secondary">Usage</th>
                 <th className="text-left px-4 py-3 font-semibold text-secondary">Expires</th>
                 <th className="text-left px-4 py-3 font-semibold text-secondary">Status</th>
+                <th className="text-left px-4 py-3 font-semibold text-secondary">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -80,11 +77,26 @@ export default async function AdminCouponsPage() {
                       {coupon.isActive ? "Active" : "Inactive"}
                     </span>
                   </td>
+                  <td className="px-4 py-3">
+                    <CouponActions coupon={{
+                      id: coupon.id,
+                      code: coupon.code,
+                      description: coupon.description,
+                      discountType: coupon.discountType,
+                      discountValue: coupon.discountValue,
+                      minOrder: coupon.minOrder,
+                      maxDiscount: coupon.maxDiscount,
+                      usageLimit: coupon.usageLimit,
+                      usedCount: coupon.usedCount,
+                      isActive: coupon.isActive,
+                      expiresAt: coupon.expiresAt ? coupon.expiresAt.toISOString() : null,
+                    }} />
+                  </td>
                 </tr>
               ))}
               {coupons.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-muted-foreground">
+                  <td colSpan={8} className="px-4 py-12 text-center text-muted-foreground">
                     No coupons found.
                   </td>
                 </tr>

@@ -9,6 +9,7 @@ import {
   DollarSign,
   ArrowLeft,
   IndianRupee,
+  FileText,
 } from "lucide-react";
 
 const sidebarLinks = [
@@ -19,6 +20,7 @@ const sidebarLinks = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/coupons", label: "Coupons", icon: DollarSign },
   { href: "/admin/categories", label: "Categories", icon: Tag },
+  { href: "/admin/blogs", label: "Blog Posts", icon: FileText },
 ];
 
 export default function AdminLayout({
