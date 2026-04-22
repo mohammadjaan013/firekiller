@@ -20,6 +20,19 @@ export async function generateMetadata({
   return {
     title: `${post.title} | FireKiller Blog`,
     description: post.excerpt,
+    openGraph: {
+      title: `${post.title} | FireKiller Blog`,
+      description: post.excerpt,
+      url: `/blog/${post.slug}`,
+      type: "article",
+      images: [{ url: post.image, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${post.title} | FireKiller Blog`,
+      description: post.excerpt,
+      images: [post.image],
+    },
   };
 }
 

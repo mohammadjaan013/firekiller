@@ -72,7 +72,7 @@ export default function ContactPage() {
                 icon: Phone,
                 title: "Call Us",
                 detail: "+91 93242 59477",
-                sub: "Mon-Sat, 9AM-8PM IST",
+                sub: "Mon-Sat, 9AM-6PM IST",
               },
               {
                 icon: Mail,
@@ -89,8 +89,8 @@ export default function ContactPage() {
               {
                 icon: Clock,
                 title: "Business Hours",
-                detail: "Mon - Sat: 9AM - 8PM",
-                sub: "Sunday: 10AM - 5PM",
+                detail: "Mon - Sat: 9AM - 6PM",
+                sub: "Sunday: Closed",
               },
             ].map(({ icon: Icon, title, detail, sub }) => (
               <div

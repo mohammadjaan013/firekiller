@@ -120,7 +120,7 @@ export default function AboutPage() {
               </div>
 
               {/* Mini stats */}
-              {/* <div className="mt-5 flex flex-wrap gap-3">
+              <div className="mt-5 flex flex-wrap gap-3">
                 {[
                   { value: "21+", label: "Years in Fire Safety" },
                   { value: "2", label: "Patented Products" },
@@ -134,7 +134,7 @@ export default function AboutPage() {
                     <p className="text-[10px] text-white/50">{s.label}</p>
                   </div>
                 ))}
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
@@ -195,7 +195,7 @@ export default function AboutPage() {
                   className="object-contain p-8"
                 />
               </div>
-              {/* <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-4 gap-3">
                 {[
                   { value: "21+", label: "Years" },
                   { value: "42.4K", label: "Sold" },
@@ -212,7 +212,7 @@ export default function AboutPage() {
                     </p>
                   </div>
                 ))}
-              </div> */}
+              </div>
             </div>
           </div>
         </div>

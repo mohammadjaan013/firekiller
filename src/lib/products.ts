@@ -64,9 +64,9 @@ export const products: Product[] = [
     },
     images: ["/images/products/f30.png", "/images/products/firekiller-1.webp", "/images/products/1.png", "/images/products/2.png"],
     videos: [
-      { src: "/videos/firekiller-d1.mp4", label: "FireKiller Demo" },
-      { src: "/videos/firekiller-d2.mp4", label: "FireKiller in Action" },
-    ],
+      { src: "https://www.youtube.com/embed/PtLaz7YQ6-A", label: "FireKiller Demo" },
+      { src: "https://www.youtube.com/embed/YtKvx5Pn_Vw", label: "FireKiller in Action" },      { src: "https://www.youtube.com/embed/oIspMHiZ1WM", label: "FireKiller Short" },
+      { src: "https://www.youtube.com/embed/8BXNCR2GuJ4", label: "Customer Review" },    ],
     inStock: true,
   },
 
@@ -105,9 +105,9 @@ export const products: Product[] = [
     },
     images: ["/images/products/firekiller-2.webp", "/images/products/firekiller-1.webp", "/images/products/1.png", "/images/products/2.png"],
     videos: [
-      { src: "/videos/firekiller-d1.mp4", label: "FireKiller Demo" },
-      { src: "/videos/firekiller-d2.mp4", label: "FireKiller in Action" },
-    ],
+      { src: "https://www.youtube.com/embed/PtLaz7YQ6-A", label: "FireKiller Demo" },
+      { src: "https://www.youtube.com/embed/YtKvx5Pn_Vw", label: "FireKiller in Action" },      { src: "https://www.youtube.com/embed/oIspMHiZ1WM", label: "FireKiller Short" },
+      { src: "https://www.youtube.com/embed/8BXNCR2GuJ4", label: "Customer Review" },    ],
     inStock: true,
   },
 
@@ -146,9 +146,9 @@ export const products: Product[] = [
     },
     images: ["/images/products/firekiller-3.webp", "/images/products/firekiller-1.webp", "/images/products/1.png", "/images/products/2.png"],
     videos: [
-      { src: "/videos/firekiller-d1.mp4", label: "FireKiller Demo" },
-      { src: "/videos/firekiller-d2.mp4", label: "FireKiller in Action" },
-    ],
+      { src: "https://www.youtube.com/embed/PtLaz7YQ6-A", label: "FireKiller Demo" },
+      { src: "https://www.youtube.com/embed/YtKvx5Pn_Vw", label: "FireKiller in Action" },      { src: "https://www.youtube.com/embed/oIspMHiZ1WM", label: "FireKiller Short" },
+      { src: "https://www.youtube.com/embed/8BXNCR2GuJ4", label: "Customer Review" },    ],
     inStock: true,
   },
 
@@ -186,10 +186,9 @@ export const products: Product[] = [
     },
     images: ["/images/products/p10.png", "/images/products/pansafe-1.webp", "/images/products/3.png", "/images/products/4.png"],
     videos: [
-      { src: "/videos/pansafe-d1.mp4", label: "PanSafe Demo" },
-      { src: "/videos/pansafe-d2.mp4", label: "PanSafe in Action" },
-      { src: "/videos/pansafe-advt.mp4", label: "PanSafe × Vishnu Manohar" },
-    ],
+      { src: "https://www.youtube.com/embed/cF5OFvxHTi0", label: "PanSafe × Vishnu Manohar" },
+      { src: "https://www.youtube.com/embed/bX5AV4asYeA", label: "PanSafe in Action" },      { src: "https://www.youtube.com/embed/DgAOQZXSetk", label: "PanSafe Short" },
+      { src: "https://www.youtube.com/embed/lRxesFqSU0U", label: "PanSafe Quick Demo" },    ],
     inStock: true,
   },
 
@@ -227,10 +226,9 @@ export const products: Product[] = [
     },
     images: ["/images/products/pansafe-3.webp", "/images/products/pansafe-1.webp", "/images/products/3.png", "/images/products/4.png"],
     videos: [
-      { src: "/videos/pansafe-d1.mp4", label: "PanSafe Demo" },
-      { src: "/videos/pansafe-d2.mp4", label: "PanSafe in Action" },
-      { src: "/videos/pansafe-advt.mp4", label: "PanSafe × Vishnu Manohar" },
-    ],
+      { src: "https://www.youtube.com/embed/cF5OFvxHTi0", label: "PanSafe × Vishnu Manohar" },
+      { src: "https://www.youtube.com/embed/bX5AV4asYeA", label: "PanSafe in Action" },      { src: "https://www.youtube.com/embed/DgAOQZXSetk", label: "PanSafe Short" },
+      { src: "https://www.youtube.com/embed/lRxesFqSU0U", label: "PanSafe Quick Demo" },    ],
     inStock: true,
   },
 
@@ -268,9 +266,10 @@ export const products: Product[] = [
     },
     images: ["/images/products/pansafe-5.webp", "/images/products/pansafe-1.webp", "/images/products/3.png", "/images/products/4.png"],
     videos: [
-      { src: "/videos/pansafe-d1.mp4", label: "PanSafe Demo" },
-      { src: "/videos/pansafe-d2.mp4", label: "PanSafe in Action" },
-      { src: "/videos/pansafe-advt.mp4", label: "PanSafe × Vishnu Manohar" },
+      { src: "https://www.youtube.com/embed/cF5OFvxHTi0", label: "PanSafe × Vishnu Manohar" },
+      { src: "https://www.youtube.com/embed/bX5AV4asYeA", label: "PanSafe in Action" },
+      { src: "https://www.youtube.com/embed/DgAOQZXSetk", label: "PanSafe Short" },
+      { src: "https://www.youtube.com/embed/lRxesFqSU0U", label: "PanSafe Quick Demo" },
     ],
     inStock: true,
   },

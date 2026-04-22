@@ -24,6 +24,7 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://firekiller.in"),
   title: "FireKiller - Seconds Save Lives",
   description:
     "India's most trusted compact fire extinguishers. Protect your home, kitchen & car. Free shipping, 1-year warranty, COD available.",

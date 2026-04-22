@@ -1,19 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Play, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function VideoShowcase() {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
-
-  const handlePlay = () => {
-    setPlaying(true);
-    videoRef.current?.play();
-  };
 
   return (
     <section className="py-10 lg:py-14 bg-white">
@@ -37,7 +31,7 @@ export default function VideoShowcase() {
           </h2>
           <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
             Watch how India&apos;s favourite kitchen fire safety sachet performs
-            in a real kitchen — endorsed by a Vishnu Manohar.
+            in a real kitchen — endorsed by Vishnu Manohar.
           </p>
         </motion.div>
 
@@ -48,40 +42,43 @@ export default function VideoShowcase() {
           transition={{ duration: 0.5 }}
           className="mx-auto"
         >
-          <div className="relative aspect-video rounded-2xl overflow-hidden border border-border shadow-md">
-            {/* Thumbnail overlay */}
-            {!playing && (
+          <div className="relative aspect-video rounded-2xl overflow-hidden border border-border shadow-md bg-black">
+            {playing ? (
+              <iframe
+                src="https://www.youtube.com/embed/cF5OFvxHTi0?rel=0&modestbranding=1&autoplay=1"
+                title="PanSafe × Vishnu Manohar"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
               <button
-                onClick={handlePlay}
-                className="absolute inset-0 z-10 flex items-center justify-center cursor-pointer group"
-                aria-label="Play video"
+                onClick={() => setPlaying(true)}
+                className="absolute inset-0 w-full h-full group"
+                aria-label="Play PanSafe × Vishnu Manohar video"
               >
                 <Image
                   src="/images/brand/thumbnail.png"
-                  alt="PanSafe Vishnu Manohar"
+                  alt="PanSafe × Vishnu Manohar thumbnail"
                   fill
                   className="object-cover"
                   priority
                 />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
-                <svg
-                  className="relative z-10 w-10 h-10 sm:w-12 sm:h-12 drop-shadow-lg group-hover:scale-110 transition-transform"
-                  viewBox="0 0 24 24"
-                  fill="white"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
+                {/* dark overlay on hover */}
+                <span className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-colors" />
+                {/* play button — small triangle only, bottom-right corner */}
+                <span className="absolute bottom-4 right-4">
+                  <svg
+                    className="w-8 h-8 drop-shadow-lg"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.5))" }}
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
               </button>
             )}
-            <video
-              ref={videoRef}
-              src="/videos/pansafe-advt.mp4"
-              controls={playing}
-              preload="metadata"
-              playsInline
-              onEnded={() => setPlaying(false)}
-              className="w-full h-full object-cover"
-            />
           </div>
 
           <div className="mt-5 text-center">

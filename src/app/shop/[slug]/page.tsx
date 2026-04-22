@@ -89,18 +89,31 @@ function VideoCarousel({
 
           {/* Active video */}
           <div className="relative flex-1 aspect-video rounded-2xl overflow-hidden border border-border bg-black shadow-lg">
-            <video
-              key={videos[current].src}
-              src={videos[current].src}
-              controls
-              preload="metadata"
-              playsInline
-              className="w-full h-full object-contain"
-            />
-            {videos[current].label && (
-              <div className="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-sm rounded-full pointer-events-none">
-                <p className="text-white text-xs font-medium">{videos[current].label}</p>
-              </div>
+            {videos[current].src.includes("youtube.com/embed") ? (
+              <iframe
+                key={videos[current].src}
+                src={`${videos[current].src}?rel=0&modestbranding=1`}
+                title={videos[current].label}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <>
+                <video
+                  key={videos[current].src}
+                  src={videos[current].src}
+                  controls
+                  preload="metadata"
+                  playsInline
+                  className="w-full h-full object-contain"
+                />
+                {videos[current].label && (
+                  <div className="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-sm rounded-full pointer-events-none">
+                    <p className="text-white text-xs font-medium">{videos[current].label}</p>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
