@@ -10,7 +10,7 @@ const mainProducts = [
     title: "FireKiller Extinguisher",
     description:
       "Compact fire extinguisher for home, car & office. Works on Oil, Gas & Electrical fires. Zero maintenance for 5 years.",
-    price: 799,
+    price: 798,
     badge: "Best Seller",
     image: "/images/products/f30.png",
     href: "/shop/firekiller-1",

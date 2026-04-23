@@ -11,7 +11,6 @@ import {
   MapPin,
   CreditCard,
   Shield,
-  Truck,
   Loader2,
   Check,
 } from "lucide-react";
@@ -64,11 +63,11 @@ const STATES = [
 /* ── Page ─────────────────────────────────────────────── */
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, subtotal, savings, discount, appliedCoupon, clearCart } = useCart();
+  const { items, subtotal, discount, appliedCoupon, clearCart } = useCart();
   const { showToast } = useToast();
   const { data: session } = useSession();
 
-  const shipping = subtotal > 999 ? 0 : 99;
+  const shipping = 0; // free shipping for now
   const total = subtotal + shipping - discount;
 
   // Address form
@@ -538,14 +537,6 @@ export default function CheckoutPage() {
                       ₹{subtotal.toLocaleString()}
                     </span>
                   </div>
-                  {savings > 0 && (
-                    <div className="flex justify-between text-green-600">
-                      <span>You Save</span>
-                      <span className="font-medium">
-                        -₹{savings.toLocaleString()}
-                      </span>
-                    </div>
-                  )}
                   {discount > 0 && (
                     <div className="flex justify-between text-green-600">
                       <span>Coupon ({appliedCoupon})</span>

@@ -22,8 +22,8 @@ export default function ReturnPolicyPage() {
             <p>
               Orders can be cancelled within <strong>24 hours</strong> of placement, provided they
               have not yet been dispatched. To cancel, please contact us immediately at{" "}
-              <a href="mailto:oustfire@gmail.com" className="text-primary hover:underline">
-                oustfire@gmail.com
+              <a href="mailto:sales@oustfire.com" className="text-primary hover:underline">
+                sales@oustfire.com
               </a>{" "}
               with your order ID.
             </p>
@@ -78,8 +78,8 @@ export default function ReturnPolicyPage() {
             <h2 className="text-lg font-bold text-secondary mb-2">5. Contact Us</h2>
             <p>
               To initiate a return, cancellation, or refund request, contact us at{" "}
-              <a href="mailto:oustfire@gmail.com" className="text-primary hover:underline">
-                oustfire@gmail.com
+              <a href="mailto:sales@oustfire.com" className="text-primary hover:underline">
+                sales@oustfire.com
               </a>{" "}
               or visit our{" "}
               <Link href="/contact" className="text-primary hover:underline">

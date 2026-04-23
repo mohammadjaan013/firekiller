@@ -7,16 +7,16 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Tag } from "lucide-react"
 import { useCart } from "@/context/CartContext";
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, subtotal, savings, totalItems, discount, appliedCoupon, applyCoupon, removeCoupon } = useCart();
+  const { items, removeItem, updateQuantity, subtotal, totalItems, discount, appliedCoupon, applyCoupon, removeCoupon } = useCart();
   const [coupon, setCoupon] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
 
-  const shipping = subtotal > 999 ? 0 : 99;
-  const GST_RATE = 0.18;
-  // Since prices are now BASE (excl. GST), calculate GST forward
-  const gstAmount = Math.round(subtotal * GST_RATE);
-  const total = subtotal + gstAmount + shipping - discount;
+  const shipping = 0; // free shipping for now
+  // prices in products.ts are GST-inclusive; derive breakdown
+  const baseAmount = Math.round(subtotal / 1.18);
+  const gstAmount = subtotal - baseAmount;
+  const total = subtotal + shipping - discount;
 
   if (items.length === 0) {
     return (
@@ -193,19 +193,13 @@ export default function CartPage() {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal (excl. GST)</span>
                   <span className="font-medium text-secondary">
-                    ₹{subtotal.toLocaleString()}
+                    ₹{baseAmount.toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">GST (18%)</span>
                   <span className="font-medium text-secondary">
                     ₹{gstAmount.toLocaleString()}
-                  </span>
-                </div>
-                <div className="flex justify-between text-green-600">
-                  <span>You Save</span>
-                  <span className="font-medium">
-                    -₹{savings.toLocaleString()}
                   </span>
                 </div>
                 {discount > 0 && (

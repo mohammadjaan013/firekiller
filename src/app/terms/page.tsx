@@ -107,8 +107,8 @@ export default function TermsPage() {
             <h2 className="text-lg font-bold text-secondary mb-2">10. Contact Us</h2>
             <p>
               For questions about these terms, contact us at{" "}
-              <a href="mailto:oustfire@gmail.com" className="text-primary hover:underline">
-                oustfire@gmail.com
+              <a href="mailto:sales@oustfire.com" className="text-primary hover:underline">
+                sales@oustfire.com
               </a>{" "}
               or visit our{" "}
               <Link href="/contact" className="text-primary hover:underline">

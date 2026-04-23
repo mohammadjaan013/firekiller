@@ -478,9 +478,6 @@ export default function ProductDetailPage({
                   <div className="flex flex-wrap gap-2">
                     {variants.map((v) => {
                       const isSelected = v.slug === product.slug;
-                      // Calculate unit count from slug
-                      const unitCount = parseInt(v.slug.split("-").pop() || "1");
-                      const perUnit = Math.round(v.price / unitCount);
                       return (
                         <Link
                           key={v.slug}
@@ -506,10 +503,10 @@ export default function ProductDetailPage({
             {/* Price */}
             <div className="mt-5 flex items-baseline gap-3">
               <span className="text-3xl font-bold text-secondary">
-                ₹{product.price.toLocaleString()}
+                ₹{Math.round(product.price / 1.18).toLocaleString()}
               </span>
               <span className="text-lg text-muted-foreground line-through">
-                ₹{product.originalPrice.toLocaleString()}
+                ₹{Math.round(product.originalPrice / 1.18).toLocaleString()}
               </span>
               {discount > 0 && (
                 <span className="px-2.5 py-1 bg-green-500/10 text-green-600 text-xs font-semibold rounded-full">
@@ -518,7 +515,7 @@ export default function ProductDetailPage({
               )}
             </div>
             <p className="mt-1.5 text-xs text-muted-foreground">
-              18% GST will be added at checkout.
+              + 18% GST applicable &middot; Final price: ₹{product.price.toLocaleString()}
             </p>
 
             {/* Quantity + Add to Cart */}

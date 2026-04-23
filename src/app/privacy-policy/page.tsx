@@ -85,8 +85,8 @@ export default function PrivacyPolicyPage() {
             <p>
               You have the right to access, correct, or delete your personal data. To make such a
               request, contact us at{" "}
-              <a href="mailto:oustfire@gmail.com" className="text-primary hover:underline">
-                oustfire@gmail.com
+              <a href="mailto:sales@oustfire.com" className="text-primary hover:underline">
+                sales@oustfire.com
               </a>
               .
             </p>
@@ -105,8 +105,8 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-lg font-bold text-secondary mb-2">9. Contact Us</h2>
             <p>
               For privacy-related questions or requests, contact us at{" "}
-              <a href="mailto:oustfire@gmail.com" className="text-primary hover:underline">
-                oustfire@gmail.com
+              <a href="mailto:sales@oustfire.com" className="text-primary hover:underline">
+                sales@oustfire.com
               </a>{" "}
               or visit our{" "}
               <Link href="/contact" className="text-primary hover:underline">

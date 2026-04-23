@@ -5,7 +5,7 @@ import Image from "next/image";
 import {
   Facebook,
   Instagram,
-  Twitter,
+  Linkedin,
   Youtube,
   Mail,
   Phone,
@@ -103,14 +103,16 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-4">
             {[
-              { icon: Facebook, href: "#" },
-              { icon: Instagram, href: "#" },
-              { icon: Twitter, href: "#" },
-              { icon: Youtube, href: "#" },
+              { icon: Facebook, href: "https://www.facebook.com/profile.php?id=100063862130294" },
+              { icon: Instagram, href: "https://www.instagram.com/oustfire_safety/?hl=en" },
+              { icon: Youtube, href: "https://www.youtube.com/@oustfire" },
+              { icon: Linkedin, href: "https://www.linkedin.com/in/babulal-shaikh-b9a933168/" },
             ].map(({ icon: Icon, href }, i) => (
               <Link
                 key={i}
                 href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-full bg-muted hover:bg-primary hover:text-white transition-colors"
                 aria-label="Social link"
               >
