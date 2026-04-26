@@ -13,10 +13,10 @@ export default function CartPage() {
   const [couponError, setCouponError] = useState("");
 
   const shipping = 0; // free shipping for now
-  // prices in products.ts are GST-inclusive; derive breakdown
-  const baseAmount = Math.round(subtotal / 1.18);
-  const gstAmount = subtotal - baseAmount;
-  const total = subtotal + shipping - discount;
+  // prices in products.ts are base (excl. GST); compute breakdown
+  const baseAmount = subtotal;
+  const gstAmount = Math.round(subtotal * 0.18);
+  const total = subtotal + gstAmount + shipping - discount;
 
   if (items.length === 0) {
     return (

@@ -31,7 +31,7 @@ export default function YouTubeShortsSection() {
             Seen on Social
           </h2>
           <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
-            Real demos, real reviews — watch how our products perform in seconds.
+            Real demos, real reviews - watch how our products perform in seconds.
           </p>
         </motion.div>
 

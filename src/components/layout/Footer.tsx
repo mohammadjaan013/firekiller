@@ -45,7 +45,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center mb-3">
               <Image
                 src="/images/brand/man2.png"
-                alt="FireKiller"
+                alt="OustFire Safety Engineers - FireKiller fire extinguisher brand"
                 width={160}
                 height={40}
                 className="h-9 w-auto object-contain"

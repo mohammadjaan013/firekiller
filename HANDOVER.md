@@ -1,4 +1,4 @@
-# FireKiller E-Commerce Platform — Handover Documentation
+# FireKiller E-Commerce Platform - Handover Documentation
 
 > **Last updated:** 25 March 2026  
 > **Repository:** `mohammadjaan013/firekiller` (branch: `main`)  
@@ -35,8 +35,8 @@
 
 **FireKiller** is an Indian e-commerce platform selling compact fire safety products:
 
-- **FireKiller** — Portable fire extinguisher balls/units for home & car safety.
-- **PanSafe** — Kitchen fire suppression sachets (patented).
+- **FireKiller** - Portable fire extinguisher balls/units for home & car safety.
+- **PanSafe** - Kitchen fire suppression sachets (patented).
 
 The site includes a storefront, blog, admin dashboard, payment processing (Razorpay), shipping integration (Shiprocket), WhatsApp notifications (Interakt), and email confirmations.
 
@@ -52,7 +52,7 @@ The site includes a storefront, blog, admin dashboard, payment processing (Razor
 | **UI** | React | 19.2.3 |
 | **Language** | TypeScript | 5 |
 | **Styling** | Tailwind CSS v4 (`@theme` syntax) | 4 |
-| **Database** | PostgreSQL (hosted on Neon) | — |
+| **Database** | PostgreSQL (hosted on Neon) | - |
 | **ORM** | Prisma with `@prisma/adapter-pg` | 7.4.2 |
 | **Auth** | NextAuth (Auth.js) v5 beta | 5.0.0-beta.30 |
 | **Payments** | Razorpay | 2.9.6 |
@@ -240,7 +240,7 @@ firekiller-X/
 
 ## 5. Design System & Theming
 
-### Color Palette (Light Mode Only — no dark mode)
+### Color Palette (Light Mode Only - no dark mode)
 
 | Token | Hex | Usage |
 |---|---|---|
@@ -427,15 +427,15 @@ WhatsappLog ─── Order (N:1)
 
 ### Key Models
 
-**User** — `id, name, email (unique), password, phone, avatar, role (CUSTOMER|ADMIN|VENDOR)`
+**User** - `id, name, email (unique), password, phone, avatar, role (CUSTOMER|ADMIN|VENDOR)`
 
-**Product** — `id, name, slug (unique), sku (unique), price, originalPrice, gstRate (0.18), stock, description, shortDesc, longDescription, badge, isFeatured, isActive, weight, dimensions, packSize, features (String[]), specifications (Json), video, productLine (firekiller|pansafe), categoryLabel, categoryId`
+**Product** - `id, name, slug (unique), sku (unique), price, originalPrice, gstRate (0.18), stock, description, shortDesc, longDescription, badge, isFeatured, isActive, weight, dimensions, packSize, features (String[]), specifications (Json), video, productLine (firekiller|pansafe), categoryLabel, categoryId`
 
-**Order** — `id, orderNumber (unique), status (enum), subtotal, shipping, discount, total, paymentMethod, paymentId, razorpayOrderId, paymentStatus, shiprocketOrderId, shiprocketShipmentId, awbCode, trackingUrl, codVerified, userId, addressId`
+**Order** - `id, orderNumber (unique), status (enum), subtotal, shipping, discount, total, paymentMethod, paymentId, razorpayOrderId, paymentStatus, shiprocketOrderId, shiprocketShipmentId, awbCode, trackingUrl, codVerified, userId, addressId`
 
-**BlogPost** — `id, title, slug (unique), excerpt, content (Markdown), coverImage, category, readTime, isPublished, isScraped, sourceUrl, source, publishedAt`
+**BlogPost** - `id, title, slug (unique), excerpt, content (Markdown), coverImage, category, readTime, isPublished, isScraped, sourceUrl, source, publishedAt`
 
-**Coupon** — `id, code (unique), discountType (percentage|fixed), discountValue, minOrder, maxUsage, usageCount, expiryDate, isActive`
+**Coupon** - `id, code (unique), discountType (percentage|fixed), discountValue, minOrder, maxUsage, usageCount, expiryDate, isActive`
 
 **Order Statuses:** `PENDING → CONFIRMED → PROCESSING → SHIPPED → DELIVERED` (or `CANCELLED`, `REFUNDED`)
 
@@ -486,10 +486,10 @@ session.user = {
 
 ## 10. Product Data
 
-Products exist in **two places** (historical reason — migration in progress):
+Products exist in **two places** (historical reason - migration in progress):
 
-1. **Static data** — `src/lib/products.ts` — 6 hardcoded products used by the storefront
-2. **Database** — Prisma `Product` model — used by admin CRUD
+1. **Static data** - `src/lib/products.ts` - 6 hardcoded products used by the storefront
+2. **Database** - Prisma `Product` model - used by admin CRUD
 
 ### Static Products (storefront-facing)
 
@@ -713,11 +713,11 @@ Overview stats: total orders, revenue, products, users.
 
 ### Other Admin Pages
 
-- **Categories** — CRUD product categories
-- **Coupons** — Create/manage discount codes (percentage/fixed, min order, expiry, usage limits)
-- **Users** — View all users, roles
-- **COD Orders** — Verify cash-on-delivery payments
-- **WhatsApp Logs** — View sent WhatsApp notification history
+- **Categories** - CRUD product categories
+- **Coupons** - Create/manage discount codes (percentage/fixed, min order, expiry, usage limits)
+- **Users** - View all users, roles
+- **COD Orders** - Verify cash-on-delivery payments
+- **WhatsApp Logs** - View sent WhatsApp notification history
 
 ---
 
@@ -732,7 +732,7 @@ npm run build
 
 ### Vercel Deployment
 
-- `.vercel/` folder present — ready for Vercel
+- `.vercel/` folder present - ready for Vercel
 - All environment variables must be set in Vercel dashboard
 - Edge middleware is compatible (`auth.config.ts` is edge-safe)
 
@@ -790,7 +790,7 @@ SMTP_FROM="\"FireKiller\" <your@gmail.com>"
 - **DO:** Use `@theme` directive in `globals.css` for color/font tokens
 - **DO:** Use `bg-linear-to-br` for gradients (NOT `bg-gradient-to-br`)
 - **DO:** Use `@plugin "@tailwindcss/typography"` in CSS (no JS config)
-- **DON'T:** Use a `tailwind.config.js` — it doesn't exist
+- **DON'T:** Use a `tailwind.config.js` - it doesn't exist
 
 ### Styling Conventions
 
@@ -813,12 +813,12 @@ SMTP_FROM="\"FireKiller\" <your@gmail.com>"
 - Uses a **custom markdown toolbar** (NOT a rich text editor)
 - Content stored as raw Markdown in the database
 - Blog articles rendered with `.prose-blog` class (Lora serif font, Medium-style)
-- No auto-format feature — plain markdown editing only
+- No auto-format feature - plain markdown editing only
 
 ### Auth Split
 
-- `auth.config.ts` → Edge-safe (NO Prisma, NO bcrypt) — used by middleware
-- `auth.ts` → Node.js only (Prisma + bcrypt) — used by API routes
+- `auth.config.ts` → Edge-safe (NO Prisma, NO bcrypt) - used by middleware
+- `auth.ts` → Node.js only (Prisma + bcrypt) - used by API routes
 - Always use `getCurrentUser()` / `requireAuth()` / `requireAdmin()` from `auth-utils.ts`
 
 ### CEO & Branding
@@ -836,22 +836,22 @@ SMTP_FROM="\"FireKiller\" <your@gmail.com>"
 
 **Completed changes (in order):**
 
-1. ✅ Footer — added informational links (How It Works, FAQs, Vendor Enquiry)
-2. ✅ FAQs page — created `/faqs` with accordion UI
-3. ✅ Blog categories — added category filter to blog listing
-4. ✅ Blog admin CRUD — full create/edit/delete with BlogEditor.tsx
-5. ✅ About Us — added CEO photo (Shaikh Sir), team info, PanSafe patent
-6. ✅ Pricing display — show MRP with strikethrough + discount badge
-7. ✅ Reviews — testimonial slideshow on homepage
-8. ✅ PanSafe patent — dedicated section on About page
-9. ✅ Expert articles — blog posts section on homepage
-10. ✅ Medium-style blog — serif typography, author bylines, read time
-11. ✅ Product page UI refresh — curvy corners, pill features, minimalist
-12. ✅ Product demo videos — local MP4 files (FireKiller d1/d2, PanSafe d1/d2/advt)
-13. ✅ CEO photo — added to About Us page (`CEO.jpeg`)
-14. ✅ Homepage VideoShowcase — PanSafe celebrity ad, light background, full-width
-15. ✅ Product features — reverted to vertical bullet list in Features tab (below product info)
-16. ✅ Blog editor — auto-format feature removed (reverted)
+1. ✅ Footer - added informational links (How It Works, FAQs, Vendor Enquiry)
+2. ✅ FAQs page - created `/faqs` with accordion UI
+3. ✅ Blog categories - added category filter to blog listing
+4. ✅ Blog admin CRUD - full create/edit/delete with BlogEditor.tsx
+5. ✅ About Us - added CEO photo (Shaikh Sir), team info, PanSafe patent
+6. ✅ Pricing display - show MRP with strikethrough + discount badge
+7. ✅ Reviews - testimonial slideshow on homepage
+8. ✅ PanSafe patent - dedicated section on About page
+9. ✅ Expert articles - blog posts section on homepage
+10. ✅ Medium-style blog - serif typography, author bylines, read time
+11. ✅ Product page UI refresh - curvy corners, pill features, minimalist
+12. ✅ Product demo videos - local MP4 files (FireKiller d1/d2, PanSafe d1/d2/advt)
+13. ✅ CEO photo - added to About Us page (`CEO.jpeg`)
+14. ✅ Homepage VideoShowcase - PanSafe celebrity ad, light background, full-width
+15. ✅ Product features - reverted to vertical bullet list in Features tab (below product info)
+16. ✅ Blog editor - auto-format feature removed (reverted)
 
 ---
 

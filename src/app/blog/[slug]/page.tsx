@@ -51,7 +51,40 @@ export default async function BlogDetailPage({
     .filter((p) => p.slug !== post.slug && p.category === post.category)
     .slice(0, 3);
 
+  // JSON-LD structured data
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    image: post.image,
+    author: {
+      "@type": "Organization",
+      name: "Oustfire Safety Engineers Pvt Ltd",
+      url: "https://firekiller.in",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "OustFire",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://firekiller.in/images/brand/man2.png",
+      },
+    },
+    datePublished: new Date(post.date).toISOString(),
+    dateModified: new Date(post.date).toISOString(),
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://firekiller.in/blog/${post.slug}`,
+    },
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="min-h-screen bg-white pt-16">
       {/* Header section with full-width cover */}
       <div className="relative">
@@ -64,7 +97,7 @@ export default async function BlogDetailPage({
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
         </div>
 
         {/* Title overlay */}
@@ -210,5 +243,6 @@ export default async function BlogDetailPage({
         </div>
       </div>
     </div>
+    </>
   );
 }

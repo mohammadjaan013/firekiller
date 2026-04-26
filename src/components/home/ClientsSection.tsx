@@ -15,19 +15,19 @@ const clients = [
     name: "Embassy Services Pvt Ltd.",
     sub: "Bengaluru",
     image: "/images/clients/client-3.png",
-    quote: "Pansafe Kitchen Pouch — Best and easy to use. Every commercial kitchen needs this.",
+    quote: "Pansafe Kitchen Pouch - Best and easy to use. Every commercial kitchen needs this.",
   },
   {
     name: "Apna Security System",
     sub: "Google Review · ⭐⭐⭐⭐⭐",
     image: "/images/clients/clients-4.jpg",
-    quote: "Pansafe kitchen sachet is a smart addition for every modern kitchen. Really a very good product — every kitchen must have.",
+    quote: "Pansafe kitchen sachet is a smart addition for every modern kitchen. Really a very good product - every kitchen must have.",
   },
   {
     name: "Raymond",
     sub: "",
     image: "/images/clients/client-1.png",
-    quote: "It should be part of the fire safety kit issued to corporates. Make it available on e-commerce platforms — this is a must-have.",
+    quote: "It should be part of the fire safety kit issued to corporates. Make it available on e-commerce platforms - this is a must-have.",
   },
 ];
 

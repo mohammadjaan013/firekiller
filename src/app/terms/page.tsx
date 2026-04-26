@@ -29,7 +29,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-secondary mb-2">2. Acceptance of Terms</h2>
             <p>
-              By using this website — whether to browse, create an account, or place an order — you
+              By using this website - whether to browse, create an account, or place an order - you
               accept these Terms &amp; Conditions in full. If you disagree with any part of these
               terms, please do not use our website.
             </p>
@@ -80,7 +80,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-lg font-bold text-secondary mb-2">7. Intellectual Property</h2>
             <p>
-              All content on this website — including text, images, logos, videos, and design — is
+              All content on this website - including text, images, logos, videos, and design - is
               the exclusive property of OustFire and is protected by copyright law. You may not
               reproduce, distribute, or use any content without prior written permission.
             </p>

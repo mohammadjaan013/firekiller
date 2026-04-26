@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { sendOrderEmailToAdmin } from "@/lib/email";
 
 /**
  * GET /api/admin/orders/[id] - get order details
@@ -87,8 +86,7 @@ export async function PUT(
  * Body: { action: "send_email" }
  */
 export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  req: NextRequest
 ) {
   try {
     const session = await auth();
@@ -96,58 +94,10 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    const { id } = await params;
     const { action } = await req.json();
 
     if (action === "send_email") {
-      const order = await prisma.order.findUnique({
-        where: { id },
-        include: {
-          user: { select: { name: true, email: true, phone: true } },
-          address: true,
-          items: { include: { product: { select: { name: true, price: true, gstRate: true } } } },
-        },
-      });
-
-      if (!order) {
-        return NextResponse.json({ error: "Order not found" }, { status: 404 });
-      }
-
-      const GST_RATE = 0.18;
-      const baseSubtotal = order.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
-      const gstAmount = Math.round(baseSubtotal * GST_RATE);
-
-      await sendOrderEmailToAdmin({
-        orderNumber: order.orderNumber,
-        customerName: order.address?.name || order.user?.name || "Customer",
-        customerEmail: order.customerEmail || order.user?.email || "",
-        customerPhone: order.address?.phone || order.user?.phone || "",
-        address: {
-          line1: order.address?.line1 || "",
-          line2: order.address?.line2 || undefined,
-          city: order.address?.city || "",
-          state: order.address?.state || "",
-          pincode: order.address?.pincode || "",
-        },
-        items: order.items.map((i) => ({
-          name: i.product.name,
-          quantity: i.quantity,
-          price: i.price,
-        })),
-        subtotal: baseSubtotal,
-        gstAmount,
-        shipping: order.shipping,
-        total: order.total,
-        paymentMethod: order.paymentMethod || "razorpay",
-        paymentId: order.paymentId || undefined,
-      });
-
-      await prisma.order.update({
-        where: { id },
-        data: { emailSentToAdmin: true },
-      });
-
-      return NextResponse.json({ success: true, message: "Email sent" });
+      return NextResponse.json({ error: "Email notification feature is disabled" }, { status: 410 });
     }
 
     return NextResponse.json({ error: "Unknown action" }, { status: 400 });

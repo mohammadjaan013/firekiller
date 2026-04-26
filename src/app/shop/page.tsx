@@ -10,7 +10,7 @@ const mainProducts = [
     title: "FireKiller Extinguisher",
     description:
       "Compact fire extinguisher for home, car & office. Works on Oil, Gas & Electrical fires. Zero maintenance for 5 years.",
-    price: 798,
+    price: 799,
     badge: "Best Seller",
     image: "/images/products/f30.png",
     href: "/shop/firekiller-1",
@@ -19,8 +19,8 @@ const mainProducts = [
   {
     title: "PanSafe Sachet",
     description:
-      "Kitchen fire sachet — just toss into a burning pan. Activates on contact. No pins, no aiming, no panic.",
-    price: 899,
+      "Kitchen fire sachet - just toss into a burning pan. Activates on contact. No pins, no aiming, no panic.",
+    price: 564,
     badge: "Kitchen Essential",
     image: "/images/products/p10.png",
     href: "/shop/pansafe-1",

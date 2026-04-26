@@ -68,7 +68,8 @@ export default function CheckoutPage() {
   const { data: session } = useSession();
 
   const shipping = 0; // free shipping for now
-  const total = subtotal + shipping - discount;
+  const gstAmount = Math.round(subtotal * 0.18);
+  const total = subtotal + gstAmount + shipping - discount;
 
   // Address form
   const [address, setAddress] = useState({
@@ -535,6 +536,12 @@ export default function CheckoutPage() {
                     <span className="text-muted-foreground">Subtotal</span>
                     <span className="font-medium text-secondary">
                       ₹{subtotal.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">GST (18%)</span>
+                    <span className="font-medium text-secondary">
+                      ₹{gstAmount.toLocaleString()}
                     </span>
                   </div>
                   {discount > 0 && (

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Refund & Cancellation Policy | OustFire",
-  description: "Refund and cancellation policy for OustFire — FireKiller and PanSafe products.",
+  description: "Refund and cancellation policy for OustFire - FireKiller and PanSafe products.",
 };
 
 export default function ReturnPolicyPage() {

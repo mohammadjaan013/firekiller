@@ -113,8 +113,8 @@ export async function sendOrderEmailToAdmin(data: OrderEmailData) {
   try {
     const transporter = createTransporter();
     const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM || `"FireKiller Orders" <${process.env.SMTP_USER}>`,
-      to: "mulanimohammadjaan@gmail.com",
+      from: process.env.SMTP_FROM || `"FireKiller Orders" <sales@oustfire.com>`,
+      to: "sales@oustfire.com",
       subject: `🔥 New Order #${data.orderNumber} - ₹${data.total.toLocaleString("en-IN")}`,
       html,
     });
@@ -195,7 +195,7 @@ export async function sendOrderConfirmationToCustomer(data: OrderEmailData) {
       </div>
 
       <div style="padding:16px;background:#f8fafc;text-align:center;font-size:12px;color:#94a3b8;border-radius:0 0 8px 8px;border:1px solid #eee;border-top:none">
-        <p style="margin:0">If you have any questions, reply to this email or contact us at support@oustfire.com</p>
+        <p style="margin:0">If you have any questions, reply to this email or contact us at sales@oustfire.com</p>
         <p style="margin:8px 0 0"><a href="${process.env.NEXTAUTH_URL || "https://firekiller.vercel.app"}/orders" style="color:#CC1F1F;font-weight:600">Track Your Order →</a></p>
       </div>
     </div>
@@ -204,7 +204,7 @@ export async function sendOrderConfirmationToCustomer(data: OrderEmailData) {
   try {
     const transporter = createTransporter();
     const info = await transporter.sendMail({
-      from: process.env.SMTP_FROM || `"FireKiller" <${process.env.SMTP_USER}>`,
+      from: process.env.SMTP_FROM || `"FireKiller" <sales@oustfire.com>`,
       to: data.customerEmail,
       subject: `✅ Order Confirmed - #${data.orderNumber} | FireKiller`,
       html,

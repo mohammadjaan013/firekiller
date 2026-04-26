@@ -2,63 +2,36 @@
 
 import { useRef, useEffect, useState } from "react";
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 const testimonials = [
   {
-    name: "Rajesh Kumar",
-    location: "New Delhi",
+    name: "Courtyard by Marriott",
+    location: "Navi Mumbai",
     rating: 5,
-    text: "FireKiller saved my kitchen when an oil fire broke out. It was so easy to use - just point and press. Every home in India needs one!",
-    avatar: "RK",
+    text: "Very innovative, easy to use and cost efficient product. Highly recommended for every kitchen.",
+    logo: "/images/clients/client-2.png",
   },
   {
-    name: "Priya Sharma",
-    location: "Mumbai",
-    rating: 5,
-    text: "I bought the car compact version and feel so much safer on long drives. The quality is amazing and the size is perfect for my dashboard.",
-    avatar: "PS",
-  },
-  {
-    name: "Amit Patel",
-    location: "Ahmedabad",
-    rating: 5,
-    text: "The PanSafe sachet is genius. I keep one near my stove and one in my car. Best investment for family safety. Highly recommended!",
-    avatar: "AP",
-  },
-  {
-    name: "Sneha Reddy",
-    location: "Hyderabad",
-    rating: 5,
-    text: "Gifted FireKiller to my parents. They are elderly and this gives me peace of mind. The one-hand operation is perfect for them.",
-    avatar: "SR",
-  },
-  {
-    name: "Vikram Singh",
-    location: "Jaipur",
-    rating: 5,
-    text: "We installed 3 FireKillers across our office. The wall mount bracket makes it super accessible. Great product by OustFire!",
-    avatar: "VS",
-  },
-  {
-    name: "Meera Nair",
-    location: "Kochi",
-    rating: 5,
-    text: "PanSafe is a must-have for every Indian kitchen. We cook with oil daily and this gives instant protection. Just throw and forget!",
-    avatar: "MN",
-  },
-  {
-    name: "Arjun Mehta",
-    location: "Pune",
-    rating: 5,
-    text: "Compact, affordable, and ISI certified. What more can you ask? I have one in every room now. Thanks OustFire!",
-    avatar: "AM",
-  },
-  {
-    name: "Kavita Joshi",
+    name: "Embassy Services Pvt Ltd.",
     location: "Bengaluru",
     rating: 5,
-    text: "After a small fire incident at home, I ordered the 3-unit pack immediately. Now I feel safe. The delivery was quick too!",
-    avatar: "KJ",
+    text: "Pansafe Kitchen Pouch - Best and easy to use. Every commercial kitchen needs this.",
+    logo: "/images/clients/client-3.png",
+  },
+  {
+    name: "Apna Security System",
+    // location: "Google Review · ⭐⭐⭐⭐⭐",
+    rating: 5,
+    text: "Pansafe kitchen sachet is a smart addition for every modern kitchen. Really a very good product - every kitchen must have.",
+    logo: "/images/clients/clients-4.jpg",
+  },
+  {
+    name: "Raymond",
+    location: "Corporate Client",
+    rating: 5,
+    text: "It should be part of the fire safety kit issued to corporates. Make it available on e-commerce platforms - this is a must-have.",
+    logo: "/images/clients/client-1.png",
   },
 ];
 
@@ -110,7 +83,7 @@ export default function TestimonialsSection() {
         <div className="flex items-end justify-between mb-10">
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold text-secondary">
-              What Our <span className="text-primary">Customers</span> Say
+              What Our <span className="text-primary">Clients</span> Say
             </h2>
             <p className="mt-2 text-muted-foreground">
               Trusted by thousands of families across India
@@ -163,8 +136,14 @@ export default function TestimonialsSection() {
 
               {/* Author */}
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
-                  {t.avatar}
+                <div className="w-12 h-12 rounded-xl overflow-hidden bg-white border border-border flex items-center justify-center shrink-0">
+                  <Image
+                    src={t.logo}
+                    alt={t.name}
+                    width={48}
+                    height={48}
+                    className="object-contain w-full h-full p-1"
+                  />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-secondary">

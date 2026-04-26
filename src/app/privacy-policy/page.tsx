@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Privacy Policy | OustFire",
-  description: "Privacy policy for OustFire — how we collect, use, and protect your personal information.",
+  description: "Privacy policy for OustFire - how we collect, use, and protect your personal information.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
             <ul className="list-disc pl-5 space-y-1">
               <li><strong>Personal identification</strong>: Name, email address, phone number, and delivery address when you place an order or create an account.</li>
               <li><strong>Payment information</strong>: We do not store card details. Payments are processed securely through Razorpay.</li>
-              <li><strong>Device &amp; usage data</strong>: IP address, browser type, pages visited, and time spent on the site — collected automatically via cookies and analytics.</li>
+              <li><strong>Device &amp; usage data</strong>: IP address, browser type, pages visited, and time spent on the site - collected automatically via cookies and analytics.</li>
             </ul>
           </section>
 

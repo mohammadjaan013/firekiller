@@ -30,7 +30,7 @@ export default function AboutPage() {
           </h1>
           <p className="mt-5 text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
             21+ years. 42,400+ products sold. 4,200+ clients. ISI certified.
-            Not numbers we chase — proof that the idea works.
+            Not numbers we chase - proof that the idea works.
           </p>
 
           {/* stat pills */}
@@ -88,12 +88,12 @@ export default function AboutPage() {
               <div className="space-y-4 text-white/80 leading-relaxed text-[15px]">
                 <p>
                   Mr. Babulal Shaikh spent years inside the fire safety industry
-                  — and the more he understood it, the more one thing became
+                  - and the more he understood it, the more one thing became
                   clear: the entire market was built for industries, not people.
                 </p>
                 <p>
                   Bulky cylinders. Technical operation. High prices. Products
-                  designed for trained professionals in factories and offices —
+                  designed for trained professionals in factories and offices -
                   not for a family in a kitchen or a commuter in a car.
                 </p>
                 <p>
@@ -106,7 +106,7 @@ export default function AboutPage() {
                   <strong className="text-primary">PanSafe</strong> and{" "}
                   <strong className="text-primary">FireKiller</strong>{" "}
                   weren&apos;t just new products. They were a different category
-                  entirely — consumer-grade fire safety that actually works for
+                  entirely - consumer-grade fire safety that actually works for
                   the common man.
                 </p>
               </div>
@@ -158,7 +158,7 @@ export default function AboutPage() {
               <p>
                 When OustFire launched, the fire safety market in India had a
                 serious blind spot. Industrial extinguishers dominated the space
-                — heavy, technical, and priced out of reach for most households.
+                - heavy, technical, and priced out of reach for most households.
                 The average Indian family had{" "}
                 <strong className="text-secondary">nothing</strong>.
               </p>
@@ -169,12 +169,12 @@ export default function AboutPage() {
                 OustFire was built on a straightforward conviction: fire safety
                 should be as common as a first-aid kit. Not a corporate
                 purchase. Not a compliance checkbox. Something every home, every
-                kitchen, every car should have — and actually use when it
+                kitchen, every car should have - and actually use when it
                 matters.
               </p>
               <p>
                 Our engineers didn&apos;t just shrink an extinguisher. They
-                rethought the product entirely — what triggers panic in a fire,
+                rethought the product entirely - what triggers panic in a fire,
                 why people freeze, what makes someone actually reach for
                 protection in 3 seconds. Every design decision came from that
                 thinking.
@@ -285,7 +285,7 @@ export default function AboutPage() {
               </div>
               <p className="text-muted-foreground leading-relaxed text-sm mb-3">
                 OustFire&apos;s patented kitchen fire sachet. No aiming, no
-                training — just throw it on the flame. Instant kitchen
+                training - just throw it on the flame. Instant kitchen
                 protection.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -315,7 +315,7 @@ export default function AboutPage() {
               Both products are ISI certified and BIS approved.
             </p>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Not as a formality — because we won&apos;t put something in an
+              Not as a formality - because we won&apos;t put something in an
               Indian home that we haven&apos;t put through the full standard.
             </p>
           </div>
@@ -354,7 +354,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Section 5: CTA — Want to Work With Us? ── */}
+      {/* ── Section 5: CTA - Want to Work With Us? ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="relative bg-linear-to-br from-primary to-primary-dark rounded-3xl overflow-hidden p-8 sm:p-12 text-center">
           {/* decorative circles */}

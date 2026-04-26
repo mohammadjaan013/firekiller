@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Truck, ShieldCheck, Award } from "lucide-react";
+import { Check, ShieldCheck, Award } from "lucide-react";
 import { motion } from "framer-motion";
 
 const features = [
@@ -94,7 +94,7 @@ export default function HeroSection() {
             <div className="relative lg:scale-110 xl:scale-125 origin-center">
               <Image
                 src="/images/hero/hero-new-2.png"
-                alt="FireKiller Extinguisher"
+                alt="FireKiller compact fire extinguisher - home, car and office fire safety"
                 width={900}
                 height={750}
                 className="w-full object-contain"

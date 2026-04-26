@@ -31,7 +31,7 @@ export default function VideoShowcase() {
           </h2>
           <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
             Watch how India&apos;s favourite kitchen fire safety sachet performs
-            in a real kitchen — endorsed by Vishnu Manohar.
+            in a real kitchen - endorsed by Vishnu Manohar.
           </p>
         </motion.div>
 
@@ -66,7 +66,7 @@ export default function VideoShowcase() {
                 />
                 {/* dark overlay on hover */}
                 <span className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-colors" />
-                {/* play button — small triangle only, bottom-right corner */}
+                {/* play button - small triangle only, bottom-right corner */}
                 <span className="absolute bottom-4 right-4">
                   <svg
                     className="w-8 h-8 drop-shadow-lg"

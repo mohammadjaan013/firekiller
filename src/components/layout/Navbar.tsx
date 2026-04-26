@@ -57,7 +57,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center shrink-0">
             <Image
               src="/images/brand/man2.png"
-              alt="FireKiller"
+              alt="OustFire Safety Engineers - FireKiller fire extinguisher"
               width={160}
               height={40}
               className="h-9 w-auto object-contain"
