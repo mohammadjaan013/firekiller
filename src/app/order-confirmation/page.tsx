@@ -3,18 +3,21 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import {
   CheckCircle,
   Package,
   Truck,
-  ArrowRight,
   ShoppingBag,
+  MapPin,
 } from "lucide-react";
 
 function OrderConfirmationContent() {
   const searchParams = useSearchParams();
+  const { data: session, status } = useSession();
   const orderNumber = searchParams.get("order") || "FK-XXXXXXXX-XXXX";
+  const isLoggedIn = status === "authenticated" && !!session?.user;
 
   return (
     <div className="min-h-screen bg-background pt-24 pb-16 flex items-center justify-center px-4">
@@ -39,7 +42,7 @@ function OrderConfirmationContent() {
 
         <p className="text-muted-foreground mb-6">
           Thank you for your purchase. Your order has been confirmed and
-          will be shipped shortly.
+          will be delivered to your address shortly.
         </p>
 
         {/* Order Number */}
@@ -65,8 +68,8 @@ function OrderConfirmationContent() {
                 active: false,
               },
               {
-                icon: Truck,
-                title: "Shipping",
+                icon: MapPin,
+                title: "Out for Delivery",
                 desc: "Tracking details will be shared via email",
                 active: false,
               },
@@ -86,16 +89,12 @@ function OrderConfirmationContent() {
                   <div>
                     <p
                       className={`text-sm font-semibold ${
-                        step.active
-                          ? "text-green-600"
-                          : "text-muted-foreground"
+                        step.active ? "text-green-600" : "text-muted-foreground"
                       }`}
                     >
                       {step.title}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {step.desc}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{step.desc}</p>
                   </div>
                 </div>
               );
@@ -104,21 +103,33 @@ function OrderConfirmationContent() {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/orders"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all"
-          >
-            <Package className="h-4 w-4" />
-            View My Orders
-          </Link>
+        <div className="flex flex-col gap-3">
+          {/* Primary CTA — differs by auth state */}
+          {isLoggedIn ? (
+            <Link
+              href="/orders"
+              className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition-all shadow-md"
+            >
+              <Package className="h-4 w-4" />
+              View My Orders
+            </Link>
+          ) : (
+            <Link
+              href={`/orders/track?order=${orderNumber}`}
+              className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition-all shadow-md"
+            >
+              <Truck className="h-4 w-4" />
+              Track My Order
+            </Link>
+          )}
+
+          {/* Secondary CTA — always continue shopping */}
           <Link
             href="/shop"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border text-secondary font-semibold rounded-xl hover:bg-muted transition-all"
+            className="inline-flex items-center justify-center gap-2 w-full py-3.5 border border-border bg-card text-secondary font-semibold rounded-xl hover:bg-muted transition-all"
           >
             <ShoppingBag className="h-4 w-4" />
             Continue Shopping
-            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </motion.div>

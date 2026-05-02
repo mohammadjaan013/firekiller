@@ -1,6 +1,7 @@
+/// <reference types="@types/google.maps" />
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -12,7 +13,8 @@ import {
   CreditCard,
   Shield,
   Loader2,
-  Check,
+  Truck,
+  Search,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
@@ -67,9 +69,17 @@ export default function CheckoutPage() {
   const { showToast } = useToast();
   const { data: session } = useSession();
 
-  const shipping = 0; // free shipping for now
+  const [shipping, setShipping] = useState(0);
+  const [shippingLoading, setShippingLoading] = useState(false);
+  const [shippingFetched, setShippingFetched] = useState(false);
   const gstAmount = Math.round(subtotal * 0.18);
   const total = subtotal + gstAmount + shipping - discount;
+
+  // Google Maps Places autocomplete
+  const autocompleteInputRef = useRef<HTMLInputElement>(null);
+  const line1InputRef = useRef<HTMLInputElement>(null);
+  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const [mapsLoaded, setMapsLoaded] = useState(false);
 
   // Address form
   const [address, setAddress] = useState({
@@ -120,6 +130,90 @@ export default function CheckoutPage() {
     }
   }, [session]);
 
+  // Fetch Shiprocket shipping rate when pincode is complete
+  const fetchShippingRate = useCallback(async (pincode: string) => {
+    if (pincode.length !== 6) return;
+    setShippingLoading(true);
+    try {
+      const res = await fetch(`/api/shiprocket/rates?pincode=${pincode}`);
+      if (res.ok) {
+        const data = await res.json();
+        setShipping(data.rate ?? 0);
+        setShippingFetched(true);
+      }
+    } catch {
+      // silently fall back to free shipping
+    } finally {
+      setShippingLoading(false);
+    }
+  }, []);
+
+  // Init (or re-init) Google Maps autocomplete each time the address step is visible.
+  // Re-initialization is needed because the input unmounts when switching to payment step,
+  // so the autocomplete must rebind to the new DOM node when the user clicks Edit.
+  useEffect(() => {
+    if (!mapsLoaded || step !== "address" || !autocompleteInputRef.current) return;
+
+    // Clean up any existing listeners before re-creating
+    if (autocompleteRef.current) {
+      google.maps.event.clearInstanceListeners(autocompleteRef.current);
+      autocompleteRef.current = null;
+    }
+
+    const ac = new google.maps.places.Autocomplete(autocompleteInputRef.current, {
+      componentRestrictions: { country: "in" },
+      fields: ["address_components", "formatted_address"],
+      types: ["geocode"],
+    });
+
+    ac.addListener("place_changed", () => {
+      const place = ac.getPlace();
+      if (!place.address_components) return;
+
+      let streetNumber = "", route = "",
+          subloc1 = "", subloc2 = "", subloc3 = "",
+          locality = "", adminArea = "", postalCode = "";
+
+      for (const comp of place.address_components) {
+        const types = comp.types;
+        if (types.includes("street_number"))            streetNumber = comp.long_name;
+        else if (types.includes("route"))               route        = comp.long_name;
+        else if (types.includes("sublocality_level_3")) subloc3      = comp.long_name;
+        else if (types.includes("sublocality_level_2")) subloc2      = comp.long_name;
+        else if (types.includes("sublocality_level_1") || types.includes("sublocality")) subloc1 = comp.long_name;
+        else if (types.includes("locality"))            locality     = comp.long_name;
+        else if (types.includes("administrative_area_level_1")) adminArea = comp.long_name;
+        else if (types.includes("postal_code"))         postalCode   = comp.long_name;
+      }
+
+      // Build a rich area string: "Sector 5E, Kalamboli" for "Sector 5E, Kalamboli, Panvel"
+      // — filter out any sub-part that duplicates the city name to avoid "Panvel, Panvel"
+      const streetInfo = [streetNumber, route].filter(Boolean).join(" ");
+      const areaFromSubloc = [subloc3, subloc2, subloc1]
+        .filter(Boolean)
+        .filter((p) => p.toLowerCase() !== locality.toLowerCase()); // no city duplicate
+      const areaFilled = [streetInfo, ...areaFromSubloc].filter(Boolean).join(", ");
+
+      setAddress((prev) => ({
+        ...prev,
+        // line1 intentionally untouched — user fills flat/apartment/floor
+        line2: areaFilled || prev.line2,
+        city: locality || prev.city,
+        state: STATES.includes(adminArea) ? adminArea : prev.state,
+        pincode: postalCode || prev.pincode,
+      }));
+
+      if (postalCode && postalCode.length === 6) {
+        fetchShippingRate(postalCode);
+      }
+
+      // Focus the flat/apartment field so user can immediately type their unit number
+      setTimeout(() => line1InputRef.current?.focus(), 50);
+    });
+
+    autocompleteRef.current = ac;
+  }, [mapsLoaded, step, fetchShippingRate]);
+
   // Redirect if cart is empty
   if (items.length === 0) {
     return (
@@ -144,6 +238,9 @@ export default function CheckoutPage() {
 
   const updateField = (field: string, value: string) => {
     setAddress((prev) => ({ ...prev, [field]: value }));
+    if (field === "pincode" && value.length === 6) {
+      fetchShippingRate(value);
+    }
   };
 
   const isAddressValid =
@@ -255,6 +352,11 @@ export default function CheckoutPage() {
         src="https://checkout.razorpay.com/v1/checkout.js"
         onLoad={() => setRazorpayLoaded(true)}
       />
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+        onLoad={() => setMapsLoaded(true)}
+        strategy="lazyOnload"
+      />
 
       <div className="min-h-screen bg-background pt-24 pb-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -343,27 +445,52 @@ export default function CheckoutPage() {
                         className="w-full px-4 py-2.5 rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                       />
                     </div>
+
+                    {/* Google Maps search */}
                     <div className="sm:col-span-2">
                       <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                        Address Line 1 *
+                        Search Your Area / Street
                       </label>
-                      <input
-                        type="text"
-                        value={address.line1}
-                        onChange={(e) => updateField("line1", e.target.value)}
-                        placeholder="House no., Building, Street"
-                        className="w-full px-4 py-2.5 rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
-                      />
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                        <input
+                          ref={autocompleteInputRef}
+                          type="text"
+                          placeholder="Start typing your street, area or pincode…"
+                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Selecting from the dropdown auto-fills street, city, state &amp; pincode below
+                      </p>
                     </div>
+
                     <div className="sm:col-span-2">
                       <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                        Address Line 2
+                        Street / Area / Landmark
+                        {address.line2 && (
+                          <span className="ml-2 text-green-600 font-normal">✓ auto-filled</span>
+                        )}
                       </label>
                       <input
                         type="text"
                         value={address.line2}
                         onChange={(e) => updateField("line2", e.target.value)}
-                        placeholder="Area, Landmark (optional)"
+                        placeholder="Auto-filled from search above (editable)"
+                        className="w-full px-4 py-2.5 rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-medium text-muted-foreground mb-1.5">
+                        Flat / Apartment / Floor *
+                      </label>
+                      <input
+                        ref={line1InputRef}
+                        type="text"
+                        value={address.line1}
+                        onChange={(e) => updateField("line1", e.target.value)}
+                        placeholder="e.g. Flat 4B, 2nd Floor, Tower C"
                         className="w-full px-4 py-2.5 rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                       />
                     </div>
@@ -435,12 +562,18 @@ export default function CheckoutPage() {
                         <p className="text-sm font-semibold text-secondary">
                           {address.name}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {address.line1}
-                          {address.line2 && `, ${address.line2}`}
-                        </p>
+                        {address.line1 && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {address.line1}
+                          </p>
+                        )}
+                        {address.line2 && (
+                          <p className="text-xs text-muted-foreground">
+                            {address.line2}
+                          </p>
+                        )}
                         <p className="text-xs text-muted-foreground">
-                          {address.city}, {address.state} - {address.pincode}
+                          {address.city}, {address.state} – {address.pincode}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
                           {address.phone} · {address.email}
@@ -553,10 +686,14 @@ export default function CheckoutPage() {
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Shipping</span>
+                    <span className="text-muted-foreground flex items-center gap-1">
+                      <Truck className="h-3.5 w-3.5" /> Shipping
+                    </span>
                     <span className="font-medium text-secondary">
-                      {shipping === 0 ? (
-                        <span className="text-green-600">FREE</span>
+                      {shippingLoading ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin inline" />
+                      ) : shipping === 0 ? (
+                        <span className="text-green-600">{shippingFetched ? "FREE" : "Calculated at next step"}</span>
                       ) : (
                         `₹${shipping}`
                       )}
@@ -573,17 +710,13 @@ export default function CheckoutPage() {
 
                 {/* Trust */}
                 <div className="mt-5 space-y-2">
-                  {/* <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Truck className="h-3.5 w-3.5 text-primary" />
-                    Free shipping on orders above ₹999
-                  </div> */}
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Shield className="h-3.5 w-3.5 text-primary" />
                     Secure checkout powered by Razorpay
                   </div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Check className="h-3.5 w-3.5 text-primary" />
-                    Delivery via Shiprocket - trackable
+                    <Truck className="h-3.5 w-3.5 text-primary" />
+                    Fast delivery to your doorstep
                   </div>
                 </div>
               </div>

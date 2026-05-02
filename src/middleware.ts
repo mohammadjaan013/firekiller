@@ -6,5 +6,6 @@ export default NextAuth(authConfig).auth;
 
 export const config = {
   // Run middleware on protected + admin routes only (not on API, static files, etc.)
-  matcher: ["/account/:path*", "/orders/:path*", "/wishlist/:path*", "/admin/:path*"],
+  // /orders/track is public (guest order lookup) — excluded here, handled in auth.config.ts
+  matcher: ["/account/:path*", "/orders/((?!track).*)", "/wishlist/:path*", "/admin/:path*"],
 };

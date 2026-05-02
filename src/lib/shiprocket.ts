@@ -32,6 +32,7 @@ export async function getShiprocketToken(): Promise<string> {
 
   if (!res.ok) {
     const text = await res.text();
+    console.error("[Shiprocket] Auth failed. Email used:", process.env.SHIPROCKET_EMAIL, "| Response:", text);
     throw new Error(`Shiprocket auth failed: ${text}`);
   }
 
