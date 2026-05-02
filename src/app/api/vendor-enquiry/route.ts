@@ -107,10 +107,12 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Send email notification (fire-and-forget)
-    sendVendorEmail({ name, company, email, phone, city, businessType, message }).catch(
-      (err) => console.error("Vendor enquiry email error:", err)
-    );
+    // Send email notification (awaited so Vercel doesn't kill the function early)
+    try {
+      await sendVendorEmail({ name, company, email, phone, city, businessType, message });
+    } catch (emailErr) {
+      console.error("Vendor enquiry email error:", emailErr);
+    }
 
     return NextResponse.json(
       { message: "Enquiry submitted successfully", enquiry },

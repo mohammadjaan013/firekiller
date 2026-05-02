@@ -98,10 +98,12 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Send email notification to sales@oustfire.com (fire-and-forget)
-    sendContactEmail({ name, email, phone, subject, message }).catch((err) =>
-      console.error("Contact form email error:", err)
-    );
+    // Send email notification to sales@oustfire.com (awaited so Vercel doesn't kill the function early)
+    try {
+      await sendContactEmail({ name, email, phone, subject, message });
+    } catch (emailErr) {
+      console.error("Contact form email error:", emailErr);
+    }
 
     return NextResponse.json(
       { message: "Message sent successfully", contact },
