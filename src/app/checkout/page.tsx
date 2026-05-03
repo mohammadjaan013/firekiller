@@ -62,6 +62,35 @@ const STATES = [
   "Daman & Diu", "Lakshadweep", "Puducherry",
 ];
 
+/* ── Address component parser (used by autocomplete + reverse geocoder) ── */
+function parseAddressComponents(
+  components: google.maps.GeocoderAddressComponent[]
+): { areaFilled: string; locality: string; adminArea: string; postalCode: string } {
+  let streetNumber = "", route = "",
+      subloc1 = "", subloc2 = "", subloc3 = "",
+      locality = "", adminArea = "", postalCode = "";
+
+  for (const comp of components) {
+    const types = comp.types;
+    if (types.includes("street_number"))            streetNumber = comp.long_name;
+    else if (types.includes("route"))               route        = comp.long_name;
+    else if (types.includes("sublocality_level_3")) subloc3      = comp.long_name;
+    else if (types.includes("sublocality_level_2")) subloc2      = comp.long_name;
+    else if (types.includes("sublocality_level_1") || types.includes("sublocality")) subloc1 = comp.long_name;
+    else if (types.includes("locality"))            locality     = comp.long_name;
+    else if (types.includes("administrative_area_level_1")) adminArea = comp.long_name;
+    else if (types.includes("postal_code"))         postalCode   = comp.long_name;
+  }
+
+  const streetInfo = [streetNumber, route].filter(Boolean).join(" ");
+  const areaFromSubloc = [subloc3, subloc2, subloc1]
+    .filter(Boolean)
+    .filter((p) => p.toLowerCase() !== locality.toLowerCase());
+  const areaFilled = [streetInfo, ...areaFromSubloc].filter(Boolean).join(", ");
+
+  return { areaFilled, locality, adminArea, postalCode };
+}
+
 /* ── Page ─────────────────────────────────────────────── */
 export default function CheckoutPage() {
   const router = useRouter();
@@ -75,11 +104,17 @@ export default function CheckoutPage() {
   const gstAmount = Math.round(subtotal * 0.18);
   const total = subtotal + gstAmount + shipping - discount;
 
-  // Google Maps Places autocomplete
+  // Google Maps Places autocomplete + interactive map
   const autocompleteInputRef = useRef<HTMLInputElement>(null);
   const line1InputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const markerRef = useRef<google.maps.Marker | null>(null);
+  const geocoderRef = useRef<google.maps.Geocoder | null>(null);
   const [mapsLoaded, setMapsLoaded] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number } | null>(null);
 
   // Address form
   const [address, setAddress] = useState({
@@ -149,70 +184,109 @@ export default function CheckoutPage() {
   }, []);
 
   // Init (or re-init) Google Maps autocomplete each time the address step is visible.
-  // Re-initialization is needed because the input unmounts when switching to payment step,
-  // so the autocomplete must rebind to the new DOM node when the user clicks Edit.
   useEffect(() => {
     if (!mapsLoaded || step !== "address" || !autocompleteInputRef.current) return;
 
-    // Clean up any existing listeners before re-creating
     if (autocompleteRef.current) {
       google.maps.event.clearInstanceListeners(autocompleteRef.current);
       autocompleteRef.current = null;
     }
 
+    // No `types` restriction — allows buildings, complexes, areas, pincodes
     const ac = new google.maps.places.Autocomplete(autocompleteInputRef.current, {
       componentRestrictions: { country: "in" },
-      fields: ["address_components", "formatted_address"],
-      types: ["geocode"],
+      fields: ["address_components", "formatted_address", "geometry"],
     });
 
     ac.addListener("place_changed", () => {
       const place = ac.getPlace();
       if (!place.address_components) return;
 
-      let streetNumber = "", route = "",
-          subloc1 = "", subloc2 = "", subloc3 = "",
-          locality = "", adminArea = "", postalCode = "";
+      const { areaFilled, locality, adminArea, postalCode } =
+        parseAddressComponents(place.address_components);
 
-      for (const comp of place.address_components) {
-        const types = comp.types;
-        if (types.includes("street_number"))            streetNumber = comp.long_name;
-        else if (types.includes("route"))               route        = comp.long_name;
-        else if (types.includes("sublocality_level_3")) subloc3      = comp.long_name;
-        else if (types.includes("sublocality_level_2")) subloc2      = comp.long_name;
-        else if (types.includes("sublocality_level_1") || types.includes("sublocality")) subloc1 = comp.long_name;
-        else if (types.includes("locality"))            locality     = comp.long_name;
-        else if (types.includes("administrative_area_level_1")) adminArea = comp.long_name;
-        else if (types.includes("postal_code"))         postalCode   = comp.long_name;
-      }
-
-      // Build a rich area string: "Sector 5E, Kalamboli" for "Sector 5E, Kalamboli, Panvel"
-      // — filter out any sub-part that duplicates the city name to avoid "Panvel, Panvel"
-      const streetInfo = [streetNumber, route].filter(Boolean).join(" ");
-      const areaFromSubloc = [subloc3, subloc2, subloc1]
-        .filter(Boolean)
-        .filter((p) => p.toLowerCase() !== locality.toLowerCase()); // no city duplicate
-      const areaFilled = [streetInfo, ...areaFromSubloc].filter(Boolean).join(", ");
-
+      // Always overwrite auto-filled fields — clears stale data from previous search
       setAddress((prev) => ({
         ...prev,
         // line1 intentionally untouched — user fills flat/apartment/floor
-        line2: areaFilled || prev.line2,
-        city: locality || prev.city,
-        state: STATES.includes(adminArea) ? adminArea : prev.state,
-        pincode: postalCode || prev.pincode,
+        line2: areaFilled,
+        city: locality,
+        state: STATES.includes(adminArea) ? adminArea : "",
+        pincode: postalCode,
       }));
 
       if (postalCode && postalCode.length === 6) {
         fetchShippingRate(postalCode);
       }
 
-      // Focus the flat/apartment field so user can immediately type their unit number
+      // Show interactive map so user can drag pin to their exact building/gate
+      const loc = place.geometry?.location;
+      if (loc) {
+        setMapCenter({ lat: loc.lat(), lng: loc.lng() });
+        setShowMap(true);
+      }
+
+      // Focus flat/apartment field so user can immediately type their unit number
       setTimeout(() => line1InputRef.current?.focus(), 50);
     });
 
     autocompleteRef.current = ac;
   }, [mapsLoaded, step, fetchShippingRate]);
+
+  // Initialize (or re-initialize) the interactive map when center or step changes.
+  // step is in deps so the map re-mounts correctly after the user clicks Edit.
+  useEffect(() => {
+    if (!mapsLoaded || !showMap || !mapCenter || !mapContainerRef.current) return;
+
+    // Always create a fresh instance (stale instance after step change)
+    mapInstanceRef.current = new google.maps.Map(mapContainerRef.current, {
+      zoom: 17,
+      center: mapCenter,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+      zoomControl: true,
+    });
+
+    if (!geocoderRef.current) {
+      geocoderRef.current = new google.maps.Geocoder();
+    }
+
+    if (markerRef.current) markerRef.current.setMap(null);
+
+    markerRef.current = new google.maps.Marker({
+      position: mapCenter,
+      map: mapInstanceRef.current,
+      draggable: true,
+      title: "Drag to your exact building / gate",
+    });
+
+    markerRef.current.addListener("dragend", () => {
+      const pos = markerRef.current?.getPosition();
+      if (!pos || !geocoderRef.current) return;
+
+      geocoderRef.current.geocode(
+        { location: { lat: pos.lat(), lng: pos.lng() } },
+        (results, status) => {
+          if (status !== "OK" || !results?.[0]) return;
+          const { areaFilled, locality, adminArea, postalCode } =
+            parseAddressComponents(results[0].address_components);
+
+          setAddress((prev) => ({
+            ...prev,
+            line2: areaFilled || prev.line2,
+            city: locality || prev.city,
+            state: STATES.includes(adminArea) ? adminArea : prev.state,
+            pincode: postalCode || prev.pincode,
+          }));
+
+          if (postalCode && postalCode.length === 6) {
+            fetchShippingRate(postalCode);
+          }
+        }
+      );
+    });
+  }, [mapsLoaded, showMap, mapCenter, step, fetchShippingRate]);
 
   // Redirect if cart is empty
   if (items.length === 0) {
@@ -449,21 +523,40 @@ export default function CheckoutPage() {
                     {/* Google Maps search */}
                     <div className="sm:col-span-2">
                       <label className="block text-xs font-medium text-muted-foreground mb-1.5">
-                        Search Your Area / Street
+                        Search Your Building / Area / Street
                       </label>
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                         <input
                           ref={autocompleteInputRef}
                           type="text"
-                          placeholder="Start typing your street, area or pincode…"
+                          placeholder="Type your building name, society, street or pincode…"
                           className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                         />
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Selecting from the dropdown auto-fills street, city, state &amp; pincode below
+                        Select from dropdown → a map appears → drag the pin to your exact gate
                       </p>
                     </div>
+
+                    {/* Interactive map — shows after autocomplete selection */}
+                    {showMap && (
+                      <div className="sm:col-span-2">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <MapPin className="h-3.5 w-3.5 text-primary" />
+                          <span className="text-xs font-semibold text-primary">
+                            Drag the pin to your exact building / gate
+                          </span>
+                        </div>
+                        <div
+                          ref={mapContainerRef}
+                          className="w-full h-52 rounded-xl border border-border overflow-hidden"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Moving the pin auto-updates the area &amp; pincode fields below
+                        </p>
+                      </div>
+                    )}
 
                     <div className="sm:col-span-2">
                       <label className="block text-xs font-medium text-muted-foreground mb-1.5">
