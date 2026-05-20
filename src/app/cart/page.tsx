@@ -160,7 +160,7 @@ export default function CartPage() {
                       const res = await fetch("/api/coupons/validate", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ code: coupon.trim(), subtotal }),
+                        body: JSON.stringify({ code: coupon.trim(), subtotal: subtotal + gstAmount }),
                       });
                       const data = await res.json();
                       if (!res.ok || !data.valid) {

@@ -6,8 +6,10 @@ import {
   useState,
   useCallback,
   useEffect,
+  useRef,
   type ReactNode,
 } from "react";
+import { useSession } from "next-auth/react";
 
 // ─── Types ──────────────────────────────────────────────
 
@@ -47,6 +49,9 @@ const COUPON_KEY = "firekiller-coupon";
 // ─── Provider ───────────────────────────────────────────
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { status } = useSession();
+  const prevStatusRef = useRef<string>("loading");
+
   const [items, setItems] = useState<CartItem[]>([]);
   const [discount, setDiscount] = useState(0);
   const [appliedCoupon, setAppliedCoupon] = useState("");
@@ -75,6 +80,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     }
   }, [items, hydrated]);
+
+  // React to auth state transitions
+  useEffect(() => {
+    const prev = prevStatusRef.current;
+    prevStatusRef.current = status;
+
+    if (prev === "loading") return; // skip initial resolution
+
+    if (prev === "unauthenticated" && status === "authenticated") {
+      // Guest just logged in — keep cart items but clear coupon
+      // (coupon was validated against guest subtotal; user must re-apply)
+      setAppliedCoupon("");
+      setDiscount(0);
+    } else if (prev === "authenticated" && status === "unauthenticated") {
+      // User just signed out — clear everything so next user starts fresh
+      setItems([]);
+      setAppliedCoupon("");
+      setDiscount(0);
+    }
+  }, [status]);
 
   // Persist coupon
   useEffect(() => {
