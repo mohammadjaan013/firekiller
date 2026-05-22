@@ -10,6 +10,10 @@ export interface BlogPost {
   image: string;
 }
 
+// Base URL for WordPress images — change NEXT_PUBLIC_WP_UPLOADS in .env to switch domain
+const BASE = process.env.NEXT_PUBLIC_WP_UPLOADS ?? "https://lemonchiffon-gull-592316.hostingersite.com/wp-content/uploads";
+const wp = (path: string) => `${BASE}/${path}`;
+
 export const blogPosts: BlogPost[] = [
   {
     id: 1,
@@ -21,7 +25,7 @@ export const blogPosts: BlogPost[] = [
     category: "PanSafe",
     date: "Jun 11, 2025",
     readTime: "5 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/06/1920_111219holidaycookingfireengulfed19088646067-763080.jpg",
+    image: wp("2025/06/1920_111219holidaycookingfireengulfed19088646067-763080.jpg"),
     content: `
 ## Why Kitchen Fires Are So Dangerous
 
@@ -77,7 +81,7 @@ Don't wait for a scare to act. Be prepared. Stay safe.
     category: "FireKiller",
     date: "Jun 23, 2025",
     readTime: "5 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/06/Fire-Killer-Fire-Extingusiher-for-all-type-of-fire-1-scaled.jpg",
+    image: wp("2025/06/Fire-Killer-Fire-Extingusiher-for-all-type-of-fire-1.jpg"),
     content: `
 ## Fire Killer Fire Extinguisher for All Types of Fire: One Powerful Shield
 
@@ -129,7 +133,7 @@ Fire safety isn't just about having an extinguisher - it's about having the righ
     category: "PanSafe",
     date: "Jun 25, 2025",
     readTime: "5 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/06/PanSafe-Kitchen-Safety-Devices-scaled.jpg",
+    image: wp("2025/06/PanSafe-Kitchen-Safety-Devices.jpg"),
     content: `
 ## PanSafe Kitchen Safety Device: Your First Line of Defense Against Grease Fires
 
@@ -185,7 +189,7 @@ Don't wait for a grease fire to realize you're unprepared. The PanSafe Kitchen S
     category: "PanSafe",
     date: "Jun 26, 2025",
     readTime: "4 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/06/Cooktop-Fire-Safety-scaled.jpg",
+    image: wp("2025/06/Cooktop-Fire-Safety.jpg"),
     content: `
 ## The Fire You Didn't Plan For
 
@@ -246,7 +250,7 @@ Kitchen fires don't announce themselves. But with PanSafe, you don't need to be 
     category: "General",
     date: "Jul 3, 2025",
     readTime: "6 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/07/FIREKILLER-FIRE-EXTINGUISHER-1024x512.png",
+    image: wp("2025/07/FIREKILLER-FIRE-EXTINGUISHER.png"),
     content: `
 ## The Silent Danger Lurking in Indian Homes
 
@@ -307,7 +311,7 @@ Don't wait for a scare - get prepared, get protected, and give your loved ones t
     category: "General",
     date: "Jul 11, 2025",
     readTime: "5 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/07/FRYING-PAN-FIRE-scaled.jpg",
+    image: wp("2025/07/FRYING-PAN-FIRE.jpg"),
     content: `
 ## A Split Second to Disaster: The Hidden Danger Behind Every Frying Pan Fire
 
@@ -375,7 +379,7 @@ Don't wait for a scare to act. Be prepared. Stay safe.
     category: "FireKiller",
     date: "Jul 14, 2025",
     readTime: "6 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/07/Blue-And-Yellow-Modern-Electrical-Services-Banner-scaled.jpg",
+    image: wp("2025/07/Blue-And-Yellow-Modern-Electrical-Services-Banner.jpg"),
     content: `
 ## FireKiller Fire Extinguisher: A Revolutionary Way to Stop Fires Instantly
 
@@ -444,7 +448,7 @@ Don't wait for a disaster to realize what you could've done. Equip yourself with
     category: "PanSafe",
     date: "Jul 15, 2025",
     readTime: "5 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/07/Pansafe-Kitchen-Pouch.jpg",
+    image: wp("2025/07/Pansafe-Kitchen-Pouch.jpg"),
     content: `
 ## When Seconds Count, Trust the Pansafe Kitchen Fire Extinguisher Sachet
 
@@ -496,7 +500,7 @@ Secure your kitchen. Secure your peace of mind.
     category: "FireKiller",
     date: "Jul 21, 2025",
     readTime: "6 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/07/firekiller-fire-extimgyisher-1024x576.png",
+    image: wp("2025/07/firekiller-fire-extimgyisher.png"),
     content: `
 ## Is Your Car Prepared for a Fire Emergency?
 
@@ -561,7 +565,7 @@ So, ask yourself: Is your car fire-safe? If the answer is "I'm not sure," then i
     category: "PanSafe",
     date: "Jul 26, 2025",
     readTime: "5 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/07/Pansafe-1.jpg",
+    image: wp("2025/07/Pansafe-1.jpg"),
     content: `
 ## We Were Skeptical - So We Tested It
 
@@ -620,7 +624,7 @@ For anyone searching how to stop an oil pan fire safely, without stress or spray
     category: "General",
     date: "Jul 30, 2025",
     readTime: "5 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/07/kitchen-fire-safety-1024x576.png",
+    image: wp("2025/07/kitchen-fire-safety.png"),
     content: `
 ## Think Your Kitchen is Safe? Think Again.
 
@@ -673,7 +677,7 @@ Because the real recipe for a safe kitchen? A dash of awareness. A spoon of prev
     category: "FireKiller",
     date: "Sep 9, 2025",
     readTime: "6 min read",
-    image: "https://firekiller.in/wp-content/uploads/2025/09/fire-killer-fire-extinguisher-1-1024x576.png",
+    image: wp("2025/09/fire-killer-fire-extinguisher-1.png"),
     content: `
 ## Your All-in-One Fire Safety Solution
 

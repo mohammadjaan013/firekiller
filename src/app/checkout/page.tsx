@@ -588,20 +588,22 @@ export default function CheckoutPage() {
                       </span>
                     </div>
                   )}
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground flex items-center gap-1">
-                      <Truck className="h-3.5 w-3.5" /> Shipping
-                    </span>
-                    <span className="font-medium text-secondary">
-                      {shippingLoading ? (
-                        <Loader2 className="h-3.5 w-3.5 animate-spin inline" />
-                      ) : shipping === 0 ? (
-                        <span className="text-green-600">{shippingFetched ? "FREE" : "Calculated at next step"}</span>
-                      ) : (
-                        `₹${shipping}`
-                      )}
-                    </span>
-                  </div>
+                  {(shippingLoading || shippingFetched) && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground flex items-center gap-1">
+                        <Truck className="h-3.5 w-3.5" /> Shipping
+                      </span>
+                      <span className="font-medium text-secondary">
+                        {shippingLoading ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin inline" />
+                        ) : shipping === 0 ? (
+                          <span className="text-green-600">FREE</span>
+                        ) : (
+                          `₹${shipping.toLocaleString()}`
+                        )}
+                      </span>
+                    </div>
+                  )}
                   <hr className="border-border" />
                   <div className="flex justify-between text-base pt-1">
                     <span className="font-bold text-secondary">Total</span>
