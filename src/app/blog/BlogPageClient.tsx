@@ -4,7 +4,17 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock } from "lucide-react";
-import { blogPosts } from "@/data/blogPosts";
+
+type DbPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  coverImage: string | null;
+  category: string | null;
+  readTime: string | null;
+  publishedAt: Date | null;
+};
 
 const CATEGORIES = ["All", "PanSafe", "FireKiller", "General"] as const;
 
@@ -14,14 +24,22 @@ const categoryColors: Record<string, string> = {
   General: "bg-blue-500/10 text-blue-600",
 };
 
-export default function BlogPageClient() {
+function formatDate(date: Date | null): string {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+export default function BlogPageClient({ posts }: { posts: DbPost[] }) {
   const [activeCategory, setActiveCategory] = useState<string>("All");
 
-  const allPosts = [...blogPosts].reverse();
   const filteredPosts =
     activeCategory === "All"
-      ? allPosts
-      : allPosts.filter((p) => p.category === activeCategory);
+      ? posts
+      : posts.filter((p) => p.category === activeCategory);
 
   return (
     <div className="min-h-screen bg-background pt-16">
@@ -54,7 +72,7 @@ export default function BlogPageClient() {
               {cat}
               {cat !== "All" && (
                 <span className="ml-1.5 text-xs opacity-70">
-                  ({allPosts.filter((p) => p.category === cat).length})
+                  ({posts.filter((p) => p.category === cat).length})
                 </span>
               )}
             </button>
@@ -67,17 +85,21 @@ export default function BlogPageClient() {
             <Link key={post.id} href={`/blog/${post.slug}`} className="group">
               <article className="bg-card rounded-xl border border-border overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all h-full flex flex-col">
                 <div className="h-32 relative">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover"
-                  />
+                  {post.coverImage ? (
+                    <Image
+                      src={post.coverImage}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-muted" />
+                  )}
                 </div>
                 <div className="p-3 flex flex-col flex-1">
                   <span
                     className={`inline-block px-2 py-0.5 text-[10px] font-semibold rounded-full w-fit ${
-                      categoryColors[post.category] || "bg-gray-100 text-gray-700"
+                      categoryColors[post.category ?? ""] || "bg-gray-100 text-gray-700"
                     }`}
                   >
                     {post.category}
@@ -91,7 +113,7 @@ export default function BlogPageClient() {
                   <div className="flex items-center gap-2 mt-auto pt-2 text-[10px] text-muted-foreground">
                     <span className="flex items-center gap-0.5">
                       <Calendar className="h-2.5 w-2.5" />
-                      {post.date}
+                      {formatDate(post.publishedAt)}
                     </span>
                     <span className="flex items-center gap-0.5">
                       <Clock className="h-2.5 w-2.5" />

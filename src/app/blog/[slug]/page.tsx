@@ -3,10 +3,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { blogPosts } from "@/data/blogPosts";
+import { prisma } from "@/lib/db";
 
-export function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }));
+function formatDate(date: Date | null): string {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+export async function generateStaticParams() {
+  const posts = await prisma.blogPost.findMany({
+    where: { isPublished: true },
+    select: { slug: true },
+  });
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({
@@ -15,23 +28,23 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await prisma.blogPost.findUnique({ where: { slug } });
   if (!post) return { title: "Not Found" };
   return {
     title: `${post.title} | FireKiller Blog`,
-    description: post.excerpt,
+    description: post.excerpt ?? "",
     openGraph: {
       title: `${post.title} | FireKiller Blog`,
-      description: post.excerpt,
+      description: post.excerpt ?? "",
       url: `/blog/${post.slug}`,
       type: "article",
-      images: [{ url: post.image, width: 1200, height: 630, alt: post.title }],
+      images: post.coverImage ? [{ url: post.coverImage, width: 1200, height: 630, alt: post.title }] : [],
     },
     twitter: {
       card: "summary_large_image",
       title: `${post.title} | FireKiller Blog`,
-      description: post.excerpt,
-      images: [post.image],
+      description: post.excerpt ?? "",
+      images: post.coverImage ? [post.coverImage] : [],
     },
   };
 }
@@ -42,14 +55,17 @@ export default async function BlogDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = await prisma.blogPost.findUnique({ where: { slug } });
 
-  if (!post) notFound();
+  if (!post || !post.isPublished) notFound();
 
   // Get related posts (same category, excluding current)
-  const related = blogPosts
-    .filter((p) => p.slug !== post.slug && p.category === post.category)
-    .slice(0, 3);
+  const related = await prisma.blogPost.findMany({
+    where: { isPublished: true, category: post.category, NOT: { slug: post.slug } },
+    orderBy: { publishedAt: "desc" },
+    take: 3,
+    select: { slug: true, title: true, coverImage: true, readTime: true },
+  });
 
   // JSON-LD structured data
   const jsonLd = {
@@ -57,7 +73,7 @@ export default async function BlogDetailPage({
     "@type": "Article",
     headline: post.title,
     description: post.excerpt,
-    image: post.image,
+    image: post.coverImage,
     author: {
       "@type": "Organization",
       name: "Oustfire Safety Engineers Pvt Ltd",
@@ -71,8 +87,8 @@ export default async function BlogDetailPage({
         url: "https://firekiller.in/images/brand/man2.png",
       },
     },
-    datePublished: new Date(post.date).toISOString(),
-    dateModified: new Date(post.date).toISOString(),
+    datePublished: post.publishedAt?.toISOString() ?? new Date().toISOString(),
+    dateModified: post.updatedAt?.toISOString() ?? new Date().toISOString(),
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `https://firekiller.in/blog/${post.slug}`,
@@ -90,13 +106,15 @@ export default async function BlogDetailPage({
       <div className="relative">
         {/* Cover image - full width */}
         <div className="relative w-full h-56 sm:h-72 md:h-80 lg:h-96 bg-secondary/5">
-          <Image
-            src={post.image}
-            alt={post.title}
-            fill
-            className="object-cover"
-            priority
-          />
+          {post.coverImage && (
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              className="object-cover"
+              priority
+            />
+          )}
           <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
         </div>
 
@@ -149,7 +167,7 @@ export default async function BlogDetailPage({
                   <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
-                      {post.date}
+                      {formatDate(post.publishedAt)}
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
@@ -210,12 +228,14 @@ export default async function BlogDetailPage({
                   className="group block bg-muted rounded-xl border border-border overflow-hidden hover:shadow-md transition-all"
                 >
                   <div className="relative h-28 bg-muted">
-                    <Image
-                      src={r.image}
-                      alt={r.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+                    {r.coverImage && (
+                      <Image
+                        src={r.coverImage}
+                        alt={r.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    )}
                   </div>
                   <div className="p-3">
                     <h4 className="text-xs font-semibold text-secondary leading-snug line-clamp-2 group-hover:text-primary transition-colors">
