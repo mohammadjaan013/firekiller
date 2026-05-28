@@ -101,13 +101,13 @@ export default async function BlogDetailPage({
       {/* Header section with full-width cover */}
       <div className="relative">
         {/* Cover image - full width */}
-        <div className="relative w-full h-56 sm:h-72 md:h-80 lg:h-96 bg-secondary/5">
+        <div className="relative w-full h-64 sm:h-80 md:h-[28rem] lg:h-[32rem] bg-secondary/10 flex items-center justify-center">
           {post.coverImage && (
             <Image
               src={getImageUrl(post.coverImage)}
               alt={post.title}
               fill
-              className="object-cover"
+              className="object-contain"
               priority
             />
           )}
