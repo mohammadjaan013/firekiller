@@ -367,7 +367,7 @@ export default function BlogEditor({
                 <ReactMarkdown
                   components={{
                     img: ({ node, ...props }) => (
-                      <img {...props} src={getImageUrl(props.src)} alt={props.alt || ""} />
+                      <img {...props} src={getImageUrl(props.src as string)} alt={props.alt || ""} />
                     ),
                   }}
                 >
