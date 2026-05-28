@@ -25,6 +25,8 @@ import {
   Minus,
 } from "lucide-react";
 
+import { getImageUrl } from "@/lib/image-utils";
+
 const CATEGORIES = ["PanSafe", "FireKiller", "General"] as const;
 
 interface BlogFormData {
@@ -362,7 +364,15 @@ export default function BlogEditor({
 
             {preview ? (
               <div className="p-6 min-h-[400px] prose prose-sm max-w-none prose-headings:text-secondary prose-a:text-primary prose-strong:text-secondary">
-                <ReactMarkdown>{form.content}</ReactMarkdown>
+                <ReactMarkdown
+                  components={{
+                    img: ({ node, ...props }) => (
+                      <img {...props} src={getImageUrl(props.src)} alt={props.alt || ""} />
+                    ),
+                  }}
+                >
+                  {form.content}
+                </ReactMarkdown>
               </div>
             ) : (
               <textarea
@@ -434,7 +444,7 @@ Start writing here. Use the toolbar above or type Markdown directly.
                 <div className="mt-2 relative h-32 rounded-lg overflow-hidden border border-border">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={form.coverImage}
+                    src={getImageUrl(form.coverImage)}
                     alt="Cover preview"
                     className="w-full h-full object-cover"
                   />

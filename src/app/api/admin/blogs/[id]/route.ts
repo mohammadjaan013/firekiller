@@ -46,7 +46,19 @@ export async function PUT(
 
     const { id } = await params;
     const body = await req.json();
-    const { title, slug, excerpt, content, coverImage, category, readTime, isPublished } = body;
+    let { title, slug, excerpt, content, coverImage, category, readTime, isPublished } = body;
+
+    const prefix = process.env.NEXT_PUBLIC_WP_UPLOADS || "https://lemonchiffon-gull-592316.hostingersite.com/wp-content/uploads";
+    const cleanPrefix = prefix.endsWith("/") ? prefix : `${prefix}/`;
+
+    if (coverImage && coverImage.startsWith(cleanPrefix)) {
+      coverImage = coverImage.substring(cleanPrefix.length);
+    }
+    
+    // Also strip prefix from images inside content
+    if (content) {
+      content = content.replaceAll(cleanPrefix, "");
+    }
 
     if (!title || !slug || !content) {
       return NextResponse.json({ error: "Title, slug, and content are required" }, { status: 400 });

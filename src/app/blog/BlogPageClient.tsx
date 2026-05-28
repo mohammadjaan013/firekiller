@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock } from "lucide-react";
+import { getImageUrl } from "@/lib/image-utils";
 
 type DbPost = {
   id: string;
@@ -87,7 +88,7 @@ export default function BlogPageClient({ posts }: { posts: DbPost[] }) {
                 <div className="h-32 relative">
                   {post.coverImage ? (
                     <Image
-                      src={post.coverImage}
+                      src={getImageUrl(post.coverImage)}
                       alt={post.title}
                       fill
                       className="object-cover"

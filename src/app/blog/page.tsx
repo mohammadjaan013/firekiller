@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import BlogPageClient from "./BlogPageClient";
 
+export const revalidate = 0; // force dynamic
+
 export const metadata: Metadata = {
   title: "Fire Safety Blog | FireKiller",
   description:

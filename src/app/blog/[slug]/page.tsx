@@ -4,6 +4,9 @@ import Image from "next/image";
 import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { prisma } from "@/lib/db";
+import { getImageUrl } from "@/lib/image-utils";
+
+export const revalidate = 0; // force dynamic
 
 function formatDate(date: Date | null): string {
   if (!date) return "";
@@ -14,14 +17,6 @@ function formatDate(date: Date | null): string {
   });
 }
 
-export async function generateStaticParams() {
-  const posts = await prisma.blogPost.findMany({
-    where: { isPublished: true },
-    select: { slug: true },
-  });
-  return posts.map((post) => ({ slug: post.slug }));
-}
-
 export async function generateMetadata({
   params,
 }: {
@@ -30,6 +25,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await prisma.blogPost.findUnique({ where: { slug } });
   if (!post) return { title: "Not Found" };
+  const coverImageUrl = getImageUrl(post.coverImage);
   return {
     title: `${post.title} | FireKiller Blog`,
     description: post.excerpt ?? "",
@@ -38,13 +34,13 @@ export async function generateMetadata({
       description: post.excerpt ?? "",
       url: `/blog/${post.slug}`,
       type: "article",
-      images: post.coverImage ? [{ url: post.coverImage, width: 1200, height: 630, alt: post.title }] : [],
+      images: coverImageUrl ? [{ url: coverImageUrl, width: 1200, height: 630, alt: post.title }] : [],
     },
     twitter: {
       card: "summary_large_image",
       title: `${post.title} | FireKiller Blog`,
       description: post.excerpt ?? "",
-      images: post.coverImage ? [post.coverImage] : [],
+      images: coverImageUrl ? [coverImageUrl] : [],
     },
   };
 }
@@ -73,7 +69,7 @@ export default async function BlogDetailPage({
     "@type": "Article",
     headline: post.title,
     description: post.excerpt,
-    image: post.coverImage,
+    image: getImageUrl(post.coverImage),
     author: {
       "@type": "Organization",
       name: "Oustfire Safety Engineers Pvt Ltd",
@@ -108,7 +104,7 @@ export default async function BlogDetailPage({
         <div className="relative w-full h-56 sm:h-72 md:h-80 lg:h-96 bg-secondary/5">
           {post.coverImage && (
             <Image
-              src={post.coverImage}
+              src={getImageUrl(post.coverImage)}
               alt={post.title}
               fill
               className="object-cover"
@@ -187,7 +183,15 @@ export default async function BlogDetailPage({
       {/* Article Content - Medium style */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <article className="prose-blog">
-          <ReactMarkdown>{post.content}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              img: ({ node, ...props }) => (
+                <img {...props} src={getImageUrl(props.src)} alt={props.alt || ""} />
+              ),
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </article>
 
         {/* Tags / Bottom CTA */}
@@ -230,7 +234,7 @@ export default async function BlogDetailPage({
                   <div className="relative h-28 bg-muted">
                     {r.coverImage && (
                       <Image
-                        src={r.coverImage}
+                        src={getImageUrl(r.coverImage)}
                         alt={r.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"

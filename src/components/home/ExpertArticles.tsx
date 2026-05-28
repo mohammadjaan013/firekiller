@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Clock } from "lucide-react";
-import { blogPosts } from "@/data/blogPosts";
+import { ArrowRight, Calendar, Clock } from "lucide-react";
+import { prisma } from "@/lib/db";
+import { getImageUrl } from "@/lib/image-utils";
 
 const categoryColors: Record<string, string> = {
   PanSafe: "bg-orange-100 text-orange-700",
@@ -9,9 +10,15 @@ const categoryColors: Record<string, string> = {
   General: "bg-blue-100 text-blue-700",
 };
 
-export default function ExpertArticles() {
+export default async function ExpertArticles() {
   // Get the 3 latest blog posts
-  const latest = [...blogPosts].reverse().slice(0, 3);
+  const latest = await prisma.blogPost.findMany({
+    where: { isPublished: true },
+    orderBy: { publishedAt: "desc" },
+    take: 3,
+  });
+
+  if (latest.length === 0) return null;
 
   return (
     <section className="py-20 bg-muted">
@@ -50,36 +57,41 @@ export default function ExpertArticles() {
             >
               {/* Cover Image */}
               <div className="relative h-48 bg-muted overflow-hidden">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                {post.coverImage && (
+                  <Image
+                    src={getImageUrl(post.coverImage)}
+                    alt={post.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                )}
                 <span
                   className={`absolute top-3 left-3 px-2.5 py-1 text-[10px] font-semibold rounded-full ${
-                    categoryColors[post.category] || "bg-gray-100 text-gray-700"
+                    categoryColors[post.category ?? ""] || "bg-gray-100 text-gray-700"
                   }`}
                 >
-                  {post.category}
+                  {post.category || "General"}
                 </span>
               </div>
 
               {/* Content */}
-              <div className="p-5">
+              <div className="p-5 flex flex-col flex-grow">
                 <h3 className="font-bold text-secondary text-sm leading-snug group-hover:text-primary transition-colors line-clamp-2 mb-2">
                   {post.title}
                 </h3>
                 <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
                   {post.excerpt}
                 </p>
-                <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                <div className="flex items-center gap-3 mt-auto text-[11px] text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {post.readTime}
+                    {post.readTime || "5 min read"}
                   </span>
                   <span>•</span>
-                  <span>{post.date}</span>
+                  <span className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ""}
+                  </span>
                 </div>
               </div>
             </Link>
