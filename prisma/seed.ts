@@ -99,8 +99,8 @@ async function main() {
   }
 
   // All prices are BASE prices EXCLUDING 18% GST
-  // FireKiller: 799, 1598, 2397  (+18% GST = 943, 1886, 2828)
-  // PanSafe:    899, 2427, 3820  (+18% GST = 1061, 2864, 4507)
+  // FireKiller: 1080, 1990, 2700  (+18% GST = 1274, 2348, 3186)
+  // PanSafe:     666, 1800, 2750  (+18% GST =  786, 2124, 3245)
 
   const productsData = [
     // ── FireKiller × 1 ──────────────────────────────────
@@ -110,8 +110,8 @@ async function main() {
       description: "Single compact fire extinguisher - perfect for a room, office, or car.",
       shortDesc: "India's most trusted compact fire extinguisher.",
       longDescription: "The FireKiller is India's most trusted compact fire extinguisher. Works on Class A, B, C, and electrical fires with zero maintenance for 5 years. Just grab, point, and spray - one-hand operation means anyone in the family can use it.",
-      price: 799,
-      originalPrice: 999,
+      price: 1080,
+      originalPrice: 1350,
       gstRate: 0.18,
       sku: "FK-1",
       stock: 200,
@@ -141,8 +141,8 @@ async function main() {
       description: "Two extinguishers - cover bedroom + living room, or equip two cars.",
       shortDesc: "Cover two critical areas with the FireKiller 2-unit pack.",
       longDescription: "Cover two critical areas with the FireKiller 2-unit pack. Bedroom + living room, or one per car. Same trusted clean-agent formula, same zero-maintenance promise.",
-      price: 1598,
-      originalPrice: 1998,
+      price: 1990,
+      originalPrice: 2700,
       gstRate: 0.18,
       sku: "FK-2",
       stock: 150,
@@ -172,8 +172,8 @@ async function main() {
       description: "Three extinguishers - whole-home protection or equip your fleet.",
       shortDesc: "The 3-unit pack gives you complete coverage.",
       longDescription: "The 3-unit pack gives you complete coverage. Place one in every room or equip multiple vehicles. The best value with the biggest savings - protect your family without leaving any blind spots.",
-      price: 2397,
-      originalPrice: 2997,
+      price: 2700,
+      originalPrice: 4050,
       gstRate: 0.18,
       sku: "FK-3",
       stock: 100,
@@ -203,8 +203,8 @@ async function main() {
       description: "Single fire suppression sachet - toss into a burning pan, fire goes out instantly.",
       shortDesc: "Revolutionary throw-and-forget fire sachet.",
       longDescription: "PanSafe is a revolutionary throw-and-forget fire sachet for cooking oil fires - the #1 cause of kitchen fires in India. Simply toss into the burning pan; it bursts on contact, instantly suppressing the fire. No aiming, no pins, no panic.",
-      price: 899,
-      originalPrice: 1149,
+      price: 666,
+      originalPrice: 999,
       gstRate: 0.18,
       sku: "PS-1",
       stock: 500,
@@ -234,8 +234,8 @@ async function main() {
       description: "Pack of 3 sachets - months of kitchen protection with backups ready.",
       shortDesc: "Three sachets for extended protection.",
       longDescription: "The 3-pack keeps your kitchen protected long-term. Keep one by the stove, one in the drawer, and one spare. Ideal for families that cook daily with oil.",
-      price: 2427,
-      originalPrice: 3447,
+      price: 1800,
+      originalPrice: 2997,
       gstRate: 0.18,
       sku: "PS-3",
       stock: 300,
@@ -265,8 +265,8 @@ async function main() {
       description: "Mega pack of 5 sachets - share with family or stock up for the year.",
       shortDesc: "The ultimate kitchen safety investment.",
       longDescription: "The 5-pack is the ultimate kitchen safety investment. Keep sachets in your kitchen, give extras to parents or neighbours. The most affordable fire protection you can buy.",
-      price: 3820,
-      originalPrice: 5745,
+      price: 2750,
+      originalPrice: 4995,
       gstRate: 0.18,
       sku: "PS-5",
       stock: 200,
