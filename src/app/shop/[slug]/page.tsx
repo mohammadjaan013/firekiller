@@ -515,7 +515,9 @@ export default function ProductDetailPage({
               )}
             </div>
             <p className="mt-1.5 text-xs text-muted-foreground">
-              + 18% GST applicable &middot; Final price: ₹{Math.round(product.price * 1.18).toLocaleString()}
+              + 18% GST applicable
+              {/* Final price hidden here - the GST-inclusive total is shown on the cart & checkout pages */}
+              {/* &middot; Final price: ₹{Math.round(product.price * 1.18).toLocaleString()} */}
             </p>
 
             {/* Quantity + Add to Cart */}

@@ -493,14 +493,18 @@ Products exist in **two places** (historical reason - migration in progress):
 
 ### Static Products (storefront-facing)
 
-| # | Product | Slug | Price | Line |
-|---|---|---|---|---|
-| 1 | FireKiller - 1 Unit | `firekiller-1` | ₹799 | firekiller |
-| 2 | FireKiller - 2 Units | `firekiller-2` | ₹1,598 | firekiller |
-| 3 | FireKiller - 3 Units | `firekiller-3` | ₹2,397 | firekiller |
-| 4 | PanSafe - 1 Pc | `pansafe-1` | ₹899 | pansafe |
-| 5 | PanSafe - 3 Pcs | `pansafe-3` | ₹2,427 | pansafe |
-| 6 | PanSafe - 5 Pcs | `pansafe-5` | ₹3,820 | pansafe |
+All prices below are **base prices excluding 18% GST** (GST is added in cart/checkout).
+
+| # | Product | Slug | Price (excl. GST) | MRP | Line |
+|---|---|---|---|---|---|
+| 1 | FireKiller - 1 Unit | `firekiller-1` | ₹1,080 | ₹1,350 | firekiller |
+| 2 | FireKiller - 2 Units | `firekiller-2` | ₹1,990 | ₹2,700 | firekiller |
+| 3 | FireKiller - 3 Units | `firekiller-3` | ₹2,700 | ₹4,050 | firekiller |
+| 4 | PanSafe - 1 Pc | `pansafe-1` | ₹666 | ₹999 | pansafe |
+| 5 | PanSafe - 3 Pcs | `pansafe-3` | ₹1,800 | ₹2,997 | pansafe |
+| 6 | PanSafe - 5 Pcs | `pansafe-5` | ₹2,750 | ₹4,995 | pansafe |
+
+> Prices live in **three** places and must be kept in sync: `src/lib/products.ts` (storefront), `prisma/seed.ts` (seed), and the `products` table in the database (used by `/api/orders` and the admin panel).
 
 ### Product Interface
 
