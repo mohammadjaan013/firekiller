@@ -1,27 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRazorpay } from "@/lib/razorpay";
+import { computeOrderTotals, totalsToNotes, PricingError } from "@/lib/pricing";
 
 /**
  * POST /api/razorpay/order
- * Creates a Razorpay order that the frontend opens in the checkout modal.
+ * Prices the cart on the server and creates a Razorpay order for THAT amount.
+ * The browser's own total is only used to detect that what the customer is
+ * looking at is out of date - it never decides what gets charged.
  *
- * Body: { amount: number (in ₹), receipt?: string }
+ * Body: {
+ *   items: [{ slug: string, quantity: number }],
+ *   couponCode?: string,
+ *   pincode?: string,
+ *   expectedTotal: number   // total shown on the checkout page (₹)
+ * }
+ *
+ * 409 → the displayed total is stale; body.totals has the correct breakdown.
  */
 export async function POST(req: NextRequest) {
   try {
-    const { amount, receipt } = await req.json();
+    const { items, couponCode, pincode, expectedTotal } = await req.json();
 
-    if (!amount || amount <= 0) {
+    const totals = await computeOrderTotals({ items, couponCode, pincode });
+
+    if (totals.total <= 0) {
+      return NextResponse.json({ error: "Invalid order amount" }, { status: 400 });
+    }
+
+    if (Math.abs(totals.total - Number(expectedTotal)) > 0.01) {
       return NextResponse.json(
-        { error: "Invalid amount" },
-        { status: 400 }
+        { error: "Your order total has changed. Please review it and try again.", totals },
+        { status: 409 }
       );
     }
 
     const order = await getRazorpay().orders.create({
-      amount: Math.round(amount * 100), // Razorpay uses paise
+      amount: Math.round(totals.total * 100), // Razorpay uses paise
       currency: "INR",
-      receipt: receipt || `rcpt_${Date.now()}`,
+      receipt: `fk_${Date.now()}`,
+      notes: totalsToNotes(totals),
     });
 
     return NextResponse.json({
@@ -30,6 +47,9 @@ export async function POST(req: NextRequest) {
       currency: order.currency,
     });
   } catch (error) {
+    if (error instanceof PricingError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
     console.error("Razorpay order creation error:", error);
     return NextResponse.json(
       { error: "Failed to create payment order" },

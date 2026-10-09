@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { evaluateCoupon } from "@/lib/pricing";
 
 /**
  * POST /api/coupons/validate - validate a coupon code
  * Body: { code: string, subtotal: number }
+ * The discount shown here is for display only - checkout re-validates the
+ * coupon server-side against the server-computed cart total.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -16,65 +18,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const coupon = await prisma.coupon.findUnique({
-      where: { code: code.toUpperCase() },
-    });
-
-    if (!coupon) {
+    const result = await evaluateCoupon(String(code), Number(subtotal) || 0);
+    if (!result.ok) {
       return NextResponse.json(
-        { valid: false, error: "Invalid coupon code" },
-        { status: 404 }
+        { valid: false, error: result.error },
+        { status: result.status }
       );
     }
 
-    // Check active
-    if (!coupon.isActive) {
-      return NextResponse.json(
-        { valid: false, error: "This coupon is no longer active" },
-        { status: 400 }
-      );
-    }
-
-    // Check expiry
-    if (coupon.expiresAt && coupon.expiresAt < new Date()) {
-      return NextResponse.json(
-        { valid: false, error: "This coupon has expired" },
-        { status: 400 }
-      );
-    }
-
-    // Check usage limit
-    if (coupon.usageLimit && coupon.usedCount >= coupon.usageLimit) {
-      return NextResponse.json(
-        { valid: false, error: "This coupon has reached its usage limit" },
-        { status: 400 }
-      );
-    }
-
-    // Check minimum order
-    if (coupon.minOrder && subtotal && subtotal < coupon.minOrder) {
-      return NextResponse.json(
-        {
-          valid: false,
-          error: `Minimum order of ₹${coupon.minOrder} required`,
-        },
-        { status: 400 }
-      );
-    }
-
-    // Calculate discount
-    let discount = 0;
-    if (subtotal) {
-      if (coupon.discountType === "percentage") {
-        discount = (subtotal * coupon.discountValue) / 100;
-        if (coupon.maxDiscount && discount > coupon.maxDiscount) {
-          discount = coupon.maxDiscount;
-        }
-      } else {
-        discount = coupon.discountValue;
-      }
-    }
-
+    const { coupon, discount } = result;
     return NextResponse.json({
       valid: true,
       coupon: {
@@ -85,7 +37,7 @@ export async function POST(req: NextRequest) {
         maxDiscount: coupon.maxDiscount,
         minOrder: coupon.minOrder,
       },
-      discount: Math.round(discount * 100) / 100,
+      discount,
     });
   } catch (error) {
     console.error("POST /api/coupons/validate error:", error);

@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 import { prisma } from "@/lib/db";
+import { getRazorpay } from "@/lib/razorpay";
+import { notesToTotals, GST_RATE } from "@/lib/pricing";
 import { sendOrderConfirmation } from "@/lib/interakt";
 import { sendOrderEmailToAdmin, sendOrderConfirmationToCustomer } from "@/lib/email";
 
@@ -16,33 +19,37 @@ function generateOrderNumber(): string {
   return `FK-${ymd}-${rand}`;
 }
 
+/** Razorpay's documented proof of payment: HMAC-SHA256("order_id|payment_id", key_secret) */
+function isValidPaymentSignature(orderId: string, paymentId: string, signature: string) {
+  const expected = crypto
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
+    .update(`${orderId}|${paymentId}`)
+    .digest("hex");
+  const a = Buffer.from(expected);
+  const b = Buffer.from(String(signature));
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
 /**
  * POST /api/checkout
- * Places an order after Razorpay payment verification.
- * Works for both logged-in users (server cart) and guest users (client cart).
+ * Places an order after a successful Razorpay payment.
+ * Works for both logged-in users and guest users.
+ *
+ * Security: the payment signature is verified HERE, and the items / amounts
+ * recorded come from the Razorpay order the server priced (its `notes`) -
+ * never from the request body. The body only supplies the delivery address.
  *
  * Body: {
  *   address: { name, phone, email, line1, line2, city, state, pincode },
  *   razorpayOrderId: string,
  *   razorpayPaymentId: string,
- *   items: [{ productId, slug, name, quantity, price }],
- *   subtotal: number,
- *   shipping: number,
- *   total: number
+ *   razorpaySignature: string
  * }
  */
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const {
-      address,
-      razorpayOrderId,
-      razorpayPaymentId,
-      items,
-      subtotal,
-      shipping,
-      total,
-    } = body;
+    const { address, razorpayOrderId, razorpayPaymentId, razorpaySignature } = body;
 
     // Validate required fields
     if (
@@ -60,19 +67,37 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!razorpayOrderId || !razorpayPaymentId) {
+    if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature) {
       return NextResponse.json(
         { error: "Payment details are required" },
         { status: 400 }
       );
     }
 
-    if (!items || items.length === 0) {
+    if (!isValidPaymentSignature(razorpayOrderId, razorpayPaymentId, razorpaySignature)) {
       return NextResponse.json(
-        { error: "No items in order" },
+        { error: "Payment verification failed" },
         { status: 400 }
       );
     }
+
+    // Idempotent: a retry / double-submit for the same payment returns the same order
+    const existing = await prisma.order.findFirst({ where: { razorpayOrderId } });
+    if (existing) {
+      return NextResponse.json({
+        orderNumber: existing.orderNumber,
+        orderId: existing.id,
+      });
+    }
+
+    // What was actually priced and charged - set server-side in /api/razorpay/order
+    const rzpOrder = await getRazorpay().orders.fetch(razorpayOrderId);
+    const priced = notesToTotals(rzpOrder.notes as Record<string, string | number>);
+    if (Math.round(priced.total * 100) !== Number(rzpOrder.amount)) {
+      console.error(`Razorpay order ${razorpayOrderId}: notes total ${priced.total} != amount ${rzpOrder.amount}`);
+      return NextResponse.json({ error: "Order amount mismatch" }, { status: 400 });
+    }
+    const { lines: items, subtotal, shipping, discount, total } = priced;
 
     // Find or create a guest user by email
     let user = await prisma.user.findUnique({
@@ -115,12 +140,15 @@ export async function POST(req: NextRequest) {
     }[] = [];
 
     for (const item of items) {
-      // Find DB product by slug (client uses numeric IDs but DB uses cuid)
+      // Find DB product by slug (catalogue uses slugs, DB uses cuid ids)
       const dbProduct = await prisma.product.findUnique({
         where: { slug: item.slug },
       });
 
-      if (dbProduct) {
+      if (!dbProduct) {
+        // Order is still created (the customer has paid) - but flag it loudly
+        console.error(`Order ${orderNumber}: product "${item.slug}" not found in DB - line not linked`);
+      } else {
         orderItems.push({
           productId: dbProduct.id,
           quantity: item.quantity,
@@ -139,7 +167,7 @@ export async function POST(req: NextRequest) {
         addressId: savedAddress.id,
         subtotal,
         shipping,
-        discount: 0,
+        discount,
         total,
         paymentMethod: "razorpay",
         paymentId: razorpayPaymentId,
@@ -153,6 +181,13 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Count the coupon use (enforces usageLimit for later orders)
+    if (priced.couponCode) {
+      await prisma.coupon
+        .update({ where: { code: priced.couponCode }, data: { usedCount: { increment: 1 } } })
+        .catch((e) => console.error("Failed to increment coupon usage:", e));
+    }
+
     // Send WhatsApp order confirmation (fire-and-forget)
     sendOrderConfirmation({
       phone: address.phone,
@@ -163,7 +198,6 @@ export async function POST(req: NextRequest) {
     }).catch((err) => console.error("WhatsApp order confirmation error:", err));
 
     // Prepare email data
-    const GST_RATE = 0.18;
     const gstAmount = Math.round(subtotal * GST_RATE);
 
     const emailData = {
@@ -178,7 +212,7 @@ export async function POST(req: NextRequest) {
         state: address.state,
         pincode: address.pincode,
       },
-      items: items.map((item: { name: string; quantity: number; price: number }) => ({
+      items: items.map((item) => ({
         name: item.name,
         quantity: item.quantity,
         price: item.price,

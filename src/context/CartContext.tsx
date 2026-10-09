@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { useSession } from "next-auth/react";
+import { getProductBySlug } from "@/lib/products";
 
 // ─── Types ──────────────────────────────────────────────
 
@@ -46,6 +47,25 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 const STORAGE_KEY = "firekiller-cart";
 const COUPON_KEY = "firekiller-coupon";
 
+/**
+ * Carts saved in localStorage keep the price from when the item was added.
+ * Refresh price/name/MRP from the current catalogue so a price change is
+ * reflected immediately, and drop products that no longer exist.
+ */
+function syncWithCatalogue(saved: CartItem[]): CartItem[] {
+  return saved.flatMap((item) => {
+    const product = getProductBySlug(item.slug);
+    if (!product) return [];
+    return [{
+      ...item,
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+    }];
+  });
+}
+
 // ─── Provider ───────────────────────────────────────────
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -61,7 +81,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) setItems(JSON.parse(saved));
+      if (saved) setItems(syncWithCatalogue(JSON.parse(saved)));
       const savedCoupon = localStorage.getItem(COUPON_KEY);
       if (savedCoupon) {
         const { code, discount: d } = JSON.parse(savedCoupon);

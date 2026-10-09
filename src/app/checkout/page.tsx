@@ -63,7 +63,7 @@ const STATES = [
 /* ── Page ─────────────────────────────────────────────── */
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, subtotal, discount, appliedCoupon, clearCart } = useCart();
+  const { items, subtotal, discount, appliedCoupon, clearCart, applyCoupon, removeCoupon } = useCart();
   const { showToast } = useToast();
   const { data: session } = useSession();
 
@@ -192,18 +192,40 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      // 1. Create Razorpay order on our server
+      // 1. Server prices the cart itself and creates the Razorpay order for that amount.
+      //    We only say WHAT we're buying; `expectedTotal` lets it detect a stale display.
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: total,
-          receipt: `fk_${Date.now()}`,
+          items: items.map((i) => ({ slug: i.slug, quantity: i.quantity })),
+          couponCode: appliedCoupon || undefined,
+          pincode: address.pincode,
+          expectedTotal: total,
         }),
       });
 
-      if (!orderRes.ok) throw new Error("Failed to create payment order");
-      const { orderId, amount, currency } = await orderRes.json();
+      const orderData = await orderRes.json().catch(() => ({}));
+
+      if (orderRes.status === 409 && orderData.totals) {
+        // Displayed total was stale (shipping rate / coupon changed) - show the
+        // server's numbers and let the customer confirm before paying.
+        const t = orderData.totals;
+        setShipping(t.shipping);
+        setShippingFetched(true);
+        if (t.couponCode) applyCoupon(t.couponCode, t.discount);
+        else removeCoupon();
+        showToast(t.couponError ? `Coupon removed: ${t.couponError}` : orderData.error);
+        setLoading(false);
+        return;
+      }
+
+      if (!orderRes.ok) {
+        showToast(orderData.error || "Failed to create payment order");
+        setLoading(false);
+        return;
+      }
+      const { orderId, amount, currency } = orderData;
 
       // 2. Open Razorpay checkout modal
       const options: RazorpayOptions = {
@@ -215,16 +237,8 @@ export default function CheckoutPage() {
         order_id: orderId,
         handler: async (response: RazorpayResponse) => {
           try {
-            // 3. Verify payment signature
-            const verifyRes = await fetch("/api/razorpay/verify", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(response),
-            });
-
-            if (!verifyRes.ok) throw new Error("Payment verification failed");
-
-            // 4. Place order in our system
+            // 3. Place order - the server verifies the payment signature and
+            //    records the items/amounts it priced, not anything we send.
             const placeRes = await fetch("/api/checkout", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
@@ -232,23 +246,14 @@ export default function CheckoutPage() {
                 address,
                 razorpayOrderId: response.razorpay_order_id,
                 razorpayPaymentId: response.razorpay_payment_id,
-                items: items.map((i) => ({
-                  productId: i.id,
-                  slug: i.slug,
-                  name: i.name,
-                  quantity: i.quantity,
-                  price: i.price,
-                })),
-                subtotal,
-                shipping,
-                total,
+                razorpaySignature: response.razorpay_signature,
               }),
             });
 
             if (!placeRes.ok) throw new Error("Failed to place order");
             const { orderNumber } = await placeRes.json();
 
-            // 5. Clear cart and redirect to confirmation
+            // 4. Clear cart and redirect to confirmation
             clearCart();
             router.push(`/order-confirmation?order=${orderNumber}`);
           } catch {
