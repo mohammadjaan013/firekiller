@@ -79,9 +79,11 @@ export default function OrderDetailClient({ order: initialOrder }: OrderProps) {
   const [emailing, setEmailing] = useState(false);
   const [message, setMessage] = useState("");
 
+  // order.subtotal is stored EXCLUDING GST; GST is added on top
+  // (same formula as cart, checkout, server pricing and order emails)
   const GST_RATE = 0.18;
-  const baseSubtotal = Math.round(order.subtotal / (1 + GST_RATE));
-  const gstAmount = order.subtotal - baseSubtotal;
+  const baseSubtotal = order.subtotal;
+  const gstAmount = Math.round(order.subtotal * GST_RATE);
 
   const handleSave = async () => {
     setSaving(true);
