@@ -99,8 +99,9 @@ async function main() {
   }
 
   // All prices are BASE prices EXCLUDING 18% GST
-  // FireKiller: 1080, 1990, 2700  (+18% GST = 1274, 2348, 3186)
+  // FireKiller: 1200, 2160, 3060  (+18% GST = 1416, 2549, 3611)  - 2-pack 10% off, 3-pack 15% off
   // PanSafe:     666, 1800, 2750  (+18% GST =  786, 2124, 3245)
+  // Combo (1 FK + 1 PS): 1500     (+18% GST = 1770)
 
   const productsData = [
     // ── FireKiller × 1 ──────────────────────────────────
@@ -110,8 +111,8 @@ async function main() {
       description: "Single compact fire extinguisher - perfect for a room, office, or car.",
       shortDesc: "India's most trusted compact fire extinguisher.",
       longDescription: "The FireKiller is India's most trusted compact fire extinguisher. Works on Class A, B, C, and electrical fires with zero maintenance for 5 years. Just grab, point, and spray - one-hand operation means anyone in the family can use it.",
-      price: 1080,
-      originalPrice: 1350,
+      price: 1200,
+      originalPrice: 1200,
       gstRate: 0.18,
       sku: "FK-1",
       stock: 200,
@@ -141,8 +142,8 @@ async function main() {
       description: "Two extinguishers - cover bedroom + living room, or equip two cars.",
       shortDesc: "Cover two critical areas with the FireKiller 2-unit pack.",
       longDescription: "Cover two critical areas with the FireKiller 2-unit pack. Bedroom + living room, or one per car. Same trusted clean-agent formula, same zero-maintenance promise.",
-      price: 1990,
-      originalPrice: 2700,
+      price: 2160,
+      originalPrice: 2400,
       gstRate: 0.18,
       sku: "FK-2",
       stock: 150,
@@ -172,8 +173,8 @@ async function main() {
       description: "Three extinguishers - whole-home protection or equip your fleet.",
       shortDesc: "The 3-unit pack gives you complete coverage.",
       longDescription: "The 3-unit pack gives you complete coverage. Place one in every room or equip multiple vehicles. The best value with the biggest savings - protect your family without leaving any blind spots.",
-      price: 2700,
-      originalPrice: 4050,
+      price: 3060,
+      originalPrice: 3600,
       gstRate: 0.18,
       sku: "FK-3",
       stock: 100,
@@ -287,6 +288,38 @@ async function main() {
         { url: "/images/products/pansafe-1.webp", isPrimary: false, sortOrder: 1 },
         { url: "/images/products/3.png", isPrimary: false, sortOrder: 2 },
         { url: "/images/products/4.png", isPrimary: false, sortOrder: 3 },
+      ],
+    },
+    // ── Combo: FireKiller × 1 + PanSafe × 1 ─────────────
+    // Lives in home-safety: the legacy "combo-packs" category is deleted above on every seed run.
+    {
+      name: "Combo - FireKiller + PanSafe",
+      slug: "combo-firekiller-pansafe",
+      description: "Get both - 1 FireKiller extinguisher + 1 PanSafe sachet for complete home & kitchen fire protection.",
+      shortDesc: "FireKiller + PanSafe together at a combo price.",
+      longDescription: "Complete fire protection in one box. The FireKiller compact extinguisher handles Class A, B, C and electrical fires anywhere in your home or car, and OustFire's patented PanSafe sachet puts out cooking-oil fires in the kitchen. Save ₹366 compared to buying both separately.",
+      price: 1500,
+      originalPrice: 1866,
+      gstRate: 0.18,
+      sku: "COMBO-FK-PS",
+      stock: 100,
+      isActive: true,
+      isFeatured: true,
+      badge: "Combo Offer",
+      weight: 0.6,
+      dimensions: "28 × 9 cm + 15 × 10 cm",
+      packSize: 1,
+      productLine: "combo",
+      categoryLabel: "Home & Kitchen Safety",
+      categoryId: homeCat.id,
+      features: ["1 × FireKiller extinguisher + 1 × PanSafe sachet", "Save ₹366 vs buying both separately", "Covers electrical, gas & cooking-oil fires", "FireKiller: zero maintenance for 5 years", "PanSafe: just toss into a burning pan", "Wall-mount bracket included"],
+      specifications: { Contents: "1 × FireKiller Extinguisher + 1 × PanSafe Sachet", "FireKiller Weight": "500 g", "PanSafe Weight": "100 g", "FireKiller Shelf Life": "5 years", "PanSafe Shelf Life": "3 years", Certifications: "FireKiller: ISI, BIS, CE · PanSafe: ISI, NABL tested" },
+      video: "https://www.youtube.com/embed/OvkMlBMoLFQ",
+      images: [
+        { url: "/images/products/f30.png", isPrimary: true, sortOrder: 0 },
+        { url: "/images/products/p10.png", isPrimary: false, sortOrder: 1 },
+        { url: "/images/products/firekiller-1.webp", isPrimary: false, sortOrder: 2 },
+        { url: "/images/products/pansafe-1.webp", isPrimary: false, sortOrder: 3 },
       ],
     },
   ];

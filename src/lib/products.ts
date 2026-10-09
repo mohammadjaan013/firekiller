@@ -23,9 +23,10 @@ export interface Product {
 }
 
 // ────────────────────────────────────────────────────────
-// 2 product lines, 6 SKUs total:
+// 2 product lines + 1 combo, 7 SKUs total:
 //   FireKiller (extinguisher) → shown in Home & Car
 //   PanSafe   (sachet)        → shown in Kitchen
+//   Combo (1 FireKiller + 1 PanSafe) → shown in Home & Kitchen
 // ────────────────────────────────────────────────────────
 
 export const products: Product[] = [
@@ -34,8 +35,8 @@ export const products: Product[] = [
     id: 1,
     slug: "firekiller-1",
     name: "FireKiller - 1 Unit",
-    price: 1080,
-    originalPrice: 1350,
+    price: 1200,
+    originalPrice: 1200,
     rating: 4.8,
     reviews: 324,
     badge: "Best Seller",
@@ -75,8 +76,8 @@ export const products: Product[] = [
     id: 2,
     slug: "firekiller-2",
     name: "FireKiller - 2 Units",
-    price: 1990,
-    originalPrice: 2700,
+    price: 2160,
+    originalPrice: 2400,
     rating: 4.9,
     reviews: 189,
     badge: "Popular",
@@ -85,10 +86,10 @@ export const products: Product[] = [
     description:
       "Two extinguishers - cover the bedroom + living room, or equip two cars.",
     longDescription:
-      "Cover two critical areas with the FireKiller 2-unit pack. Bedroom + living room, or one per car. Same trusted clean-agent formula, same zero-maintenance promise. Save ₹710 off MRP with the 2-unit pack.",
+      "Cover two critical areas with the FireKiller 2-unit pack. Bedroom + living room, or one per car. Same trusted clean-agent formula, same zero-maintenance promise. Get 10% off with the 2-unit pack - save ₹240.",
     features: [
       "Two extinguishers for multi-area safety",
-      "Save ₹170 vs buying two single packs",
+      "Save ₹240 (10% off) vs buying two single packs",
       "Zero maintenance for 5 years each",
       "One-hand squeeze operation",
       "Two wall-mount brackets included",
@@ -116,8 +117,8 @@ export const products: Product[] = [
     id: 3,
     slug: "firekiller-3",
     name: "FireKiller - 3 Units",
-    price: 2700,
-    originalPrice: 4050,
+    price: 3060,
+    originalPrice: 3600,
     rating: 4.9,
     reviews: 112,
     badge: "Best Value",
@@ -129,7 +130,7 @@ export const products: Product[] = [
       "The 3-unit pack gives you complete coverage. Place one in every room or equip multiple vehicles. The best value with the biggest savings - protect your family without leaving any blind spots.",
     features: [
       "Three extinguishers for maximum safety",
-      "Save ₹540 vs buying three single packs",
+      "Save ₹540 (15% off) vs buying three single packs",
       "Zero maintenance for 5 years each",
       "One-hand squeeze operation",
       "Three wall-mount brackets included",
@@ -270,6 +271,46 @@ export const products: Product[] = [
       { src: "https://www.youtube.com/embed/bX5AV4asYeA", label: "PanSafe in Action" },
       { src: "https://www.youtube.com/embed/DgAOQZXSetk", label: "PanSafe Short" },
       { src: "https://www.youtube.com/embed/lRxesFqSU0U", label: "PanSafe Quick Demo" },
+    ],
+    inStock: true,
+  },
+
+  // ── Combo: FireKiller ×1 + PanSafe ×1 ──────────────────
+  {
+    id: 7,
+    slug: "combo-firekiller-pansafe",
+    name: "Combo - FireKiller + PanSafe",
+    price: 1500,
+    originalPrice: 1866, // FireKiller ×1 (1200) + PanSafe ×1 (666) bought separately
+    rating: 0,
+    reviews: 0,
+    badge: "Combo Offer",
+    categories: ["home", "kitchen"],
+    categoryLabel: "Home & Kitchen Safety",
+    description:
+      "Get both - 1 FireKiller extinguisher + 1 PanSafe sachet for complete home & kitchen fire protection.",
+    longDescription:
+      "Complete fire protection in one box. The FireKiller compact extinguisher handles Class A, B, C and electrical fires anywhere in your home or car, and OustFire's patented PanSafe sachet puts out cooking-oil fires in the kitchen - just toss it into the pan. Save ₹366 compared to buying both separately.",
+    features: [
+      "1 × FireKiller extinguisher + 1 × PanSafe sachet",
+      "Save ₹366 vs buying both separately",
+      "Covers electrical, gas & cooking-oil fires",
+      "FireKiller: zero maintenance for 5 years",
+      "PanSafe: just toss into a burning pan",
+      "Wall-mount bracket included",
+    ],
+    specifications: {
+      Contents: "1 × FireKiller Extinguisher + 1 × PanSafe Sachet",
+      "FireKiller Weight": "500 g",
+      "PanSafe Weight": "100 g",
+      "FireKiller Shelf Life": "5 years",
+      "PanSafe Shelf Life": "3 years",
+      Certifications: "FireKiller: ISI, BIS, CE · PanSafe: ISI, NABL tested",
+    },
+    images: ["/images/products/f30.png", "/images/products/p10.png", "/images/products/firekiller-1.webp", "/images/products/pansafe-1.webp"],
+    videos: [
+      { src: "https://www.youtube.com/embed/PtLaz7YQ6-A", label: "FireKiller Demo" },
+      { src: "https://www.youtube.com/embed/bX5AV4asYeA", label: "PanSafe in Action" },
     ],
     inStock: true,
   },

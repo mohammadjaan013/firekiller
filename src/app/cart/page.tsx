@@ -96,9 +96,11 @@ export default function CartPage() {
                     <span className="text-base font-bold text-secondary">
                       ₹{item.price.toLocaleString()}
                     </span>
-                    <span className="text-xs text-muted-foreground line-through">
-                      ₹{item.originalPrice.toLocaleString()}
-                    </span>
+                    {item.originalPrice > item.price && (
+                      <span className="text-xs text-muted-foreground line-through">
+                        ₹{item.originalPrice.toLocaleString()}
+                      </span>
+                    )}
                   </div>
 
                   {/* Quantity & Remove */}

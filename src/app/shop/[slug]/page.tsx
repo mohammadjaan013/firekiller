@@ -505,9 +505,11 @@ export default function ProductDetailPage({
               <span className="text-3xl font-bold text-secondary">
                 ₹{product.price.toLocaleString()}
               </span>
-              <span className="text-lg text-muted-foreground line-through">
-                ₹{product.originalPrice.toLocaleString()}
-              </span>
+              {product.originalPrice > product.price && (
+                <span className="text-lg text-muted-foreground line-through">
+                  ₹{product.originalPrice.toLocaleString()}
+                </span>
+              )}
               {discount > 0 && (
                 <span className="px-2.5 py-1 bg-green-500/10 text-green-600 text-xs font-semibold rounded-full">
                   {discount}% OFF
@@ -948,9 +950,11 @@ export default function ProductDetailPage({
                       <span className="text-base font-bold text-secondary">
                         ₹{rp.price.toLocaleString()}
                       </span>
-                      <span className="text-xs text-muted-foreground line-through">
-                        ₹{rp.originalPrice.toLocaleString()}
-                      </span>
+                      {rp.originalPrice > rp.price && (
+                        <span className="text-xs text-muted-foreground line-through">
+                          ₹{rp.originalPrice.toLocaleString()}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </Link>
