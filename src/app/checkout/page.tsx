@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
+import CouponInput from "@/components/cart/CouponInput";
 
 /* ── Razorpay global type ─────────────────────────────── */
 declare global {
@@ -570,6 +571,9 @@ export default function CheckoutPage() {
                 </div>
 
                 <hr className="border-border mb-4" />
+
+                {/* Coupon - customers can arrive here straight from the product page */}
+                <CouponInput amount={subtotal + gstAmount} className="mb-4" />
 
                 {/* Totals */}
                 <div className="space-y-2 text-sm">

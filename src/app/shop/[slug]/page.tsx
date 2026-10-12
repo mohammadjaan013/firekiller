@@ -190,7 +190,7 @@ export default function ProductDetailPage({
   const [reviewComment, setReviewComment] = useState("");
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
 
-  const { addItem, isInCart } = useCart();
+  const { addItem, isInCart, updateQuantity } = useCart();
   const { showToast } = useToast();
 
   if (!product) {
@@ -276,18 +276,30 @@ export default function ProductDetailPage({
     ((product.originalPrice - product.price) / product.originalPrice) * 100
   );
 
+  // Add to Cart and Buy Now both put this product in the cart at the selected
+  // quantity and go straight to checkout. Setting (not adding) the quantity when
+  // it's already in the cart means going back and clicking again can't double it.
+  const handleAddAndCheckout = () => {
+    if (alreadyInCart) {
+      updateQuantity(product.id, quantity);
+    } else {
+      addItem(
+        {
+          id: product.id,
+          slug: product.slug,
+          name: product.name,
+          price: product.price,
+          originalPrice: product.originalPrice,
+          image: product.images[0],
+        },
+        quantity
+      );
+    }
+    router.push("/checkout");
+  };
+
   const handleAddToCart = () => {
-    addItem(
-      {
-        id: product.id,
-        slug: product.slug,
-        name: product.name,
-        price: product.price,
-        originalPrice: product.originalPrice,
-        image: product.images[0],
-      },
-      quantity
-    );
+    handleAddAndCheckout();
     showToast(`${product.name} added to cart!`);
   };
 
@@ -604,22 +616,7 @@ export default function ProductDetailPage({
 
             {/* Buy Now */}
             <button
-              onClick={() => {
-                if (!alreadyInCart) {
-                  addItem(
-                    {
-                      id: product.id,
-                      slug: product.slug,
-                      name: product.name,
-                      price: product.price,
-                      originalPrice: product.originalPrice,
-                      image: product.images[0],
-                    },
-                    quantity
-                  );
-                }
-                router.push("/cart");
-              }}
+              onClick={handleAddAndCheckout}
               className="mt-3 w-full flex items-center justify-center gap-2 py-3 border-2 border-primary text-primary font-semibold rounded-2xl hover:bg-primary hover:text-white transition-all text-sm"
             >
               <Zap className="h-4 w-4" /> Buy Now

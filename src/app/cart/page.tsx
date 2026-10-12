@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Tag } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import CouponInput from "@/components/cart/CouponInput";
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, subtotal, totalItems, discount, appliedCoupon, applyCoupon, removeCoupon } = useCart();
-  const [coupon, setCoupon] = useState("");
-  const [couponLoading, setCouponLoading] = useState(false);
-  const [couponError, setCouponError] = useState("");
+  const { items, removeItem, updateQuantity, subtotal, totalItems, discount } = useCart();
 
   const shipping = 0; // free shipping for now
   // prices in products.ts are base (excl. GST); compute breakdown
@@ -142,54 +139,7 @@ export default function CartPage() {
               </h3>
 
               {/* Coupon */}
-              <div className="flex gap-2 mb-6">
-                <div className="relative flex-1">
-                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <input
-                    type="text"
-                    value={coupon}
-                    onChange={(e) => setCoupon(e.target.value)}
-                    placeholder="Coupon code"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm"
-                  />
-                </div>
-                <button
-                  onClick={async () => {
-                    if (!coupon.trim()) return;
-                    setCouponLoading(true);
-                    setCouponError("");
-                    try {
-                      const res = await fetch("/api/coupons/validate", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ code: coupon.trim(), subtotal: subtotal + gstAmount }),
-                      });
-                      const data = await res.json();
-                      if (!res.ok || !data.valid) {
-                        throw new Error(data.error || "Invalid coupon");
-                      }
-                      applyCoupon(data.coupon.code, data.discount);
-                    } catch (err) {
-                      setCouponError(err instanceof Error ? err.message : "Invalid coupon");
-                      removeCoupon();
-                    } finally {
-                      setCouponLoading(false);
-                    }
-                  }}
-                  disabled={couponLoading}
-                  className="px-4 py-2.5 bg-secondary text-white text-sm font-semibold rounded-xl hover:bg-primary transition-colors shrink-0 disabled:opacity-50"
-                >
-                  {couponLoading ? "..." : "Apply"}
-                </button>
-              </div>
-              {couponError && (
-                <p className="text-xs text-red-500 mt-1">{couponError}</p>
-              )}
-              {appliedCoupon && (
-                <p className="text-xs text-green-600 mt-1">
-                  Coupon &quot;{appliedCoupon}&quot; applied! You save ₹{discount.toLocaleString()}
-                </p>
-              )}
+              <CouponInput amount={subtotal + gstAmount} />
 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
