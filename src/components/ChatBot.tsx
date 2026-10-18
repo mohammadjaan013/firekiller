@@ -166,7 +166,7 @@ export default function ChatBot() {
                   }`}
                 >
                   <div
-                    className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-relaxed ${
+                    className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${
                       msg.role === "user"
                         ? "bg-primary text-white rounded-br-md"
                         : "bg-muted text-secondary rounded-bl-md"
