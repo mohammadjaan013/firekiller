@@ -174,6 +174,7 @@ export async function POST(req: NextRequest) {
         razorpayOrderId,
         paymentStatus: "paid",
         status: "CONFIRMED",
+        customerEmail: address.email,
         items:
           orderItems.length > 0
             ? { create: orderItems }
@@ -187,15 +188,6 @@ export async function POST(req: NextRequest) {
         .update({ where: { code: priced.couponCode }, data: { usedCount: { increment: 1 } } })
         .catch((e) => console.error("Failed to increment coupon usage:", e));
     }
-
-    // Send WhatsApp order confirmation (fire-and-forget)
-    sendOrderConfirmation({
-      phone: address.phone,
-      customerName: address.name,
-      orderNumber: order.orderNumber,
-      total: order.total,
-      orderId: order.id,
-    }).catch((err) => console.error("WhatsApp order confirmation error:", err));
 
     // Prepare email data
     const gstAmount = Math.round(subtotal * GST_RATE);
@@ -220,25 +212,36 @@ export async function POST(req: NextRequest) {
       subtotal,
       gstAmount,
       shipping,
+      discount,
       total: order.total,
       paymentMethod: "razorpay",
       paymentId: razorpayPaymentId,
     };
 
-    // Send both emails in parallel and AWAIT them so Vercel doesn't kill the function early
-    try {
-      await Promise.all([
-        sendOrderEmailToAdmin(emailData).then(() =>
-          prisma.order.update({
-            where: { id: order.id },
-            data: { emailSentToAdmin: true, customerEmail: address.email },
-          }).catch((e) => console.error("Failed to update email flag:", e))
-        ),
-        sendOrderConfirmationToCustomer(emailData),
-      ]);
-    } catch (err) {
-      console.error("Email sending error (non-blocking):", err);
+    // Notifications: run in parallel and AWAIT them all - Vercel can freeze the
+    // function once the response is sent, so nothing here may be fire-and-forget.
+    // allSettled: one failing channel never blocks the others or the order.
+    const [adminEmail, customerEmail, whatsapp] = await Promise.allSettled([
+      sendOrderEmailToAdmin(emailData),
+      sendOrderConfirmationToCustomer(emailData),
+      sendOrderConfirmation({
+        phone: address.phone,
+        customerName: address.name,
+        orderNumber: order.orderNumber,
+        total: order.total,
+        orderId: order.id,
+      }),
+    ]);
+
+    // Only mark as sent if it really was ("skipped" = SMTP not configured)
+    if (adminEmail.status === "fulfilled" && adminEmail.value === "sent") {
+      await prisma.order
+        .update({ where: { id: order.id }, data: { emailSentToAdmin: true } })
+        .catch((e) => console.error("Failed to update email flag:", e));
     }
+    if (adminEmail.status === "rejected") console.error(`Order ${orderNumber}: admin email failed:`, adminEmail.reason);
+    if (customerEmail.status === "rejected") console.error(`Order ${orderNumber}: customer email failed:`, customerEmail.reason);
+    if (whatsapp.status === "rejected") console.error(`Order ${orderNumber}: WhatsApp failed:`, whatsapp.reason);
 
     return NextResponse.json({
       orderNumber: order.orderNumber,

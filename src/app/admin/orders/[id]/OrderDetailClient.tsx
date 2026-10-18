@@ -76,7 +76,7 @@ export default function OrderDetailClient({ order: initialOrder }: OrderProps) {
   const [awbCode, setAwbCode] = useState(order.awbCode || "");
   const [trackingUrl, setTrackingUrl] = useState(order.trackingUrl || "");
   const [saving, setSaving] = useState(false);
-  const [emailing, setEmailing] = useState(false);
+  const [emailing, setEmailing] = useState<"" | "send_email" | "send_customer_email">("");
   const [message, setMessage] = useState("");
 
   // order.subtotal is stored EXCLUDING GST; GST is added on top
@@ -105,22 +105,24 @@ export default function OrderDetailClient({ order: initialOrder }: OrderProps) {
     }
   };
 
-  const handleSendEmail = async () => {
-    setEmailing(true);
+  const handleSendEmail = async (action: "send_email" | "send_customer_email") => {
+    setEmailing(action);
     setMessage("");
     try {
       const res = await fetch(`/api/admin/orders/${order.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "send_email" }),
+        body: JSON.stringify({ action }),
       });
-      if (!res.ok) throw new Error("Failed");
-      setOrder((prev) => ({ ...prev, emailSentToAdmin: true }));
-      setMessage("Email sent successfully!");
-    } catch {
-      setMessage("Failed to send email");
+      const data = await res.json().catch(() => ({}));
+      // Show the server's actual reason (e.g. SMTP not configured, login rejected)
+      if (!res.ok) throw new Error(data.error || `Failed to send email (HTTP ${res.status})`);
+      if (action === "send_email") setOrder((prev) => ({ ...prev, emailSentToAdmin: true }));
+      setMessage(data.message || "Email sent successfully!");
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Failed to send email");
     } finally {
-      setEmailing(false);
+      setEmailing("");
     }
   };
 
@@ -362,16 +364,29 @@ export default function OrderDetailClient({ order: initialOrder }: OrderProps) {
           </p>
 
           <button
-            onClick={handleSendEmail}
-            disabled={emailing}
+            onClick={() => handleSendEmail("send_email")}
+            disabled={!!emailing}
             className="w-full flex items-center justify-center gap-2 py-2.5 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors disabled:opacity-50"
           >
-            {emailing ? (
+            {emailing === "send_email" ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <Mail className="h-4 w-4" />
             )}
             {order.emailSentToAdmin ? "Resend Email" : "Send Email"}
+          </button>
+
+          <button
+            onClick={() => handleSendEmail("send_customer_email")}
+            disabled={!!emailing}
+            className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 border border-amber-500 text-amber-700 font-semibold rounded-lg hover:bg-amber-50 transition-colors disabled:opacity-50"
+          >
+            {emailing === "send_customer_email" ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Mail className="h-4 w-4" />
+            )}
+            Resend confirmation to customer
           </button>
 
           <div className="mt-3 flex items-center gap-2 text-xs">

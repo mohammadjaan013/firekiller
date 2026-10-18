@@ -13,25 +13,27 @@ export async function POST(req: NextRequest) {
     const rawBody = await req.text();
     const signature = req.headers.get("x-razorpay-signature");
 
-    // Verify webhook signature
-    if (process.env.RAZORPAY_WEBHOOK_SECRET && process.env.RAZORPAY_WEBHOOK_SECRET !== "your_webhook_secret") {
-      if (!signature) {
-        return NextResponse.json({ error: "Missing signature" }, { status: 401 });
-      }
+    // Verify webhook signature - ALWAYS. Without a secret anyone could POST fake
+    // "payment.captured" / "refund.created" events and change order statuses,
+    // so an unconfigured secret means we reject, not trust.
+    const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (!secret || secret === "your_webhook_secret") {
+      console.error("RAZORPAY_WEBHOOK_SECRET is not configured - rejecting webhook");
+      return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
+    }
+    if (!signature) {
+      return NextResponse.json({ error: "Missing signature" }, { status: 401 });
+    }
 
-      const expectedSignature = crypto
-        .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET)
-        .update(rawBody)
-        .digest("hex");
+    const expectedSignature = crypto
+      .createHmac("sha256", secret)
+      .update(rawBody)
+      .digest("hex");
 
-      const isValid = crypto.timingSafeEqual(
-        Buffer.from(expectedSignature),
-        Buffer.from(signature)
-      );
-
-      if (!isValid) {
-        return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-      }
+    const expected = Buffer.from(expectedSignature);
+    const received = Buffer.from(signature);
+    if (expected.length !== received.length || !crypto.timingSafeEqual(expected, received)) {
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
     const event = JSON.parse(rawBody);
